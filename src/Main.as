@@ -1,13 +1,15 @@
 package
 {
+	import screens.MainMenu;
 	import starling.events.Event;
 	import starling.text.TextField;
 	import starling.display.Sprite;
 	import starling.events.EnterFrameEvent;
 	import starling.events.TouchEvent;
 	
-	public class Main extends Sprite 
-	{
+	public class Main extends Sprite {
+		
+		private var mainMenu:MainMenu;
 		
 		public function Main() 
 		{
@@ -18,10 +20,8 @@ package
 		private function onAddToStage(e:Event):void {
 			this.removeEventListener(Event.ADDED_TO_STAGE, onAddToStage);
 			
-			// testing output and input
-			var tf:TextField = new TextField(100, 50, "HELLO WORLD");
-			this.addChild(tf);
-			
+			mainMenu = new MainMenu();
+			addChild(mainMenu);
 		}
 		
 	}

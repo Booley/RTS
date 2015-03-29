@@ -20,7 +20,12 @@ package screens {
 		}
 		
 		public function onAddToStage(event:Event):void {
-			this.removeEventListener(Event.ADDED_TO_STAGE, onAddToStage);
+			mainMenuPlayBtn = new Button(Assets.getTexture("ButtonTexture"), "Play");
+			addChild(mainMenuPlayBtn);
+			
+			mainMenuAboutBtn = new Button(Assets.getTexture("ButtonTexture"), "About");
+			mainMenuAboutBtn.y = 100;
+			addChild(mainMenuAboutBtn);
 		}
 	}
 }

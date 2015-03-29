@@ -7,7 +7,7 @@ package
 
 	public class Assets {
 		
-		[Embed(source="../assets/images/buttons/button.png")]
+		[Embed(source="/../assets/images/buttons/button.png")]
 		public static const ButtonTexture:Class;
 		
 		private static var gameTextures:Dictionary = new Dictionary();
