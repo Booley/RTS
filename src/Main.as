@@ -38,21 +38,68 @@ package
 			playScreen = new PlayScreen();
 				
 			// register event listeners
+			addMainMenuEventListeners();
+			addSPMenuEventListeners();
+			addMPMenuEventListeners();
+			addLeaderboardMenuEventListeners();
+			addOptsMenuEventListeners();
+			addPlayScreenEventListeners();
+		}
+		
+		private function addMainMenuEventListeners():void {
 			mainMenu.addEventListener(NavEvent.MAIN_MENU_SP, onSPBtnPress);
 			mainMenu.addEventListener(NavEvent.MAIN_MENU_MP, onMPBtnPress);
 			mainMenu.addEventListener(NavEvent.MAIN_MENU_LEADERBOARD, onLeaderboardBtnPress);
 			mainMenu.addEventListener(NavEvent.MAIN_MENU_OPTS, onOptsBtnPress);
-			
+		}
+		
+		private function removeMainMenuEventListeners():void {
+			mainMenu.removeEventListener(NavEvent.MAIN_MENU_SP, onSPBtnPress);
+			mainMenu.removeEventListener(NavEvent.MAIN_MENU_MP, onMPBtnPress);
+			mainMenu.removeEventListener(NavEvent.MAIN_MENU_LEADERBOARD, onLeaderboardBtnPress);
+			mainMenu.removeEventListener(NavEvent.MAIN_MENU_OPTS, onOptsBtnPress);
+		}
+		
+		private function addSPMenuEventListeners():void {
 			spMenu.addEventListener(NavEvent.SP_MENU_BACK, onSPBackBtnPress);
 			spMenu.addEventListener(NavEvent.SP_MENU_PLAY, onSPPlayBtnPress);
-			
+		}
+		
+		private function removeSPMenuEventListeners():void {
+			spMenu.removeEventListener(NavEvent.SP_MENU_BACK, onSPBackBtnPress);
+			spMenu.removeEventListener(NavEvent.SP_MENU_PLAY, onSPPlayBtnPress);
+		}
+		
+		private function addMPMenuEventListeners():void {
 			mpMenu.addEventListener(NavEvent.MP_MENU_BACK, onMPBackBtnPress);
-			
+		}
+		
+		private function removeMPMenuEventListeners():void {
+			mpMenu.removeEventListener(NavEvent.MP_MENU_BACK, onMPBackBtnPress);
+		}
+		
+		private function addLeaderboardMenuEventListeners():void {
 			leaderboardMenu.addEventListener(NavEvent.LEADERBOARD_MENU_BACK, onLeaderboardBackBtnPress);
-			
+		}
+		
+		private function removeLeaderboardMenuEventListeners():void {
+			leaderboardMenu.removeEventListener(NavEvent.LEADERBOARD_MENU_BACK, onLeaderboardBackBtnPress);
+		}
+		
+		private function addOptsMenuEventListeners():void {
 			optsMenu.addEventListener(NavEvent.OPTS_MENU_BACK, onOptsBackBtnPress);
-			
+		}
+		
+		private function removeOptsMenuEventListeners():void {
+			optsMenu.removeEventListener(NavEvent.OPTS_MENU_BACK, onOptsBackBtnPress);
+		}
+		
+		private function addPlayScreenEventListeners():void {
 			playScreen.addEventListener(NavEvent.PLAY_SCREEN_BACK, onPlayScreenBackBtnPress);
+		}
+		
+		private function removePlayScreenEventListeners():void {
+			playScreen.removeEventListener(NavEvent.PLAY_SCREEN_BACK, onPlayScreenBackBtnPress);
 		}
 		
 		// handle spMenu button press

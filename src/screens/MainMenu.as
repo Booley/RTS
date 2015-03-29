@@ -20,11 +20,6 @@ package screens {
 		
 		public function MainMenu() {
 			super();
-			this.addEventListener(Event.ADDED_TO_STAGE, onAddToStage);
-		}
-		
-		public function onAddToStage(event:Event):void {
-			removeEventListener(Event.ADDED_TO_STAGE, onAddToStage);
 			
 			// add background
 			background = new Image(Assets.getTexture("MenuBackground"));
@@ -47,11 +42,35 @@ package screens {
 			mainMenuOptsBtn.y = 300;
 			addChild(mainMenuOptsBtn);
 			
-			// register event listeners
+			this.addEventListener(Event.ADDED_TO_STAGE, onAddToStage);
+		}
+		
+		public function onAddToStage(event:Event):void {
+			removeEventListener(Event.ADDED_TO_STAGE, onAddToStage);
+			addEventListener(Event.REMOVED_FROM_STAGE, onRemoveFromStage);
+			
+			addEventListeners();
+		}
+		
+		public function onRemoveFromStage(event:Event):void {
+			removeEventListener(Event.REMOVED_FROM_STAGE, onRemoveFromStage);
+			addEventListener(Event.ADDED_TO_STAGE, onAddToStage);
+			
+			removeEventListeners();
+		}
+		
+		private function addEventListeners():void {
 			mainMenuSPBtn.addEventListener(TouchEvent.TOUCH, onSPBtnPress);
 			mainMenuMPBtn.addEventListener(TouchEvent.TOUCH, onMPBtnPress);
 			mainMenuLeaderboardBtn.addEventListener(TouchEvent.TOUCH, onLeaderboardBtnPress);
 			mainMenuOptsBtn.addEventListener(TouchEvent.TOUCH, onOptsBtnPress);
+		}
+		
+		private function removeEventListeners():void {
+			mainMenuSPBtn.removeEventListener(TouchEvent.TOUCH, onSPBtnPress);
+			mainMenuMPBtn.removeEventListener(TouchEvent.TOUCH, onMPBtnPress);
+			mainMenuLeaderboardBtn.removeEventListener(TouchEvent.TOUCH, onLeaderboardBtnPress);
+			mainMenuOptsBtn.removeEventListener(TouchEvent.TOUCH, onOptsBtnPress);
 		}
 		
 		// handle mainMenuSPBtn press

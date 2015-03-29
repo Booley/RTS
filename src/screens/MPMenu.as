@@ -14,19 +14,35 @@ package screens {
 		
 		public function MPMenu() {
 			super();
-			this.addEventListener(Event.ADDED_TO_STAGE, onAddToStage);
-		}
-		
-		public function onAddToStage(event:Event):void {
-			removeEventListener(Event.ADDED_TO_STAGE, onAddToStage);
 			
 			// initialize and add buttons
 			backBtn = new Button(Assets.getTexture("ButtonTexture"), "Back");
 			backBtn.y = 0;
 			addChild(backBtn);
 			
-			// register event listeners
+			this.addEventListener(Event.ADDED_TO_STAGE, onAddToStage);
+		}
+
+		public function onAddToStage(event:Event):void {
+			removeEventListener(Event.ADDED_TO_STAGE, onAddToStage);
+			addEventListener(Event.REMOVED_FROM_STAGE, onRemoveFromStage);
+			
+			addEventListeners();
+		}
+		
+		public function onRemoveFromStage(event:Event):void {
+			removeEventListener(Event.REMOVED_FROM_STAGE, onRemoveFromStage);
+			addEventListener(Event.ADDED_TO_STAGE, onAddToStage);
+			
+			removeEventListeners();
+		}
+		
+		private function addEventListeners():void {
 			backBtn.addEventListener(TouchEvent.TOUCH, onBackBtnPress);
+		}
+		
+		private function removeEventListeners():void {
+			backBtn.removeEventListener(TouchEvent.TOUCH, onBackBtnPress);
 		}
 		
 		// handle backBtn press

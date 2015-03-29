@@ -15,11 +15,6 @@ package screens {
 		
 		public function SPMenu() {
 			super();
-			this.addEventListener(Event.ADDED_TO_STAGE, onAddToStage);
-		}
-		
-		public function onAddToStage(event:Event):void {
-			removeEventListener(Event.ADDED_TO_STAGE, onAddToStage);
 			
 			// initialize and add buttons
 			backBtn = new Button(Assets.getTexture("ButtonTexture"), "Back");
@@ -30,9 +25,31 @@ package screens {
 			playBtn.y = 100;
 			addChild(playBtn);
 			
-			// register event listeners
+			this.addEventListener(Event.ADDED_TO_STAGE, onAddToStage);
+		}
+		
+		public function onAddToStage(event:Event):void {
+			removeEventListener(Event.ADDED_TO_STAGE, onAddToStage);
+			addEventListener(Event.REMOVED_FROM_STAGE, onRemoveFromStage);
+			
+			addEventListeners();
+		}
+		
+		public function onRemoveFromStage(event:Event):void {
+			removeEventListener(Event.REMOVED_FROM_STAGE, onRemoveFromStage);
+			addEventListener(Event.ADDED_TO_STAGE, onAddToStage);
+			
+			removeEventListeners();
+		}
+		
+		private function addEventListeners():void {
 			backBtn.addEventListener(TouchEvent.TOUCH, onBackBtnPress);
 			playBtn.addEventListener(TouchEvent.TOUCH, onPlayBtnPress);
+		}
+		
+		private function removeEventListeners():void {
+			backBtn.removeEventListener(TouchEvent.TOUCH, onBackBtnPress);
+			playBtn.removeEventListener(TouchEvent.TOUCH, onPlayBtnPress);
 		}
 		
 		// handle backBtn press

@@ -22,29 +22,19 @@ package screens {
 		
 		public function PlayScreen() {
 			super();
-			this.addEventListener(Event.ADDED_TO_STAGE, onAddToStage);
-		}
-		
-		public function onAddToStage(event:Event):void {
-			this.removeEventListener(Event.ADDED_TO_STAGE, onAddToStage);
-			
-			this.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 			
 			// initialize and add buttons
 			backBtn = new Button(Assets.getTexture("ButtonTexture"), "Back");
 			backBtn.y = 0;
 			addChild(backBtn);
 			
-			// register event listeners
-			backBtn.addEventListener(TouchEvent.TOUCH, onBackBtnPress);
-			
-			
-			
-			
+			// fake invisible rectangle so touch events don't fall through
+			// will be removed when a background is added
+			var bg:Quad = new Quad(1000, 2000);
+			bg.alpha = 0;
+			addChildAt(bg, 0);
 			
 			// TESTING UNIT MOVEMENT AND STUFF {{{{{{{{{{{{{{{{
-			this.addEventListener(TouchEvent.TOUCH, onTouch);
-			
 			var unitVector:Vector.<Unit> = new Vector.<Unit>();
 			for (var i:int = 0; i < 10; i++) {
 				var x:Number = Math.random() * 100;
@@ -53,13 +43,35 @@ package screens {
 			}
 			flock = new Flock(unitVector);
 			addChild(flock);
-			
-			var bg:Quad = new Quad(stage.stageWidth, stage.stageHeight);
-			bg.alpha = 0;
-			addChildAt(bg, 0);
+
 			// END TESTING UNIT MOVEMENT }}}}}}}}}}}}}}}}}}
+			addEventListener(Event.ADDED_TO_STAGE, onAddToStage);
+		}
+		
+		public function onAddToStage(event:Event):void {
+			removeEventListener(Event.ADDED_TO_STAGE, onAddToStage);
+			addEventListener(Event.REMOVED_FROM_STAGE, onRemoveFromStage);
 			
+			addEventListeners();
+		}
+		
+		public function onRemoveFromStage(event:Event):void {
+			removeEventListener(Event.REMOVED_FROM_STAGE, onRemoveFromStage);
+			addEventListener(Event.ADDED_TO_STAGE, onAddToStage);
 			
+			removeEventListeners();
+		}
+		
+		private function addEventListeners():void {
+			addEventListener(Event.ENTER_FRAME, onEnterFrame);
+			backBtn.addEventListener(TouchEvent.TOUCH, onBackBtnPress);
+			addEventListener(TouchEvent.TOUCH, onTouch);			
+		}
+		
+		private function removeEventListeners():void {
+			removeEventListener(Event.ENTER_FRAME, onEnterFrame);
+			backBtn.removeEventListener(TouchEvent.TOUCH, onBackBtnPress);
+			removeEventListener(TouchEvent.TOUCH, onTouch);
 		}
 		
 		public function onTouch(e:TouchEvent):void {
