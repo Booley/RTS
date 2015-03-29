@@ -23,6 +23,10 @@ package {
 		// events for the Options Menu
 		public static const OPTS_MENU_BACK:String = "optsMenuBack";
 		
+		// events for the Play Screen
+		public static const PLAY_SCREEN_BACK:String = "playScreenBack";
+		
+		
 		// constructor
 		public function NavEvent(string:String) {
 			super(string);

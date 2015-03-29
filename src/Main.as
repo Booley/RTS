@@ -10,10 +10,13 @@ package
 	public class Main extends Sprite {
 		
 		private var mainMenu:MainMenu;
+		
 		private var spMenu:SPMenu;
 		private var mpMenu:MPMenu;
 		private var leaderboardMenu:LeaderboardMenu;
 		private var optsMenu:OptsMenu;
+		
+		private var playScreen:PlayScreen;
 		
 		public function Main() {
 			super();
@@ -31,6 +34,8 @@ package
 			mpMenu = new MPMenu();
 			leaderboardMenu = new LeaderboardMenu();
 			optsMenu = new OptsMenu();
+			
+			playScreen = new PlayScreen();
 				
 			// register event listeners
 			mainMenu.addEventListener(NavEvent.MAIN_MENU_SP, onSPBtnPress);
@@ -39,12 +44,15 @@ package
 			mainMenu.addEventListener(NavEvent.MAIN_MENU_OPTS, onOptsBtnPress);
 			
 			spMenu.addEventListener(NavEvent.SP_MENU_BACK, onSPBackBtnPress);
+			spMenu.addEventListener(NavEvent.SP_MENU_PLAY, onSPPlayBtnPress);
 			
 			mpMenu.addEventListener(NavEvent.MP_MENU_BACK, onMPBackBtnPress);
 			
 			leaderboardMenu.addEventListener(NavEvent.LEADERBOARD_MENU_BACK, onLeaderboardBackBtnPress);
 			
 			optsMenu.addEventListener(NavEvent.OPTS_MENU_BACK, onOptsBackBtnPress);
+			
+			playScreen.addEventListener(NavEvent.PLAY_SCREEN_BACK, onPlayScreenBackBtnPress);
 		}
 		
 		// handle spMenu button press
@@ -76,6 +84,12 @@ package
 			removeChild(spMenu);
 			addChild(mainMenu);
 		}
+				
+		// handle SPMenu's play button press
+		private function onSPPlayBtnPress(e:Event):void {
+			removeChild(spMenu);
+			addChild(playScreen);
+		}
 		
 		// handle MPMenu's back button press
 		private function onMPBackBtnPress(e:Event):void {
@@ -92,6 +106,12 @@ package
 		// handle OptsMenu's back button press
 		private function onOptsBackBtnPress(e:Event):void {
 			removeChild(optsMenu);
+			addChild(mainMenu);
+		}
+		
+		// handle OptsMenu's back button press
+		private function onPlayScreenBackBtnPress(e:Event):void {
+			removeChild(playScreen);
 			addChild(mainMenu);
 		}
 		

@@ -10,6 +10,9 @@ package
 		[Embed(source="/../assets/images/buttons/button.png")]
 		public static const ButtonTexture:Class;
 		
+		[Embed(source="/../assets/images/backgrounds/menu_background.jpg")]
+		public static const MenuBackground:Class;
+		
 		private static var gameTextures:Dictionary = new Dictionary();
 
 		public static function getTexture(name:String):Texture

@@ -1,6 +1,7 @@
 package screens {
 	
 	import flash.display3D.textures.Texture;
+	import starling.display.Image;
 	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.display.Button;
@@ -15,6 +16,8 @@ package screens {
 		private var mainMenuLeaderboardBtn:Button;
 		private var mainMenuOptsBtn:Button;
 		
+		private var background:Image;
+		
 		public function MainMenu() {
 			super();
 			this.addEventListener(Event.ADDED_TO_STAGE, onAddToStage);
@@ -22,6 +25,10 @@ package screens {
 		
 		public function onAddToStage(event:Event):void {
 			removeEventListener(Event.ADDED_TO_STAGE, onAddToStage);
+			
+			// add background
+			background = new Image(Assets.getTexture("MenuBackground"));
+			addChild(background);
 			
 			// initialize and add buttons
 			mainMenuSPBtn = new Button(Assets.getTexture("ButtonTexture"), "Single-Player");
