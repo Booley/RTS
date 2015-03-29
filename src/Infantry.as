@@ -1,9 +1,8 @@
 package 
 {
-	public class Infantry extends Unit {
+	public class Infantry implements Unit {
 		//subject to change
 		var damage:int = 100;
-		var cost:int = 100;
 		var health:int = 1000;
 		var speed:Number = 50;
 		var x:int = BASE_X;

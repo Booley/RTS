@@ -1,9 +1,8 @@
 package 
 {
-	public class Raider extends Unit {
+	public class Raider implements Unit {
 		//subject to change
 		var damage:int = 50;
-		var cost:int = 100;
 		var health:int = 800;
 		var speed:Number = 100;
 		var x:int = BASE_X;

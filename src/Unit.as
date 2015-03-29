@@ -1,10 +1,9 @@
 package 
 {
-	public class Unit 
+	public interface Unit 
 	{
 		var damage:int;
 		var health:int;
-		var cost:int;
 		var speed:Number;
 		var x:int;
 		var y:int;
