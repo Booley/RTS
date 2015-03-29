@@ -1,6 +1,6 @@
 package screens {
 	
-	import flash.display3D.textures.Texture;
+	import starling.textures.Texture;
 	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.display.Button;

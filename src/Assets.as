@@ -13,6 +13,15 @@ package
 		[Embed(source="/../assets/images/backgrounds/menu_background.jpg")]
 		public static const MenuBackground:Class;
 		
+		[Embed(source="/../assets/images/units/square.png")]
+		public static const InfantryTexture:Class;
+		
+		[Embed(source="/../assets/images/units/circle.png")]
+		public static const RaiderTexture:Class;
+		
+		[Embed(source="/../assets/images/units/triangle.png")]
+		public static const SniperTexture:Class;
+		
 		private static var gameTextures:Dictionary = new Dictionary();
 
 		public static function getTexture(name:String):Texture
