@@ -1,0 +1,7 @@
+*.bat
+bin
+bat
+lib
+AIR*
+*.xml
+References
