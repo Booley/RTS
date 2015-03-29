@@ -32,7 +32,7 @@ package {
 		private function deactivate(e:Event):void 
 		{
 			// exit when app is sent to background (temporary)
-			NativeApplication.nativeApplication.exit();
+			//NativeApplication.nativeApplication.exit();
 		}
 
 	}
