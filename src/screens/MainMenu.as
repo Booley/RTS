@@ -49,24 +49,24 @@ package screens {
 			removeEventListener(Event.ADDED_TO_STAGE, onAddToStage);
 			addEventListener(Event.REMOVED_FROM_STAGE, onRemoveFromStage);
 			
-			addEventListeners();
+			addListeners();
 		}
 		
 		public function onRemoveFromStage(event:Event):void {
 			removeEventListener(Event.REMOVED_FROM_STAGE, onRemoveFromStage);
 			addEventListener(Event.ADDED_TO_STAGE, onAddToStage);
 			
-			removeEventListeners();
+			removeListeners();
 		}
 		
-		private function addEventListeners():void {
+		private function addListeners():void {
 			mainMenuSPBtn.addEventListener(TouchEvent.TOUCH, onSPBtnPress);
 			mainMenuMPBtn.addEventListener(TouchEvent.TOUCH, onMPBtnPress);
 			mainMenuLeaderboardBtn.addEventListener(TouchEvent.TOUCH, onLeaderboardBtnPress);
 			mainMenuOptsBtn.addEventListener(TouchEvent.TOUCH, onOptsBtnPress);
 		}
 		
-		private function removeEventListeners():void {
+		private function removeListeners():void {
 			mainMenuSPBtn.removeEventListener(TouchEvent.TOUCH, onSPBtnPress);
 			mainMenuMPBtn.removeEventListener(TouchEvent.TOUCH, onMPBtnPress);
 			mainMenuLeaderboardBtn.removeEventListener(TouchEvent.TOUCH, onLeaderboardBtnPress);

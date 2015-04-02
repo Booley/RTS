@@ -27,21 +27,21 @@ package screens {
 			removeEventListener(Event.ADDED_TO_STAGE, onAddToStage);
 			addEventListener(Event.REMOVED_FROM_STAGE, onRemoveFromStage);
 			
-			addEventListeners();
+			addListeners();
 		}
 		
 		public function onRemoveFromStage(event:Event):void {
 			removeEventListener(Event.REMOVED_FROM_STAGE, onRemoveFromStage);
 			addEventListener(Event.ADDED_TO_STAGE, onAddToStage);
 			
-			removeEventListeners();
+			removeListeners();
 		}
 		
-		private function addEventListeners():void {
+		private function addListeners():void {
 			backBtn.addEventListener(TouchEvent.TOUCH, onBackBtnPress);
 		}
 		
-		private function removeEventListeners():void {
+		private function removeListeners():void {
 			backBtn.removeEventListener(TouchEvent.TOUCH, onBackBtnPress);
 		}
 		
