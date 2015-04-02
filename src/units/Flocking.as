@@ -13,14 +13,14 @@ package units {
 		
 		
 		// get the net acceleration from a unit's neighbors on the unit for flocking behavior
-		public static function getAcceleration(u:Unit, neighbors:Vector.<Unit>, goal:Point = null):Point {
+		public static function getAcceleration(u:Unit, neighbors:Vector.<Unit>, avgPos:Point, goal:Point = null):Point {
 			var accel:Point = new Point();
 			
 			var repulsionVector:Point = getRepulsion(u, neighbors);
 			repulsionVector.normalize(repulsionVector.length * REPULSION_WEIGHT);
 			accel = accel.add(repulsionVector);
 			
-			var attractionVector:Point = getAttraction(u, neighbors);
+			var attractionVector:Point = getAttraction(u, neighbors, avgPos);
 			attractionVector.normalize(attractionVector.length*ATTRACTION_WEIGHT);
 			accel = accel.add(attractionVector);
 			
@@ -29,7 +29,7 @@ package units {
 			accel = accel.add(matchingVector);
 			
 			if (goal != null) {
-				var goalVector:Point = getGoalAttraction(u, neighbors, goal);
+				var goalVector:Point = getGoalAttraction(u, neighbors, goal, avgPos);
 				goalVector.normalize(goalVector.length*GOAL_WEIGHT);
 				accel = accel.add(goalVector);
 			}
@@ -55,13 +55,7 @@ package units {
 		
 		// sum attractive forces from neighbors 
 		// boids move towards center of the entire group
-		private static function getAttraction(u:Unit, neighbors:Vector.<Unit>):Point {
-			var avgPos:Point = new Point();
-			for each (var unit:Unit in neighbors) {
-				avgPos = avgPos.add(unit.pos);
-			}
-			// divide by number of neighbors to get average position of flock
-			avgPos.normalize(avgPos.length/neighbors.length);
+		private static function getAttraction(u:Unit, neighbors:Vector.<Unit>, avgPos:Point):Point {
 			return avgPos.subtract(u.pos);
 		}
 		
@@ -78,18 +72,8 @@ package units {
 		}
 		
 		// attractive force towards the goal, normalized, relative to avgPos of the entire group
-		private static function getGoalAttraction(u:Unit, neighbors:Vector.<Unit>, goal:Point):Point {
-			var avgPos:Point = new Point();
-			for each (var unit:Unit in neighbors) {
-				avgPos = avgPos.add(unit.pos);
-			}
-			// divide by number of neighbors to get average position of flock
-			avgPos.normalize(avgPos.length/neighbors.length);
-			var dif:Point = goal.subtract(avgPos);
-			if (goal.length > 1) {
-				//dif.normalize(1); // goal attraction has a maximum cutoff
-			}
-			return dif;
+		private static function getGoalAttraction(u:Unit, neighbors:Vector.<Unit>, goal:Point, avgPos:Point):Point {
+			return goal.subtract(avgPos);
 		}
 			
 	}

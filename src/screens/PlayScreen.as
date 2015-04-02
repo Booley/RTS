@@ -11,21 +11,26 @@ package screens {
 	import starling.textures.Texture;
 	import starling.display.Quad;
 	
-	import units.Flock;
-	import units.Unit;
+	import units.*;
 	
 	public class PlayScreen extends Sprite {
 		
 		private var backBtn:Button;
 		
-		private var flock:Flock;
+		public static var game:Game;
 		
+		// handle events and user input and pass data to the game
+		// the "PlayScreen" abstraction will pass data to Game.  Game will 
+		// not know whether the data comes from user input, an AI opponent,
+		// or an opponent on another device.  
 		public function PlayScreen() {
 			super();
 			
 			// initialize and add buttons
-			backBtn = new Button(Assets.getTexture("ButtonTexture"), "Back");
+			backBtn = new Button(Assets.getTexture("ButtonTexture"), "X");
 			backBtn.y = 0;
+			backBtn.width = 20; 
+			backBtn.height = 20;
 			addChild(backBtn);
 			
 			// fake invisible rectangle so touch events don't fall through
@@ -34,23 +39,26 @@ package screens {
 			bg.alpha = 0;
 			addChildAt(bg, 0);
 			
-			// TESTING UNIT MOVEMENT AND STUFF {{{{{{{{{{{{{{{{
-			var unitVector:Vector.<Unit> = new Vector.<Unit>();
-			for (var i:int = 0; i < 10; i++) {
-				var x:Number = Math.random() * 100;
-				var y:Number = Math.random() * 100 + 200;
-				unitVector.push(new Unit(new Point(x, y)));
-			}
-			flock = new Flock(unitVector);
-			addChild(flock);
-
-			// END TESTING UNIT MOVEMENT }}}}}}}}}}}}}}}}}}
 			addEventListener(Event.ADDED_TO_STAGE, onAddToStage);
+		}
+		
+		public function newGame():void {
+			game = new Game();
+			game.start();
+			addChild(game);
+		}
+		
+		public function endGame():void {
+			game.end();
+			removeChild(game);
 		}
 		
 		public function onAddToStage(event:Event):void {
 			removeEventListener(Event.ADDED_TO_STAGE, onAddToStage);
 			addEventListener(Event.REMOVED_FROM_STAGE, onRemoveFromStage);
+			
+			// TEMPORARY.
+			newGame();
 			
 			addEventListeners();
 		}
@@ -59,11 +67,14 @@ package screens {
 			removeEventListener(Event.REMOVED_FROM_STAGE, onRemoveFromStage);
 			addEventListener(Event.ADDED_TO_STAGE, onAddToStage);
 			
+			// TEMPORARY.
+			endGame();
+			
 			removeEventListeners();
 		}
 		
 		private function addEventListeners():void {
-			addEventListener(Event.ENTER_FRAME, onEnterFrame);
+			addEventListener(Event.ENTER_FRAME, onEnterFrame);	
 			backBtn.addEventListener(TouchEvent.TOUCH, onBackBtnPress);
 			addEventListener(TouchEvent.TOUCH, onTouch);			
 		}
@@ -74,17 +85,21 @@ package screens {
 			removeEventListener(TouchEvent.TOUCH, onTouch);
 		}
 		
+		public function onEnterFrame(e:Event):void {
+			if (game) {
+				game.tick(Constants.FPS);
+			}
+		}
+		
+		
+		// screen touches
 		public function onTouch(e:TouchEvent):void {
 			var touch:Touch = e.getTouch(this);
 			if (touch) {
 				if (touch.phase == TouchPhase.BEGAN) {
-					flock.goal = new Point(touch.globalX, touch.globalY);				
+					game.test(new Point(touch.globalX, touch.globalY));				
 				}
 			}
-		}
-		
-		public function onEnterFrame(e:Event):void {
-			flock.tick(1/30); // TESTING
 		}
 		
 		// handle backBtn press

@@ -8,22 +8,26 @@ package
 	public class Assets {
 		
 		[Embed(source="/../assets/images/buttons/button.png")]
-		public static const ButtonTexture:Class;
+		private static const ButtonTexture:Class;
 		
 		[Embed(source="/../assets/images/backgrounds/menu_background.jpg")]
-		public static const MenuBackground:Class;
+		private static const MenuBackground:Class;
+		
+		[Embed(source="/../assets/images/units/base.png")]
+		private static const BaseTexture:Class;
 		
 		[Embed(source="/../assets/images/units/square.png")]
-		public static const InfantryTexture:Class;
+		private static const InfantryTexture:Class;
 		
 		[Embed(source="/../assets/images/units/circle.png")]
-		public static const RaiderTexture:Class;
+		private static const RaiderTexture:Class;
 		
 		[Embed(source="/../assets/images/units/triangle.png")]
-		public static const SniperTexture:Class;
+		private static const SniperTexture:Class;
 		
 		private static var gameTextures:Dictionary = new Dictionary();
 
+		// avoid creating a texture from a bitmap more than once for optimization.
 		public static function getTexture(name:String):Texture
 		{
 			if (gameTextures[name] == undefined)
