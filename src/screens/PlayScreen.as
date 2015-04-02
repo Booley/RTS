@@ -60,7 +60,7 @@ package screens {
 			// TEMPORARY.
 			newGame();
 			
-			addEventListeners();
+			addListeners();
 		}
 		
 		public function onRemoveFromStage(event:Event):void {
@@ -70,16 +70,16 @@ package screens {
 			// TEMPORARY.
 			endGame();
 			
-			removeEventListeners();
+			removeListeners();
 		}
 		
-		private function addEventListeners():void {
+		private function addListeners():void {
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);	
 			backBtn.addEventListener(TouchEvent.TOUCH, onBackBtnPress);
 			addEventListener(TouchEvent.TOUCH, onTouch);			
 		}
 		
-		private function removeEventListeners():void {
+		private function removeListeners():void {
 			removeEventListener(Event.ENTER_FRAME, onEnterFrame);
 			backBtn.removeEventListener(TouchEvent.TOUCH, onBackBtnPress);
 			removeEventListener(TouchEvent.TOUCH, onTouch);

@@ -28,7 +28,7 @@ package screens {
 			addEventListener(Event.REMOVED_FROM_STAGE, onRemoveFromStage);
 			
 			// register event listeners
-			addEventListeners();
+			addListeners();
 		}
 		
 		public function onRemoveFromStage(event:Event):void {
@@ -36,14 +36,14 @@ package screens {
 			addEventListener(Event.ADDED_TO_STAGE, onAddToStage);
 			
 			// register event listeners
-			removeEventListeners();
+			removeListeners();
 		}
 		
-		private function addEventListeners():void {
+		private function addListeners():void {
 			backBtn.addEventListener(TouchEvent.TOUCH, onBackBtnPress);
 		}
 		
-		private function removeEventListeners():void {
+		private function removeListeners():void {
 			backBtn.removeEventListener(TouchEvent.TOUCH, onBackBtnPress);
 		}
 		
