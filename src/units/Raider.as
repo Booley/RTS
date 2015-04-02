@@ -1,19 +1,15 @@
 package units {
 	
-	public class Raider implements Unit {
-		/*
-		//subject to change
-		var damage:int = 50;
-		var health:int = 800;
-		var speed:Number = 100;
-		var x:int = BASE_X;
-		var y:int = BASE_Y;
-		var type:String = "infantry";
-		var attackRange:int = 10;
-		public function move(newX, newY);
+	import flash.geom.Point;
+	
+	public class Raider extends Unit {
 		
-		public function attack(gameUnit) {
-			gameUnit.health -= this.damage;
-		}*/
+		public function Raider(startPos:Point) {
+			super(startPos);
+			this.unitType = Unit.RAIDER;
+			this.textureName = "RaiderTexture";
+		}
+		
 	}
+	
 }

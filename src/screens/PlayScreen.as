@@ -11,8 +11,7 @@ package screens {
 	import starling.textures.Texture;
 	import starling.display.Quad;
 	
-	import units.Flock;
-	import units.Unit;
+	import units.*;
 	
 	public class PlayScreen extends Sprite {
 		
@@ -39,7 +38,7 @@ package screens {
 			for (var i:int = 0; i < 10; i++) {
 				var x:Number = Math.random() * 100;
 				var y:Number = Math.random() * 100 + 200;
-				unitVector.push(new Unit(new Point(x, y)));
+				unitVector.push(new Sniper(new Point(x, y)));
 			}
 			flock = new Flock(unitVector);
 			addChild(flock);

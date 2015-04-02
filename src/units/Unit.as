@@ -31,6 +31,9 @@ package units {
 		
 		public var image:Image;
 		
+		public var textureName:String = "default";
+		
+		
 		// a constructor for a unit
 		public function Unit(startPos:Point) {
 			pos = startPos.clone();
@@ -48,7 +51,7 @@ package units {
 		
 		// Idk about this method.. might remove it
 		public function createArt():void {
-			image = new Image(Assets.getTexture("InfantryTexture"));
+			image = new Image(Assets.getTexture(textureName));
 			image.scaleX = 0.1;
 			image.scaleY = 0.1;
 			image.x = -image.width / 2;
