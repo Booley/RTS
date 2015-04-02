@@ -8,6 +8,7 @@ package units {
 	public class Unit extends Sprite {
 		
 		// unit types
+		public static const BASE:int = 0;
 		public static const INFANTRY:int = 1;
 		public static const RAIDER:int = 2;
 		public static const SNIPER:int = 3;
@@ -31,12 +32,13 @@ package units {
 		
 		public var image:Image;
 		
-		public var textureName:String = "default";
-		
+		public var textureName:String = "default"; // fix later.  just to make compiler happy.  don't actually use the Unit() constructor
 		
 		// a constructor for a unit
 		public function Unit(startPos:Point) {
 			pos = startPos.clone();
+			this.x = pos.x;
+			this.y = pos.y;
 			vel = new Point();
 			
 			this.addEventListener(Event.ADDED_TO_STAGE, onAddToStage);
@@ -52,15 +54,15 @@ package units {
 		// Idk about this method.. might remove it
 		public function createArt():void {
 			image = new Image(Assets.getTexture(textureName));
-			image.scaleX = 0.1;
-			image.scaleY = 0.1;
+			image.scaleX *= 0.3;
+			image.scaleY *= 0.3; // TEMPORARY
 			image.x = -image.width / 2;
 			image.y = -image.height / 2;
 			addChild(image);
 		}	
 		
 		// 
-		public function tick(dt:Number, neighbors:Vector.<Unit>, goal:Point = null):void {
+		public function tick(dt:Number, neighbors:Vector.<Unit> = null, avgPos:Point = null, goal:Point = null):void {
 			var v:Point = vel.clone();
 			v.normalize(v.length * dt);
 			pos = pos.add(v);
@@ -68,7 +70,7 @@ package units {
 			this.x = pos.x;
 			this.y = pos.y;
 			
-			var accel:Point = Flocking.getAcceleration(this, neighbors, goal);
+			var accel:Point = Flocking.getAcceleration(this, neighbors, avgPos, goal);
 			accel.normalize(accel.length * dt);
 			if (accel.length > MAX_ACCEL) {
 				accel.normalize(MAX_ACCEL);

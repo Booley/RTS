@@ -26,6 +26,8 @@ package {
 			starling = new Starling(Main, stage);
 			starling.antiAliasing = 1;
 			starling.start();
+			
+			Starling.current.showStats = true;
 		}
 		
 		
