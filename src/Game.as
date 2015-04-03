@@ -2,6 +2,7 @@ package {
 	//Takes in commands from other classes and executes them. Also executes tick for all state-mutable objects
 	
 	import flash.geom.Point;
+	import mx.core.ButtonAsset;
 	
 	import starling.display.Button;
 	import starling.display.Sprite;
@@ -87,6 +88,7 @@ package {
 					unit = new Raider(new Point(300 * Math.random(), 400 * Math.random()));
 				}
 				flocks[0].addUnit(unit);
+
 			}
 		}
 		
@@ -118,6 +120,18 @@ package {
 			flocks[0].goal = p;
 		}
 		
+		public function addBullet(bullet:Bullet):void {
+			bullets.push(bullet);
+			addChild(bullet);
+		}
 		
+		public function removeBullet(bullet:Bullet):void {
+			//how to remove?
+			/*for (var i:int = 0; i < bullets.length; i++) {
+				if (bullets[i] == bullet)
+					bullets.
+			}
+			*/
+		}
 	}
 }
