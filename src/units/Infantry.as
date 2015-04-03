@@ -10,6 +10,8 @@ package units {
 			this.textureName = "InfantryTexture";
 		}
 		
+		
+		
 	}
 	
 }

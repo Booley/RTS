@@ -3,7 +3,6 @@ package {
 	
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	import mx.events.FlexEvent;
 	
 	import starling.display.Button;
 	import starling.display.Sprite;
@@ -21,6 +20,7 @@ package {
 		private var flocks:Vector.<Flock>;
 		private var bases:Vector.<Base>;
 		private var selectedUnits:Vector.<Unit>;
+		private var bullets:Vector.<Bullet>;
 		
 		private var pause:Boolean = true;
 		
@@ -29,6 +29,7 @@ package {
 			
 			flocks = new Vector.<Flock>();
 			bases = new Vector.<Base>();
+			bullets = new Vector.<Bullet>();
 			
 			// TESTING UNIT MOVEMENT AND STUFF {{{{{{{{{{{{{{{{
 			var unitVector:Vector.<Unit> = new Vector.<Unit>();
@@ -67,7 +68,11 @@ package {
 			for each (var base:Base in bases) {
 				base.tick(dt);
 			}
-			
+			/*
+			for each (var bullet:Bullet in bullets) {
+				bullet.tick(dt);
+			}
+			*/
 			for each (var flock:Flock in flocks) {
 				flock.tick(dt);
 			}
@@ -85,6 +90,7 @@ package {
 					unit = new Raider(new Point(300 * Math.random(), 400 * Math.random()));
 				}
 				flocks[0].addUnit(unit);
+
 			}
 			*/
 		}
@@ -202,6 +208,21 @@ package {
 		public function test(p:Point):void {
 			flocks[0].goal = p;
 		}
-
+		
+		public function addBullet(bullet:Bullet):void {
+			bullets.push(bullet);
+			addChild(bullet);
+		}
+		
+		public function removeBullet(bullet:Bullet):void {
+			//how to remove?
+			// TO BO AND IGNACIO.  Try something like bullets.splice(bullets.indexOf(bullet), 1). CTRL-f "splice" for examples
+			// and BE CAREFUL not to remove from an array while iterating through that array.  
+			/*for (var i:int = 0; i < bullets.length; i++) {
+				if (bullets[i] == bullet)
+					bullets.
+			}
+			*/
+		}
 	}
 }

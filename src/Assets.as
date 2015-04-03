@@ -27,8 +27,9 @@ package
 		
 		[Embed(source="/../assets/images/units/highlight.png")]
 		private static const HighlightTexture:Class;
-		
-		HighlightTexture
+
+		[Embed(source = "../assets/images/units/bullet.png")]
+		private static const BulletTexture:Class;
 		
 		private static var gameTextures:Dictionary = new Dictionary();
 
