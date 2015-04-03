@@ -70,7 +70,13 @@ package {
 			
 			// TEST UNIT MOVEMENT
 			if (Math.random() < 0.02) {
-				var unit:Unit = new Infantry(new Point(300 * Math.random(), 400 * Math.random()));
+				if (Math.random() < 0.33) {
+					var unit:Unit = new Infantry(new Point(300 * Math.random(), 400 * Math.random()));
+				} else if (Math.random() < 0.5) {
+					var unit:Unit = new Sniper(new Point(300 * Math.random(), 400 * Math.random()));
+				} else {
+					var unit:Unit = new Raider(new Point(300 * Math.random(), 400 * Math.random()));
+				}
 				flocks[0].addUnit(unit);
 				
 			}

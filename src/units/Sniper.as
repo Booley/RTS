@@ -10,6 +10,17 @@ package units {
 			this.textureName = "SniperTexture";
 		}
 		
+		
+		override public function createArt():void {
+			// create art
+			super.createArt();
+			
+			image.scaleX *= 0.15;
+			image.scaleY *= 0.15; // TEMPORARY
+			image.x = -image.width / 2;
+			image.y = -image.height / 2;
+			addChild(image);
+		}	
 	}
 	
 }
