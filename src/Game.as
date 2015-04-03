@@ -2,6 +2,8 @@ package {
 	//Takes in commands from other classes and executes them. Also executes tick for all state-mutable objects
 	
 	import flash.geom.Point;
+	import flash.geom.Rectangle;
+	import mx.events.FlexEvent;
 	
 	import starling.display.Button;
 	import starling.display.Sprite;
@@ -18,6 +20,7 @@ package {
 		
 		private var flocks:Vector.<Flock>;
 		private var bases:Vector.<Base>;
+		private var selectedUnits:Vector.<Unit>;
 		
 		private var pause:Boolean = true;
 		
@@ -68,11 +71,12 @@ package {
 			for each (var flock:Flock in flocks) {
 				flock.tick(dt);
 			}
-			
+			/*
 			// TEST UNIT MOVEMENT
 			if (Math.random() < 0.02) {
 				//bases[0].queueUnit(Unit.INFANTRY);
 				//spawn(bases[0].nextUnit(), bases[0].pos);
+				
 				if (Math.random() < 0.33) {
 					var unit:Unit = new Infantry(new Point(300 * Math.random(), 400 * Math.random()));
 				} else if (Math.random() < 0.5) {
@@ -82,6 +86,93 @@ package {
 				}
 				flocks[0].addUnit(unit);
 			}
+			*/
+		}
+		
+		// tap to select A FLOCK. Return true if a flock was selected.
+		public function tap(startTap:Point, endTap:Point):void {
+			// if units were selected from a previous tap or drag
+			if (selectedUnits) {
+				var newFlock:Flock = new Flock();
+				for each (var unit:Unit in selectedUnits) {		
+					var oldFlock:Flock = unit.flock;
+					if (oldFlock) {
+						if (oldFlock.neighbors.length == 0) {
+							flocks.splice(flocks.indexOf(oldFlock), 1);
+						}
+						oldFlock.removeUnit(unit);
+					}
+					newFlock.addUnit(unit);
+					unit.unHighlight();
+				}
+				if (newFlock.neighbors.length > 0) {
+					newFlock.goal = startTap;
+					flocks.push(newFlock); 
+					
+				} else {
+					trace("Empty flock error");
+				}
+
+				
+				
+				selectedUnits = null;
+				return;
+			}
+			// if no units are currently selected, select the nearest flock
+			var bestDist:int = int.MAX_VALUE;
+			var closestFlock:Flock;
+			for each (var flock:Flock in flocks) {
+				var thisDist:int = flock.avgPos.subtract(startTap).length;  // HACK:  DOESN'T TAKE FLEET SIZE INTO ACCOUNT
+				if (thisDist < bestDist) {
+					bestDist = thisDist;
+					closestFlock = flock;
+				}
+			}
+			if (closestFlock) {
+				selectUnits(closestFlock.neighbors);
+			}
+		}
+		
+		// drag to box-select UNITS. Return true if units were selected.
+		public function drag(startTap:Point, endTap:Point):void {
+			// deselect any currently selected units
+			if (selectedUnits) {
+				for each (unit in selectedUnits) {
+					unit.unHighlight();
+				}
+				selectedUnits = null;
+			}
+			// determine which units were inside the box selection
+			var unitVector:Vector.<Unit> = new Vector.<Unit>();
+			for each (var flock:Flock in flocks) {
+				for each (var unit:Unit in flock.neighbors) {
+					if (containsPoint(startTap, endTap, unit.pos)) {
+						unitVector.push(unit);
+					}
+				}
+			}
+			// if units were selected, select them
+			if (unitVector.length > 0) {
+				selectUnits(unitVector);
+			} 
+		}
+		
+		// is the middle point in the rectangle defined by p1 and p2?
+		private function containsPoint(p1:Point, p2:Point, middle:Point):Boolean {
+			var x1:Number = Math.min(p1.x, p2.x);
+			var y1:Number = Math.min(p1.y, p2.y);
+			var x2:Number = Math.max(p1.x, p2.x);
+			var y2:Number = Math.max(p1.y, p2.y);
+			var rect:Rectangle = new Rectangle(x1, y1, x2 - x1, y2 - y1);
+			return rect.containsPoint(middle);
+		}
+		
+		// select flock from either select or boxSelect
+		private function selectUnits(unitVector:Vector.<Unit>):void {
+			for each (var unit:Unit in unitVector) {
+				unit.highlight();
+			}
+			selectedUnits = unitVector.slice(0, unitVector.length);
 		}
 		
 		public function spawn(unitType:int, pos:Point):void {

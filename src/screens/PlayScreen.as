@@ -18,9 +18,14 @@ package screens {
 	
 	public class PlayScreen extends Sprite {
 		
+		private static const TAP_LENGTH_CUTOFF:Number = 20; // length finger can travel before a tap becomes a box-select
+		
 		private var backBtn:Button;
 		
 		public static var game:Game;
+		
+		private var startTap:Point;
+		private var selectRect:Quad;
 		
 		// handle events and user input and pass data to the game
 		// the "PlayScreen" abstraction will pass data to Game.  Game will 
@@ -41,6 +46,11 @@ package screens {
 			var bg:Quad = new Quad(1000, 2000);
 			bg.alpha = 0;
 			addChildAt(bg, 0);
+			
+			selectRect = new Quad(1, 1, 0x00ffff);
+			selectRect.alpha = 0.2;
+			selectRect.visible = false;
+			addChild(selectRect);
 			
 			addEventListener(Event.ADDED_TO_STAGE, onAddToStage);
 		}
@@ -100,10 +110,38 @@ package screens {
 			var touch:Touch = e.getTouch(this);
 			if (touch) {
 				if (touch.phase == TouchPhase.BEGAN) {
-					game.test(new Point(touch.globalX, touch.globalY));				
+					startTap = new Point(touch.globalX, touch.globalY);	
+				} else if (touch.phase == TouchPhase.MOVED) {
+					if (startTap) {
+						var endPos:Point = new Point(touch.globalX, touch.globalY);	
+						var diff:Point = endPos.subtract(startTap);
+						selectRect.visible = true;
+						selectRect.x = startTap.x;
+						selectRect.y = startTap.y;
+						selectRect.width = diff.x;
+						selectRect.height = diff.y;
+					}
+				} 
+				else if (touch.phase == TouchPhase.ENDED) {
+					if (startTap) {
+						var endTap:Point = new Point(touch.globalX, touch.globalY);		
+						diff = endTap.subtract(startTap);
+						
+						if (diff.length < TAP_LENGTH_CUTOFF) {
+							game.tap(startTap, endTap); 
+						} else {
+							game.drag(startTap, endTap);
+						}
+						
+						startTap = null;
+						selectRect.visible = false;
+					}
 				}
+				
 			}
 		}
+		
+		
 		
 		// handle backBtn press
 		private function onBackBtnPress(e:TouchEvent):void {

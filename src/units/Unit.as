@@ -32,9 +32,13 @@ package units {
 		public var vel:Point;
 		public var radius:Number;
 		
+		public var flock:Flock;
+		
 		public var image:Image;
+		public var highlightImage:Image;
 		
 		public var textureName:String = "default"; // fix later.  just to make compiler happy.  don't actually use the Unit() constructor
+		public var highlightTextureName:String = "HighlightTexture"; // fix later.  just to make compiler happy.  don't actually use the Unit() constructor
 		
 		// a constructor for a unit
 		public function Unit(startPos:Point) {
@@ -53,6 +57,14 @@ package units {
 			//createShootingAnimation();
 		}
 		
+		public function highlight():void {
+			highlightImage.visible = true;
+		}
+		
+		public function unHighlight():void {
+			highlightImage.visible = false;
+		}
+		
 		public function takeDamage(dmg:Number):void {
 			this.health -= dmg;
 		}
@@ -65,6 +77,14 @@ package units {
 			image.x = -image.width / 2;
 			image.y = -image.height / 2;
 			addChild(image);
+			
+			highlightImage = new Image(Assets.getTexture(highlightTextureName));
+			highlightImage.scaleX *= 0.3;
+			highlightImage.scaleY *= 0.3; // TEMPORARY
+			highlightImage.x = -highlightImage.width / 2;
+			highlightImage.y = -highlightImage.height / 2;
+			addChild(highlightImage);
+			highlightImage.visible = false;
 		}	
 		
 		// 
