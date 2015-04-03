@@ -1,5 +1,7 @@
 package units {
-	
+	/*
+	 * Models all "units" in game: infantry, sniper, raider.
+	 */
 	import flash.geom.Point;
 	import starling.display.Image;
 	import starling.events.Event;
@@ -51,6 +53,10 @@ package units {
 			//createShootingAnimation();
 		}
 		
+		public function takeDamage(dmg:Number):void {
+			this.health -= dmg;
+		}
+		
 		// Idk about this method.. might remove it
 		public function createArt():void {
 			image = new Image(Assets.getTexture(textureName));
@@ -63,6 +69,7 @@ package units {
 		
 		// 
 		public function tick(dt:Number, neighbors:Vector.<Unit> = null, avgPos:Point = null, goal:Point = null):void {
+			//begin updating unit's movement {{{
 			var v:Point = vel.clone();
 			v.normalize(v.length * dt);
 			pos = pos.add(v);
@@ -70,23 +77,31 @@ package units {
 			this.x = pos.x;
 			this.y = pos.y;
 			
+			//update acceleration
 			var accel:Point = Flocking.getAcceleration(this, neighbors, avgPos, goal);
 			accel.normalize(accel.length * dt);
 			if (accel.length > MAX_ACCEL) {
 				accel.normalize(MAX_ACCEL);
 			}
+			
+			//update velocity
 			vel = vel.add(accel);
 			vel.normalize(vel.length * DAMPENING);
 			if (vel.length > MAX_SPEED) {
 				vel.normalize(MAX_SPEED);
 			}
+			
+			//update rotation
 			this.rotation %= 2*Math.PI;
 			var dir:Number = Math.atan2(vel.y, vel.x);
 			if (Math.abs(dir - this.rotation) > Math.PI) {
 				if (dir < this.rotation) dir += 2*Math.PI;
 				else dir -= 2*Math.PI;
 			}
-			this.rotation += (dir - this.rotation)*ROTATION_DAMPENING*vel.length/MAX_SPEED;
+			this.rotation += (dir - this.rotation) * ROTATION_DAMPENING * vel.length / MAX_SPEED;
+			
+			// }}} end updating unit's movement
+			
 		}
 		
 	}

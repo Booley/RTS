@@ -1,4 +1,5 @@
 package {
+	//Takes in commands from other classes and executes them. Also executes tick for all state-mutable objects
 	
 	import flash.geom.Point;
 	
@@ -70,8 +71,16 @@ package {
 			
 			// TEST UNIT MOVEMENT
 			if (Math.random() < 0.02) {
-				bases[0].queueUnit(Unit.INFANTRY);
-				spawn(bases[0].nextUnit(), bases[0].pos);
+				//bases[0].queueUnit(Unit.INFANTRY);
+				//spawn(bases[0].nextUnit(), bases[0].pos);
+				if (Math.random() < 0.33) {
+					var unit:Unit = new Infantry(new Point(300 * Math.random(), 400 * Math.random()));
+				} else if (Math.random() < 0.5) {
+					unit = new Sniper(new Point(300 * Math.random(), 400 * Math.random()));
+				} else {
+					unit = new Raider(new Point(300 * Math.random(), 400 * Math.random()));
+				}
+				flocks[0].addUnit(unit);
 			}
 		}
 		

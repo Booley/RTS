@@ -1,4 +1,5 @@
 package units {
+	//Models the base where units spawn and should attack
 	
 	import flash.geom.Point;
 		
@@ -18,10 +19,7 @@ package units {
 		
 		private var totalResources:int = DEFAULT_TOTAL_RESOURCES;
 		private var resourceRate:Number = DEFAULT_RESOURCE_RATE;
-		private var health:int = DEFAULT_HEALTH;
 		private var range:int = DEFAULT_RANGE;
-		private var damage:int = DEFAULT_DAMAGE;
-		private var rateOfFire:int = DEFAULT_RATE_OF_FIRE;
 		
 		private var unitQueue:Vector.<int>;
 		
