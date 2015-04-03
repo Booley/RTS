@@ -27,6 +27,7 @@ package units {
 		
 		public var rallyPoint:Point;
 		
+		public var infiniteBuild:Boolean = false; // Should units be re-queued after creation?
 		
 		public function Base(startPos:Point, rotation:Number = 0) {
 			super(startPos);
@@ -39,8 +40,17 @@ package units {
 			unitQueue = new Vector.<int>();
 		}
 		
+		public function queueUnit(unit:int):void {
+			unitQueue.push(unit);
+		}
+		
 		public function nextUnit():int {
-			return Unit.INFANTRY;
+			var unit:int = unitQueue.shift();
+			// requeue units if infinite build is on
+			if (infiniteBuild) {
+				unitQueue.push(unit);
+			}
+			return unit;
 		}
 		
 		override public function tick(dt:Number, neighbors:Vector.<Unit> = null, avgPos:Point = null, goal:Point = null):void {

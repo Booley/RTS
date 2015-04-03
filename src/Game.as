@@ -70,9 +70,8 @@ package {
 			
 			// TEST UNIT MOVEMENT
 			if (Math.random() < 0.02) {
-				var unit:Unit = new Infantry(new Point(300 * Math.random(), 400 * Math.random()));
-				flocks[0].addUnit(unit);
-				
+				bases[0].queueUnit(Unit.INFANTRY);
+				spawn(bases[0].nextUnit(), bases[0].pos);
 			}
 		}
 		
@@ -96,7 +95,8 @@ package {
 			unitVector.push(unit);
 			addChild(unit);
 			var flock:Flock = new Flock(unitVector);
-			flock.goal = new Point(400, 200); // TEMPORARY
+			flock.goal = new Point(200, 200); // TEMPORARY
+			flocks.push(flock);
 		}
 		
 		public function test(p:Point):void {

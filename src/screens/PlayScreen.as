@@ -2,6 +2,8 @@ package screens {
 	
 	import flash.geom.Point;
 	
+	import flash.ui.Multitouch;
+	
 	import starling.display.Button;
 	import starling.display.Sprite;
 	import starling.events.Event;
