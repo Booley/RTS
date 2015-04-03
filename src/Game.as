@@ -18,6 +18,7 @@ package {
 		
 		private var flocks:Vector.<Flock>;
 		private var bases:Vector.<Base>;
+		private var bullets:Vector.<Bullet>;
 		
 		private var pause:Boolean = true;
 		
@@ -26,6 +27,7 @@ package {
 			
 			flocks = new Vector.<Flock>();
 			bases = new Vector.<Base>();
+			bullets = new Vector.<Bullet>();
 			
 			// TESTING UNIT MOVEMENT AND STUFF {{{{{{{{{{{{{{{{
 			var unitVector:Vector.<Unit> = new Vector.<Unit>();
@@ -64,7 +66,11 @@ package {
 			for each (var base:Base in bases) {
 				base.tick(dt);
 			}
-			
+			/*
+			for each (var bullet:Bullet in bullets) {
+				bullet.tick(dt);
+			}
+			*/
 			for each (var flock:Flock in flocks) {
 				flock.tick(dt);
 			}
@@ -111,6 +117,7 @@ package {
 		public function test(p:Point):void {
 			flocks[0].goal = p;
 		}
-
+		
+		
 	}
 }

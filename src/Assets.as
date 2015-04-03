@@ -25,6 +25,9 @@ package
 		[Embed(source="/../assets/images/units/triangle.png")]
 		private static const SniperTexture:Class;
 		
+		[Embed(source = "../assets/images/units/bullet.png")]
+		private static const BulletTexture:Class;
+		
 		private static var gameTextures:Dictionary = new Dictionary();
 
 		// avoid creating a texture from a bitmap more than once for optimization.

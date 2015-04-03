@@ -55,6 +55,9 @@ package units {
 		
 		public function takeDamage(dmg:Number):void {
 			this.health -= dmg;
+			if (this.health <= 0) {
+				// destroy()?
+			}
 		}
 		
 		// Idk about this method.. might remove it
