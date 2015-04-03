@@ -1,4 +1,5 @@
 package screens {
+	//Interface for touch, also executes the tick for game.
 	
 	import flash.geom.Point;
 	

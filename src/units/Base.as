@@ -1,4 +1,5 @@
 package units {
+	//Models the base where units spawn and should attack
 	
 	import flash.geom.Point;
 		

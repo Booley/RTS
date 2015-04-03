@@ -1,4 +1,5 @@
 package {
+	//Takes in commands from other classes and executes them. Also executes tick for all state-mutable objects
 	
 	import flash.geom.Point;
 	
