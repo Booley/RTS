@@ -27,8 +27,8 @@ package units {
 		
 		public var infiniteBuild:Boolean = false; // Should units be re-queued after creation?
 		
-		public function Base(startPos:Point, rotation:Number = 0) {
-			super(startPos);
+		public function Base(startPos:Point, owner:int = 1, rotation:Number = 0) {
+			super(startPos, owner);
 			unitType = Unit.BASE;
 			textureName = "BaseTexture";
 			

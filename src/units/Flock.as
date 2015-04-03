@@ -11,10 +11,8 @@ package units {
 		
 		public var neighbors:Vector.<Unit>;
 		public var goal:Point;
-		public var owner:int; // ID of player which owns the flock
 
-		public function Flock(owner:int = 1, units:Vector.<Unit> = null) {
-			this.owner = owner;
+		public function Flock(units:Vector.<Unit> = null) {
 			if (units == null) {
 				this.neighbors = new Vector.<Unit>();
 			} else {

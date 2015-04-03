@@ -46,15 +46,18 @@ package units {
 		public var healthBackground:Quad;
 		public var healthBar:Quad;
 		
+		public var owner:int; // ID of player which owns the unit
+		
 		public var textureName:String = "default"; // fix later.  just to make compiler happy.  don't actually use the Unit() constructor
 		public var highlightTextureName:String = "HighlightTexture"; // fix later.  just to make compiler happy.  don't actually use the Unit() constructor
 		
 		// a constructor for a unit
-		public function Unit(startPos:Point) {
+		public function Unit(startPos:Point, owner:int = 1) {
 			pos = startPos.clone();
 			this.x = pos.x;
 			this.y = pos.y;
 			vel = new Point();
+			this.owner = owner;
 			
 			this.addEventListener(Event.ADDED_TO_STAGE, onAddToStage);
 		}
@@ -92,7 +95,7 @@ package units {
 		
 		// Idk about this method.. might remove it
 		public function createArt():void {
-			image = new Image(Assets.getTexture(textureName));
+			image = new Image(Assets.getTexture(textureName + owner));
 			image.scaleX *= 0.3;
 			image.scaleY *= 0.3; // TEMPORARY
 			image.alignPivot();
@@ -178,9 +181,12 @@ package units {
 					target = null;
 				}
 			}
+			if (target && target.parent == null) {
+				 target = null;
+			}
 			// target can become null in previous if statement
-			if (target == null || (target != null && target.parent == null)) {
-				pickTarget(PlayScreen.game.getEnemyUnits(this.flock.owner));
+			if (target == null) {
+				pickTarget(PlayScreen.game.getEnemyUnits(this.owner));
 			}
 			
 			// attack target

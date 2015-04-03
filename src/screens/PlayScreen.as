@@ -19,10 +19,10 @@ package screens {
 	public class PlayScreen extends Sprite {
 		
 		private static const TAP_LENGTH_CUTOFF:Number = 20; // length finger can travel before a tap becomes a box-select
+	
+		public static var game:Game;
 		
 		private var backBtn:Button;
-		
-		public static var game:Game;
 		
 		private var startTap:Point;
 		private var selectRect:Quad;

@@ -43,7 +43,7 @@ package {
 				unitVector.push(unit);
 				addChild(unit);
 			}
-			var flock:Flock = new Flock(1, unitVector);
+			var flock:Flock = new Flock(unitVector);
 			flocks.push(flock);
 			flock.goal = new Point(200, 300);
 			
@@ -52,11 +52,11 @@ package {
 			for (i = 0; i < 20; i++) {
 				x = Math.random() * 100;
 				y = Math.random() * 100;
-				unit = new Infantry(new Point(x, y));
+				unit = new Infantry(new Point(x, y), 2);
 				unitVector.push(unit);
 				addChild(unit);
 			}
-			flock = new Flock(2, unitVector);
+			flock = new Flock(unitVector);
 			flocks.push(flock);
 			flock.goal = new Point(200, 100);
 			
@@ -65,7 +65,7 @@ package {
 			bases.push(base1);
 			addChild(base1);
 			
-			var base2:Base = new Base(new Point(320 / 2, 10), Math.PI);
+			var base2:Base = new Base(new Point(320 / 2, 10), 2, Math.PI);
 			bases.push(base2)
 			addChild(base2);
 			
@@ -184,9 +184,11 @@ package {
 			// determine which units were inside the box selection
 			var unitVector:Vector.<Unit> = new Vector.<Unit>();
 			for each (var flock:Flock in flocks) {
-				if (flock.owner != owner) {
-					for each (var unit:Unit in flock.neighbors) {
+				for each (var unit:Unit in flock.neighbors) {
+					if (unit.owner != owner) {
 						unitVector.push(unit);
+					} else {
+						break;
 					}
 				}
 			}
@@ -197,13 +199,13 @@ package {
 			var unit:Unit;
 			switch (unitType) {
 				case Unit.INFANTRY:
-					unit = new Infantry(pos)
+					unit = new Infantry(pos, owner)
 					break;
 				case Unit.RAIDER:
-					unit = new Raider(pos)
+					unit = new Raider(pos, owner)
 					break;
 				case Unit.SNIPER:
-					unit = new Sniper(pos)
+					unit = new Sniper(pos, owner)
 					break;
 				default:
 					trace("Unknown unit type in base.spawn()");
@@ -212,7 +214,7 @@ package {
 			var unitVector:Vector.<Unit> = new Vector.<Unit>();
 			unitVector.push(unit);
 			addChild(unit);
-			var flock:Flock = new Flock(owner, unitVector);
+			var flock:Flock = new Flock(unitVector);
 			flock.goal = new Point(200, 200); // TEMPORARY
 			flocks.push(flock);
 		}
