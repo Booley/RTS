@@ -11,9 +11,10 @@ package units {
 		
 		public var neighbors:Vector.<Unit>;
 		public var goal:Point;
-		public var avgPos:Point;
+		public var owner:int; // ID of player which owns the flock
 
-		public function Flock(units:Vector.<Unit> = null) {
+		public function Flock(owner:int = 1, units:Vector.<Unit> = null) {
+			this.owner = owner;
 			if (units == null) {
 				this.neighbors = new Vector.<Unit>();
 			} else {
@@ -35,16 +36,8 @@ package units {
 		}
 		
 		public function tick(dt:Number):void {
-			// compute average flock position
-			avgPos = new Point();
 			for each (var unit:Unit in neighbors) {
-				avgPos = avgPos.add(unit.pos);
-			}
-			// divide by number of neighbors to get average position of flock
-			avgPos.normalize(avgPos.length/neighbors.length);
-			
-			for each (unit in neighbors) {
-				unit.tick(dt, neighbors, avgPos, goal);
+				unit.tick(dt, neighbors, goal);
 			}
 		}
 		

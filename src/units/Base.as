@@ -51,7 +51,7 @@ package units {
 			return unit;
 		}
 		
-		override public function tick(dt:Number, neighbors:Vector.<Unit> = null, avgPos:Point = null, goal:Point = null):void {
+		override public function tick(dt:Number, neighbors:Vector.<Unit> = null, goal:Point = null):void {
 			updateResources();
 		}
 		

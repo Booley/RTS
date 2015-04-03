@@ -34,17 +34,32 @@ package {
 			bullets = new Vector.<Bullet>();
 			
 			// TESTING UNIT MOVEMENT AND STUFF {{{{{{{{{{{{{{{{
+			// TEAM 1
 			var unitVector:Vector.<Unit> = new Vector.<Unit>();
-			for (var i:int = 0; i < 10; i++) {
+			for (var i:int = 0; i < 20; i++) {
 				var x:Number = Math.random() * 100;
-				var y:Number = Math.random() * 100 + 200;
+				var y:Number = Math.random() * 100 + 400;
 				var unit:Unit = new Infantry(new Point(x, y));
 				unitVector.push(unit);
 				addChild(unit);
 			}
-			var flock:Flock = new Flock(unitVector);
+			var flock:Flock = new Flock(1, unitVector);
 			flocks.push(flock);
 			flock.goal = new Point(200, 300);
+			
+			// TEAM 2
+			unitVector = new Vector.<Unit>();
+			for (i = 0; i < 20; i++) {
+				x = Math.random() * 100;
+				y = Math.random() * 100;
+				unit = new Infantry(new Point(x, y));
+				unitVector.push(unit);
+				addChild(unit);
+			}
+			flock = new Flock(2, unitVector);
+			flocks.push(flock);
+			flock.goal = new Point(200, 100);
+			
 			
 			var base1:Base = new Base(new Point(320 / 2, 480 - 10));
 			bases.push(base1);
@@ -70,31 +85,14 @@ package {
 			for each (var base:Base in bases) {
 				base.tick(dt);
 			}
-			/*
+			
 			for each (var bullet:Bullet in bullets) {
 				bullet.tick(dt);
 			}
-			*/
+			
 			for each (var flock:Flock in flocks) {
 				flock.tick(dt);
 			}
-			/*
-			// TEST UNIT MOVEMENT
-			if (Math.random() < 0.02) {
-				//bases[0].queueUnit(Unit.INFANTRY);
-				//spawn(bases[0].nextUnit(), bases[0].pos);
-				
-				if (Math.random() < 0.33) {
-					var unit:Unit = new Infantry(new Point(300 * Math.random(), 400 * Math.random()));
-				} else if (Math.random() < 0.5) {
-					unit = new Sniper(new Point(300 * Math.random(), 400 * Math.random()));
-				} else {
-					unit = new Raider(new Point(300 * Math.random(), 400 * Math.random()));
-				}
-				flocks[0].addUnit(unit);
-
-			}
-			*/
 		}
 		
 		// tap to select A FLOCK. Return true if a flock was selected.
@@ -182,7 +180,20 @@ package {
 			selectedUnits = unitVector.slice(0, unitVector.length);
 		}
 		
-		public function spawn(unitType:int, pos:Point):void {
+		public function getEnemyUnits(owner:int):Vector.<Unit> {
+			// determine which units were inside the box selection
+			var unitVector:Vector.<Unit> = new Vector.<Unit>();
+			for each (var flock:Flock in flocks) {
+				if (flock.owner != owner) {
+					for each (var unit:Unit in flock.neighbors) {
+						unitVector.push(unit);
+					}
+				}
+			}
+			return unitVector;
+		}
+		
+		public function spawn(unitType:int, pos:Point, owner:int):void {
 			var unit:Unit;
 			switch (unitType) {
 				case Unit.INFANTRY:
@@ -201,9 +212,41 @@ package {
 			var unitVector:Vector.<Unit> = new Vector.<Unit>();
 			unitVector.push(unit);
 			addChild(unit);
-			var flock:Flock = new Flock(unitVector);
+			var flock:Flock = new Flock(owner, unitVector);
 			flock.goal = new Point(200, 200); // TEMPORARY
 			flocks.push(flock);
+		}
+		
+		public function removeUnit(unit:Unit):void {
+			if (unit == null) {
+				trace("WHAT THE ACTUAL FUCK1");
+				return;
+			}
+			var flock:Flock = unit.flock;
+			if (unit.flock == null) {
+				trace("WHAT THE ACTUAL FUCK");
+				return;
+			}
+			// remove unit from its flock
+			flock.removeUnit(unit);
+			if (flock.neighbors.length == 0) {
+				flocks.splice(flocks.indexOf(flock), 1);
+			}
+			removeChild(unit);
+			
+			// make sure unit isn't in selectedUnits
+			for each (var unit2:Unit in selectedUnits) {
+				if (unit == unit2) {
+					selectedUnits.splice(selectedUnits.indexOf(unit), 1);
+				}
+			}
+			// remove any bullets headed toward this unit
+			for each (var bullet:Bullet in bullets) {
+				// === compares memory addresses
+				if (bullet.target == unit) {
+					removeBullet(bullet);
+				}
+			}
 		}
 		
 		public function addBullet(bullet:Bullet):void {
@@ -212,14 +255,8 @@ package {
 		}
 		
 		public function removeBullet(bullet:Bullet):void {
-			//how to remove?
-			// TO BO AND IGNACIO.  Try something like bullets.splice(bullets.indexOf(bullet), 1). CTRL-f "splice" for examples
-			// and BE CAREFUL not to remove from an array while iterating through that array.  
-			/*for (var i:int = 0; i < bullets.length; i++) {
-				if (bullets[i] == bullet)
-					bullets.
-			}
-			*/
+			bullets.splice(bullets.indexOf(bullet), 1)
+			removeChild(bullet);
 		}
 	}
 }

@@ -13,7 +13,15 @@ package units {
 		
 		
 		// get the net acceleration from a unit's neighbors on the unit for flocking behavior
-		public static function getAcceleration(u:Unit, neighbors:Vector.<Unit>, avgPos:Point, goal:Point = null):Point {
+		public static function getAcceleration(u:Unit, neighbors:Vector.<Unit>, goal:Point = null):Point {
+			// compute average flock position
+			var avgPos:Point = new Point();
+			for each (var unit:Unit in neighbors) {
+				avgPos = avgPos.add(unit.pos);
+			}
+			// divide by number of neighbors to get average position of flock
+			avgPos.normalize(avgPos.length/neighbors.length);
+			
 			var accel:Point = new Point();
 			
 			var repulsionVector:Point = getRepulsion(u, neighbors);
