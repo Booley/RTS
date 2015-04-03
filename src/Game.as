@@ -17,6 +17,8 @@ package {
 	
 	public class Game extends Sprite {
 		
+		private static const DISTANCE_TO_TAP_UNIT:Number = 50; // max distance from a unit you can tap for it to select its flock
+		
 		private var flocks:Vector.<Flock>;
 		private var bases:Vector.<Base>;
 		private var selectedUnits:Vector.<Unit>;
@@ -103,10 +105,10 @@ package {
 				for each (var unit:Unit in selectedUnits) {		
 					var oldFlock:Flock = unit.flock;
 					if (oldFlock) {
+						oldFlock.removeUnit(unit);
 						if (oldFlock.neighbors.length == 0) {
 							flocks.splice(flocks.indexOf(oldFlock), 1);
 						}
-						oldFlock.removeUnit(unit);
 					}
 					newFlock.addUnit(unit);
 					unit.unHighlight();
@@ -114,24 +116,23 @@ package {
 				if (newFlock.neighbors.length > 0) {
 					newFlock.goal = startTap;
 					flocks.push(newFlock); 
-					
 				} else {
 					trace("Empty flock error");
 				}
-
-				
 				
 				selectedUnits = null;
 				return;
 			}
 			// if no units are currently selected, select the nearest flock
-			var bestDist:int = int.MAX_VALUE;
+			var bestDist:int = DISTANCE_TO_TAP_UNIT;
 			var closestFlock:Flock;
 			for each (var flock:Flock in flocks) {
-				var thisDist:int = flock.avgPos.subtract(startTap).length;  // HACK:  DOESN'T TAKE FLEET SIZE INTO ACCOUNT
-				if (thisDist < bestDist) {
-					bestDist = thisDist;
-					closestFlock = flock;
+				for each (unit in flock.neighbors) {
+					var thisDist:int = unit.pos.subtract(startTap).length;
+					if (thisDist < bestDist) {
+						bestDist = thisDist;
+						closestFlock = unit.flock;
+					}
 				}
 			}
 			if (closestFlock) {
@@ -203,10 +204,6 @@ package {
 			var flock:Flock = new Flock(unitVector);
 			flock.goal = new Point(200, 200); // TEMPORARY
 			flocks.push(flock);
-		}
-		
-		public function test(p:Point):void {
-			flocks[0].goal = p;
 		}
 		
 		public function addBullet(bullet:Bullet):void {

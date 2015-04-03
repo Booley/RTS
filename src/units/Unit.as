@@ -15,10 +15,10 @@ package units {
 		public static const RAIDER:int = 2;
 		public static const SNIPER:int = 3;
 		
-		public static const MAX_SPEED:Number = 100; // REPLACE THIS WHEN CREATING SUBCLASSES
+		public static const MAX_SPEED:Number = 50; // REPLACE THIS WHEN CREATING SUBCLASSES
 		public static const MAX_ACCEL:Number = 15; // REPLACE THIS WHEN CREATING SUBCLASSES
 		
-		public static const DAMPENING:Number = 0.85; // dampening time constant to help smooth movement.  applied to vel each tick
+		public static const DAMPENING:Number = 0.95; // dampening time constant to help smooth movement.  applied to vel each tick
 		public static const ROTATION_DAMPENING:Number = 0.1; // time constant for rotation adjustment based on velocity direction
 		
 		public var damage:int; 

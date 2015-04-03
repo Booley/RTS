@@ -111,8 +111,10 @@ package screens {
 			if (touch) {
 				if (touch.phase == TouchPhase.BEGAN) {
 					startTap = new Point(touch.globalX, touch.globalY);	
-				} else if (touch.phase == TouchPhase.MOVED) {
+				} 
+				else if (touch.phase == TouchPhase.MOVED) {
 					if (startTap) {
+						// update box-selection rectangle
 						var endPos:Point = new Point(touch.globalX, touch.globalY);	
 						var diff:Point = endPos.subtract(startTap);
 						selectRect.visible = true;
@@ -127,9 +129,12 @@ package screens {
 						var endTap:Point = new Point(touch.globalX, touch.globalY);		
 						diff = endTap.subtract(startTap);
 						
+						// tap
 						if (diff.length < TAP_LENGTH_CUTOFF) {
 							game.tap(startTap, endTap); 
-						} else {
+						} 
+						// drag
+						else {
 							game.drag(startTap, endTap);
 						}
 						
@@ -140,8 +145,6 @@ package screens {
 				
 			}
 		}
-		
-		
 		
 		// handle backBtn press
 		private function onBackBtnPress(e:TouchEvent):void {
