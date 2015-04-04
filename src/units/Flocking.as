@@ -5,12 +5,11 @@ package units {
 	public class Flocking {
 		
 		// flocking behavior constants
-		public static const REPULSION_WEIGHT:Number = 500; // repulsion from neighbors
+		public static const REPULSION_WEIGHT:Number = 200; // repulsion from neighbors
 		public static const ATTRACTION_WEIGHT:Number = 1; // attraction from neighbors 
-		public static const MATCH_VELOCITY_WEIGHT:Number = 0.1; // want to match neighbors' velocity
-		public static const GOAL_WEIGHT:Number = 0.5; // attraction to goal 
+		public static const MATCH_VELOCITY_WEIGHT:Number = 0.05; // want to match neighbors' velocity
+		public static const GOAL_WEIGHT:Number = 0.3; // attraction to goal 
 		public static const THRUST_FACTOR:Number = 10; // overall scale factor for thrust strength
-		
 		
 		// get the net acceleration from a unit's neighbors on the unit for flocking behavior
 		public static function getAcceleration(u:Unit, neighbors:Vector.<Unit>, goal:Point = null):Point {

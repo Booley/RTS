@@ -14,10 +14,12 @@ package {
 	import starling.display.Quad;
 	
 	import units.*;
+	import screens.QueueMenu;
 	
 	public class Game extends Sprite {
 		
-		private static const DISTANCE_TO_TAP_UNIT:Number = 50; // max distance from a unit you can tap for it to select its flock
+		private static const DISTANCE_TO_TAP_UNIT:Number = 30; // max distance from a unit you can tap for it to select its flock
+		private static const DISTANCE_TO_TAP_BASE:Number = 40; // max distance from a unit you can tap for it to select its flock
 		
 		private var flocks:Vector.<Flock>;
 		private var bases:Vector.<Base>;
@@ -25,6 +27,9 @@ package {
 		private var bullets:Vector.<Bullet>;
 		
 		private var pause:Boolean = true;
+		
+		private var queueMenu:QueueMenu;
+		private var base1:Base;
 		
 		public function Game() {
 			super();
@@ -56,14 +61,15 @@ package {
 				unitVector.push(unit);
 				addChild(unit);
 			}
+			
 			flock = new Flock(unitVector);
 			flocks.push(flock);
 			flock.goal = new Point(200, 100);
 			
-			
-			var base1:Base = new Base(new Point(320 / 2, 480 - 10));
+			base1 = new Base(new Point(320 / 2, 480 - 10));
 			bases.push(base1);
 			addChild(base1);
+			queueMenu = new QueueMenu(base1);
 			
 			var base2:Base = new Base(new Point(320 / 2, 10), 2, Math.PI);
 			bases.push(base2)
@@ -97,6 +103,10 @@ package {
 		
 		// tap to select A FLOCK. Return true if a flock was selected.
 		public function tap(startTap:Point, endTap:Point):void {
+			if (contains(queueMenu)) {
+				removeChild(queueMenu);
+				return;
+			}
 			// if units were selected from a previous tap or drag
 			if (selectedUnits) {
 				var newFlock:Flock = new Flock();
@@ -121,7 +131,13 @@ package {
 				selectedUnits = null;
 				return;
 			}
-			// if no units are currently selected, select the nearest flock
+			// if no units are currently selected,
+			// check if the base was clicked
+			if (base1.pos.subtract(startTap).length < DISTANCE_TO_TAP_BASE) {
+				addChild(queueMenu);
+				return;
+			} 
+			//select the nearest flock
 			var bestDist:int = DISTANCE_TO_TAP_UNIT;
 			var closestFlock:Flock;
 			for each (var flock:Flock in flocks) {
@@ -140,6 +156,9 @@ package {
 		
 		// drag to box-select UNITS. Return true if units were selected.
 		public function drag(startTap:Point, endTap:Point):void {
+			if (contains(queueMenu)) {
+				removeChild(queueMenu);
+			}
 			// deselect any currently selected units
 			if (selectedUnits) {
 				for each (unit in selectedUnits) {
@@ -152,7 +171,9 @@ package {
 			for each (var flock:Flock in flocks) {
 				for each (var unit:Unit in flock.neighbors) {
 					if (containsPoint(startTap, endTap, unit.pos)) {
-						unitVector.push(unit);
+						if (unit.owner == 1) {
+							unitVector.push(unit);
+						}
 					}
 				}
 			}

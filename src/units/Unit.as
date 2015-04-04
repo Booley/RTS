@@ -18,39 +18,45 @@ package units {
 		public static const RAIDER:int = 2;
 		public static const SNIPER:int = 3;
 		
-		public static const MAX_SPEED:Number = 50; // REPLACE THIS WHEN CREATING SUBCLASSES
-		public static const MAX_ACCEL:Number = 15; // REPLACE THIS WHEN CREATING SUBCLASSES
-		public static const MAX_HEALTH:Number = 100; // REPLACE THIS WHEN CREATING SUBCLASSES
-		
+		// global movement constants
 		public static const DAMPENING:Number = 0.95; // dampening time constant to help smooth movement.  applied to vel each tick
 		public static const ROTATION_DAMPENING:Number = 0.1; // time constant for rotation adjustment based on velocity direction
 		
+		// constants to override
+		public static var DEFAULT_MAX_SPEED:Number = 20; // REPLACE THIS WHEN CREATING SUBCLASSES
+		public static var DEFAULT_MAX_ACCEL:Number = 1; // REPLACE THIS WHEN CREATING SUBCLASSES
+		public static var DEFAULT_MAX_HEALTH:Number = 200; // REPLACE THIS WHEN CREATING SUBCLASSES
+		public static var DEFAULT_HEALTH_REGEN:Number = 2; // REPLACE THIS WHEN CREATING SUBCLASSES
+		public static var DEFAULT_DAMAGE:Number = 10; // REPLACE THIS WHEN CREATING SUBCLASSES
+		public static var DEFAULT_ROF:Number = 2; // REPLACE THIS WHEN CREATING SUBCLASSES
+		public static var DEFAULT_ATTACK_RANGE:Number = 100; // REPLACE THIS WHEN CREATING SUBCLASSES
 		
-		public var damage:int = 10; 
-		public var rateOfFire:Number = 2; // seconds per shot
-		public var attackRange:int = 100;
-		public var attackCooldown:Number = 0;
-		public var target:Unit;
-		public var health:int = MAX_HEALTH;
-		
+		// constants which depend on unit type
 		public var unitType:int;
-		
+		public var textureName:String = "default"; // fix later.  just to make compiler happy.  don't actually use the Unit() constructor
+		public var maxSpeed:Number = DEFAULT_MAX_SPEED;
+		public var maxAccel:Number = DEFAULT_MAX_ACCEL;
+		public var maxHealth:Number = DEFAULT_MAX_HEALTH;
+		public var health:Number = maxHealth;
+		public var healthRegen:Number = DEFAULT_HEALTH_REGEN; // health regen per second
+		public var damage:Number = DEFAULT_DAMAGE; 
+		public var rateOfFire:Number = DEFAULT_ROF; // seconds per shot
+		public var attackRange:int = DEFAULT_ATTACK_RANGE;
+		public var attackCooldown:Number = 0;
 		
 		public var pos:Point;
 		public var vel:Point;
-		public var radius:Number;
 		public var flock:Flock;
+		public var target:Unit;
+		public var owner:int; // ID of player which owns the unit
 		
+		// image variables
 		public var image:Image;
 		public var highlightImage:Image;
 		public var healthBackground:Quad;
 		public var healthBar:Quad;
-		
-		public var owner:int; // ID of player which owns the unit
-		
-		public var textureName:String = "default"; // fix later.  just to make compiler happy.  don't actually use the Unit() constructor
-		public var highlightTextureName:String = "HighlightTexture"; // fix later.  just to make compiler happy.  don't actually use the Unit() constructor
-		
+		public var highlightTextureName:String = "HighlightTexture";
+
 		// a constructor for a unit
 		public function Unit(startPos:Point, owner:int = 1) {
 			pos = startPos.clone();
@@ -79,10 +85,6 @@ package units {
 		
 		public function takeDamage(dmg:Number):void {
 			this.health -= dmg;
-			healthBar.width = healthBackground.width * health / MAX_HEALTH;
-			if (this.health <= 0) {
-				PlayScreen.game.removeUnit(this);
-			}
 		}
 		
 		public function shoot():void {
@@ -96,8 +98,8 @@ package units {
 		// Idk about this method.. might remove it
 		public function createArt():void {
 			image = new Image(Assets.getTexture(textureName + owner));
-			image.scaleX *= 0.3;
-			image.scaleY *= 0.3; // TEMPORARY
+			image.scaleX *= 0.2;
+			image.scaleY *= 0.2; // TEMPORARY
 			image.alignPivot();
 			addChild(image);
 			
@@ -141,38 +143,13 @@ package units {
 		
 		// 
 		public function tick(dt:Number, neighbors:Vector.<Unit> = null, goal:Point = null):void {
-			//begin updating unit's movement {{{
-			var v:Point = vel.clone();
-			v.normalize(v.length * dt);
-			pos = pos.add(v);
-			
-			this.x = pos.x;
-			this.y = pos.y;
-			
-			//update acceleration
-			var accel:Point = Flocking.getAcceleration(this, neighbors, goal);
-			accel.normalize(accel.length * dt);
-			if (accel.length > MAX_ACCEL) {
-				accel.normalize(MAX_ACCEL);
+			health += healthRegen * dt;
+			health = Math.min(health, maxHealth);
+			healthBar.width = healthBackground.width * health / maxHealth;
+			if (this.health <= 0) {
+				PlayScreen.game.removeUnit(this);
 			}
 			
-			//update velocity
-			vel = vel.add(accel);
-			vel.normalize(vel.length * DAMPENING);
-			if (vel.length > MAX_SPEED) {
-				vel.normalize(MAX_SPEED);
-			}
-			
-			//update rotation
-			image.rotation %= 2*Math.PI;
-			var dir:Number = Math.atan2(vel.y, vel.x);
-			if (Math.abs(dir - image.rotation) > Math.PI) {
-				if (dir < image.rotation) dir += 2*Math.PI;
-				else dir -= 2*Math.PI;
-			}
-			image.rotation += (dir - image.rotation) * ROTATION_DAMPENING * vel.length / MAX_SPEED;
-			
-			// }}} end updating unit's movement
 			
 			// attempt to find a target if one doesn't exist
 			if (target) {
@@ -188,6 +165,53 @@ package units {
 			if (target == null) {
 				pickTarget(PlayScreen.game.getEnemyUnits(this.owner));
 			}
+			
+			
+			//begin updating unit's movement {{{
+			var v:Point = vel.clone();
+			v.normalize(v.length * dt);
+			pos = pos.add(v);
+			
+			this.x = pos.x;
+			this.y = pos.y;
+			
+			//update acceleration
+			var accel:Point = Flocking.getAcceleration(this, neighbors, goal);
+			accel.normalize(accel.length * dt);
+			if (accel.length > maxAccel) {
+				accel.normalize(maxAccel);
+			}
+			
+			//update velocity
+			vel = vel.add(accel);
+			vel.normalize(vel.length * DAMPENING);
+			if (vel.length > maxSpeed) {
+				vel.normalize(maxSpeed);
+			}
+			
+			// }}} end updating unit's movement
+			//update rotation
+			image.rotation %= 2*Math.PI;
+			if (target) {
+				var diff:Point = target.pos.subtract(this.pos);
+				//update rotation
+				dir = Math.atan2(diff.y, diff.x);
+				if (Math.abs(dir - image.rotation) > Math.PI) {
+					if (dir < image.rotation) dir += 2*Math.PI;
+					else dir -= 2*Math.PI;
+				}
+				image.rotation += (dir - image.rotation) * ROTATION_DAMPENING;
+			} else {
+				//update rotation
+				var dir:Number = Math.atan2(vel.y, vel.x);
+				if (Math.abs(dir - image.rotation) > Math.PI) {
+					if (dir < image.rotation) dir += 2*Math.PI;
+					else dir -= 2*Math.PI;
+				}
+				image.rotation += (dir - image.rotation) * ROTATION_DAMPENING * vel.length / maxSpeed;
+			}
+			
+
 			
 			// attack target
 			attackCooldown -= dt;

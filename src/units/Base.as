@@ -3,9 +3,11 @@ package units {
 	
 	import flash.geom.Point;
 		
-	import starling.events.Event
+	import starling.events.Event;
 	import starling.display.Image;
 	import starling.display.Sprite;
+	
+	import screens.PlayScreen;
 	
 	public class Base extends Unit {
 		
@@ -17,6 +19,8 @@ package units {
 		private static const DEFAULT_DAMAGE:int = 10; // damage per shot
 		private static const DEFAULT_RATE_OF_FIRE:int = 1; // shots per second
 		
+		private static const UNIT_BUILD_COOLDOWN_RESET:Number = 3; // seconds
+		
 		private var totalResources:int = DEFAULT_TOTAL_RESOURCES;
 		private var resourceRate:Number = DEFAULT_RESOURCE_RATE;
 		private var range:int = DEFAULT_RANGE;
@@ -26,6 +30,8 @@ package units {
 		public var rallyPoint:Point;
 		
 		public var infiniteBuild:Boolean = false; // Should units be re-queued after creation?
+		
+		public var unitBuildCooldown:Number = UNIT_BUILD_COOLDOWN_RESET;
 		
 		public function Base(startPos:Point, owner:int = 1, rotation:Number = 0) {
 			super(startPos, owner);
@@ -53,6 +59,11 @@ package units {
 		
 		override public function tick(dt:Number, neighbors:Vector.<Unit> = null, goal:Point = null):void {
 			updateResources();
+			unitBuildCooldown -= dt;
+			if (unitBuildCooldown < 0) {
+				unitBuildCooldown = UNIT_BUILD_COOLDOWN_RESET;
+				PlayScreen.game.spawn(nextUnit(), this.pos, this.owner);
+			}
 		}
 		
 		private function updateResources():void {
