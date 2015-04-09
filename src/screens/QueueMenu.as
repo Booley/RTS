@@ -19,12 +19,12 @@ package screens {
 		private var button5:Button;
 		private var button6:Button;
 		
-		private var base:Base;
+		private var portal:Base;
 		
 		public function QueueMenu(base:Base) {
 			super();
 			
-			this.base = base;
+			this.portal = base;
 			
 			// initialize and add buttons
 			button1 = new Button(Assets.getTexture("ButtonTexture"), "Inf");
@@ -79,7 +79,7 @@ package screens {
 			var touch:Touch = e.getTouch(button1);
 			if (touch) {
 				if(touch.phase == TouchPhase.BEGAN) {
-					base.queueUnit(Unit.INFANTRY);
+					portal.queueUnit(Unit.INFANTRY);
 				}
 			}
 		}
@@ -89,7 +89,7 @@ package screens {
 			var touch:Touch = e.getTouch(button2);
 			if (touch) {
 				if(touch.phase == TouchPhase.BEGAN) {
-					base.queueUnit(Unit.SNIPER);
+					portal.queueUnit(Unit.SNIPER);
 				}
 			}
 		}
@@ -99,7 +99,7 @@ package screens {
 			var touch:Touch = e.getTouch(button3);
 			if (touch) {
 				if(touch.phase == TouchPhase.BEGAN) {
-					base.queueUnit(Unit.RAIDER);
+					portal.queueUnit(Unit.RAIDER);
 				}
 			}
 		}
