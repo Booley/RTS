@@ -6,8 +6,8 @@ package units {
 
 		public static const UNIT_TYPE:int = Unit.INFANTRY;
 		public static const TEXTURE_NAME:String = "InfantryTexture";
-		public static const MAX_SPEED:Number = 15;
-		public static const MAX_ACCEL:Number = 1;
+		public static const MAX_SPEED:Number = 50; // 15;
+		public static const MAX_ACCEL:Number = 10;
 		public static const MAX_HEALTH:Number = 200; 
 		public static const HEALTH_REGEN:Number = 2;
 		public static const DAMAGE:Number = 10;

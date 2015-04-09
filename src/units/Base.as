@@ -14,16 +14,21 @@ package units {
 		// default constants
 		private static const DEFAULT_TOTAL_RESOURCES:int = 100; // starting resources
 		private static const DEFAULT_RESOURCE_RATE:Number = 1; // resource per second
-		private static const DEFAULT_HEALTH:int = 5000; // hitpoints
-		private static const DEFAULT_RANGE:int = 50; // range in "units" of the defensive turret
-		private static const DEFAULT_DAMAGE:int = 10; // damage per shot
-		private static const DEFAULT_RATE_OF_FIRE:int = 1; // shots per second
+		
+		public static const UNIT_TYPE:int = Unit.INFANTRY;
+		public static const TEXTURE_NAME:String = "BaseTexture";
+		public static const MAX_SPEED:Number = 0;
+		public static const MAX_ACCEL:Number = 0;
+		public static const MAX_HEALTH:Number = 50; 
+		public static const HEALTH_REGEN:Number = 2;
+		public static const DAMAGE:Number = 50;
+		public static const ROF:Number = 1;
+		public static const ATTACK_RANGE:Number = 120;
 		
 		private static const UNIT_BUILD_COOLDOWN_RESET:Number = 3; // seconds
 		
-		private var totalResources:int = DEFAULT_TOTAL_RESOURCES;
-		private var resourceRate:Number = DEFAULT_RESOURCE_RATE;
-		private var range:int = DEFAULT_RANGE;
+		private var totalResources:int;
+		private var resourceRate:Number;
 		
 		private var unitQueue:Vector.<int>;
 		
@@ -35,8 +40,19 @@ package units {
 		
 		public function Base(startPos:Point, owner:int = 1, rotation:Number = 0) {
 			super(startPos, owner);
-			unitType = Unit.BASE;
-			textureName = "BaseTexture";
+			this.unitType = Unit.BASE;
+			this.textureName = TEXTURE_NAME;
+			this.maxSpeed = MAX_SPEED;
+			this.maxAccel = MAX_ACCEL;
+			this.maxHealth = MAX_HEALTH;
+			this.health = this.maxHealth;
+			this.healthRegen = HEALTH_REGEN;
+			this.damage = DAMAGE;
+			this.rateOfFire = ROF;
+			this.attackRange = ATTACK_RANGE;
+			
+			this.totalResources = DEFAULT_TOTAL_RESOURCES;
+			this.resourceRate = DEFAULT_RESOURCE_RATE;
 			
 			this.rotation = rotation;
 			rallyPoint = pos.clone();
@@ -58,8 +74,12 @@ package units {
 		}
 		
 		override public function tick(dt:Number, neighbors:Vector.<Unit> = null, goal:Point = null):void {
+			super.tick(dt, neighbors, goal);
+			
 			updateResources();
-			unitBuildCooldown -= dt;
+			if (unitQueue.length > 0) {
+				unitBuildCooldown -= dt;
+			}
 			if (unitBuildCooldown < 0) {
 				unitBuildCooldown = UNIT_BUILD_COOLDOWN_RESET;
 				PlayScreen.game.spawn(nextUnit(), this.pos, this.owner);

@@ -5,14 +5,15 @@ package units {
 	public class Flocking {
 		
 		// flocking behavior constants
-		public static const REPULSION_WEIGHT:Number = 200; // repulsion from neighbors
+		public static const FRIENDLY_REPULSION_WEIGHT:Number = 200; // repulsion from neighbors
+		public static const ENEMY_REPULSION_WEIGHT:Number = 50000; // repulsion from enemies
 		public static const ATTRACTION_WEIGHT:Number = 1; // attraction from neighbors 
 		public static const MATCH_VELOCITY_WEIGHT:Number = 0.05; // want to match neighbors' velocity
 		public static const GOAL_WEIGHT:Number = 0.3; // attraction to goal 
 		public static const THRUST_FACTOR:Number = 10; // overall scale factor for thrust strength
 		
 		// get the net acceleration from a unit's neighbors on the unit for flocking behavior
-		public static function getAcceleration(u:Unit, neighbors:Vector.<Unit>, goal:Point = null):Point {
+		public static function getAcceleration(u:Unit, neighbors:Vector.<Unit>, enemies:Vector.<Unit>, goal:Point = null):Point {
 			// compute average flock position
 			var avgPos:Point = new Point();
 			for each (var unit:Unit in neighbors) {
@@ -24,8 +25,12 @@ package units {
 			var accel:Point = new Point();
 			
 			var repulsionVector:Point = getRepulsion(u, neighbors);
-			repulsionVector.normalize(repulsionVector.length * REPULSION_WEIGHT);
+			repulsionVector.normalize(repulsionVector.length * FRIENDLY_REPULSION_WEIGHT);
 			accel = accel.add(repulsionVector);
+			
+			var enemyRepulsionVector:Point = getEnemyRepulsion(u, enemies);
+			enemyRepulsionVector.normalize(enemyRepulsionVector.length * ENEMY_REPULSION_WEIGHT);
+			accel = accel.add(enemyRepulsionVector);
 			
 			var attractionVector:Point = getAttraction(u, neighbors, avgPos);
 			attractionVector.normalize(attractionVector.length*ATTRACTION_WEIGHT);
@@ -54,6 +59,20 @@ package units {
 				var dist:Number = dif.length;
 				if (dist == 0) continue;
 				dif.normalize(1 / dist);
+				// FIX LATER: make sure to limit this so it doesn't blow up
+				sum = sum.add(dif);
+			}
+			return sum;
+		}
+		
+				// get thrust from repulsive forces from neighbors
+		private static function getEnemyRepulsion(u:Unit, neighbors:Vector.<Unit>):Point {
+			var sum:Point = new Point();
+			for each (var unit:Unit in neighbors) {
+				var dif:Point = u.pos.subtract(unit.pos);
+				var dist:Number = dif.length;
+				if (dist == 0) continue;
+				dif.normalize(1 / dist / dist / dist);
 				// FIX LATER: make sure to limit this so it doesn't blow up
 				sum = sum.add(dif);
 			}

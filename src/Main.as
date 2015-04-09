@@ -96,10 +96,12 @@ package
 		
 		private function addPlayScreenEventListeners():void {
 			playScreen.addEventListener(NavEvent.PLAY_SCREEN_BACK, onPlayScreenBackBtnPress);
+			playScreen.addEventListener(NavEvent.GAME_QUIT, onGameQuit);
 		}
 		
 		private function removePlayScreenEventListeners():void {
 			playScreen.removeEventListener(NavEvent.PLAY_SCREEN_BACK, onPlayScreenBackBtnPress);
+			playScreen.removeEventListener(NavEvent.GAME_QUIT, onGameQuit);
 		}
 		
 		// handle spMenu button press
@@ -158,6 +160,12 @@ package
 		
 		// handle OptsMenu's back button press
 		private function onPlayScreenBackBtnPress(e:Event):void {
+			removeChild(playScreen);
+			addChild(mainMenu);
+		}
+		
+		// handle OptsMenu's back button press
+		private function onGameQuit(e:Event):void {
 			removeChild(playScreen);
 			addChild(mainMenu);
 		}

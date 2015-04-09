@@ -3,6 +3,7 @@ package {
 	
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
+	import screens.GameOverMenu;
 	
 	import starling.display.Button;
 	import starling.display.Sprite;
@@ -29,7 +30,9 @@ package {
 		private var pause:Boolean = true;
 		
 		private var queueMenu:QueueMenu;
+		private var gameOverMenu:GameOverMenu;
 		private var base1:Base;
+		private var base2:Base;
 		
 		public function Game() {
 			super();
@@ -38,6 +41,26 @@ package {
 			bases = new Vector.<Base>();
 			bullets = new Vector.<Bullet>();
 			
+			this.addEventListener(NavEvent.GAME_OVER_LOSE, onGameOverLose);
+			this.addEventListener(NavEvent.GAME_OVER_WIN, onGameOverWin);
+			test();
+			
+			// END TESTING UNIT MOVEMENT }}}}}}}}}}}}}}}}}}
+		}
+		
+		public function onGameOverLose(event:NavEvent):void {
+			pause = true;
+			gameOverMenu = new GameOverMenu(2);
+			addChild(gameOverMenu);
+		}
+		
+		public function onGameOverWin(event:NavEvent):void {
+			pause = true;
+			gameOverMenu = new GameOverMenu(1);
+			addChild(gameOverMenu);
+		}
+		
+		private function test():void {
 			// TESTING UNIT MOVEMENT AND STUFF {{{{{{{{{{{{{{{{
 			// TEAM 1
 			var unitVector:Vector.<Unit> = new Vector.<Unit>();
@@ -71,11 +94,9 @@ package {
 			addChild(base1);
 			queueMenu = new QueueMenu(base1);
 			
-			var base2:Base = new Base(new Point(320 / 2, 10), 2, Math.PI);
+			base2 = new Base(new Point(320 / 2, 10), 2, Math.PI);
 			bases.push(base2)
 			addChild(base2);
-			
-			// END TESTING UNIT MOVEMENT }}}}}}}}}}}}}}}}}}
 		}
 		
 		public function start():void {
@@ -105,7 +126,6 @@ package {
 		public function tap(startTap:Point, endTap:Point):void {
 			if (contains(queueMenu)) {
 				removeChild(queueMenu);
-				return;
 			}
 			// if units were selected from a previous tap or drag
 			if (selectedUnits) {
@@ -213,6 +233,29 @@ package {
 					}
 				}
 			}
+			for each (var base:Base in bases) {
+				if (base.owner != owner) {
+					unitVector.push(base);
+				}
+			}
+			return unitVector;
+		}
+		
+		public function getOtherFlockUnits(thisUnit:Unit):Vector.<Unit> {
+			// determine which units were inside the box selection
+			var unitVector:Vector.<Unit> = new Vector.<Unit>();
+			for each (var flock:Flock in flocks) {
+				for each (var unit:Unit in flock.neighbors) {
+					if (!(unit.flock === thisUnit.flock)) {
+						unitVector.push(unit);
+					} else {
+						break;
+					}
+				}
+			}
+			for each (var base:Base in bases) {
+				unitVector.push(base);
+			}
 			return unitVector;
 		}
 		
@@ -229,7 +272,7 @@ package {
 					unit = new Sniper(pos, owner)
 					break;
 				default:
-					trace("Unknown unit type in base.spawn()");
+					trace("Unknown unit type in game.spawn()");
 					return;
 			}
 			var unitVector:Vector.<Unit> = new Vector.<Unit>();
@@ -242,20 +285,19 @@ package {
 		
 		public function removeUnit(unit:Unit):void {
 			if (unit == null) {
-				trace("WHAT THE ACTUAL FUCK1");
 				return;
 			}
 			var flock:Flock = unit.flock;
-			if (unit.flock == null) {
-				trace("WHAT THE ACTUAL FUCK");
-				return;
+			if (unit.flock != null) {
+				// remove unit from its flock
+				flock.removeUnit(unit);
+				if (flock.neighbors.length == 0) {
+					flocks.splice(flocks.indexOf(flock), 1);
+				}
 			}
-			// remove unit from its flock
-			flock.removeUnit(unit);
-			if (flock.neighbors.length == 0) {
-				flocks.splice(flocks.indexOf(flock), 1);
+			if (contains(unit)) {
+				removeChild(unit);
 			}
-			removeChild(unit);
 			
 			// make sure unit isn't in selectedUnits
 			for each (var unit2:Unit in selectedUnits) {
@@ -269,6 +311,13 @@ package {
 				if (bullet.target == unit) {
 					removeBullet(bullet);
 				}
+			}
+			
+			// if unit is a base
+			if (unit === base1) {
+				dispatchEvent(new NavEvent(NavEvent.GAME_OVER_LOSE));
+			} else if (unit === base2) {
+				dispatchEvent(new NavEvent(NavEvent.GAME_OVER_WIN));
 			}
 		}
 		

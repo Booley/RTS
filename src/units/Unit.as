@@ -165,7 +165,16 @@ package units {
 			if (target == null) {
 				pickTarget(PlayScreen.game.getEnemyUnits(this.owner));
 			}
+			// attack target
+			attackCooldown -= dt;
+			if (target != null) {
+				if (attackCooldown < 0) {
+					attackCooldown = rateOfFire;
+					shoot();
+				}
+			}
 			
+			if (this.unitType == Unit.BASE) return;
 			
 			//begin updating unit's movement {{{
 			var v:Point = vel.clone();
@@ -176,7 +185,8 @@ package units {
 			this.y = pos.y;
 			
 			//update acceleration
-			var accel:Point = Flocking.getAcceleration(this, neighbors, goal);
+			var otherFlockUnits:Vector.<Unit> = PlayScreen.game.getOtherFlockUnits(this);
+			var accel:Point = Flocking.getAcceleration(this, neighbors, otherFlockUnits, goal);
 			accel.normalize(accel.length * dt);
 			if (accel.length > maxAccel) {
 				accel.normalize(maxAccel);
@@ -209,17 +219,6 @@ package units {
 					else dir -= 2*Math.PI;
 				}
 				image.rotation += (dir - image.rotation) * ROTATION_DAMPENING * vel.length / maxSpeed;
-			}
-			
-
-			
-			// attack target
-			attackCooldown -= dt;
-			if (target != null) {
-				if (attackCooldown < 0) {
-					attackCooldown = rateOfFire;
-					shoot();
-				}
 			}
 			
 		}

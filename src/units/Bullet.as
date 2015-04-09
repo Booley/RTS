@@ -16,16 +16,14 @@ package units {
 		public static const MAX_SPEED:Number = 100; // REPLACE THIS WHEN CREATING SUBCLASSES
 		
 		public var damage:int; 
-		
 		public var bulletType:int;
 		
 		public var pos:Point;
 		public var vel:Point;
-
+		
 		public var target:Unit;
 		
 		public var image:Image;
-		
 		public var textureName:String = "BulletTexture"; // fix later.  just to make compiler happy.  don't actually use the Unit() constructor
 		
 		public function Bullet(startPos:Point, target:Unit, damage:int, bulletType:int) {
@@ -41,7 +39,6 @@ package units {
 			this.addEventListener(Event.ADDED_TO_STAGE, onAddToStage);
 		}
 		
-		
 		public function onAddToStage(e:Event):void {
 			this.removeEventListener(Event.ADDED_TO_STAGE, onAddToStage);
 			createArt();
@@ -56,7 +53,7 @@ package units {
 			image.scaleY *= 0.1; // TEMPORARY
 			image.alignPivot();
 			addChild(image);
-		}	
+		}
 		
 		// 
 		public function tick(dt:Number):void {
@@ -73,9 +70,9 @@ package units {
 			var dist:Number = target.pos.subtract(pos).length;  // CHECK "if (target)" first before accessing target.pos
 			if (dist < v.length) {
 				PlayScreen.game.removeBullet(this);
-				if (target.flock != null) {
+				//if (target.flock != null) {
 					target.takeDamage(damage);
-				}
+				//}
 				return;
 			}
 			

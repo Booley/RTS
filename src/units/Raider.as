@@ -8,9 +8,9 @@ package units {
 		public static const TEXTURE_NAME:String = "RaiderTexture";
 		public static const MAX_SPEED:Number = 30;
 		public static const MAX_ACCEL:Number = 2;
-		public static const MAX_HEALTH:Number = 50; 
+		public static const MAX_HEALTH:Number = 100; 
 		public static const HEALTH_REGEN:Number = 5;
-		public static const DAMAGE:Number = 4;
+		public static const DAMAGE:Number = 10;
 		public static const ROF:Number = 1;
 		public static const ATTACK_RANGE:Number = 80;
 		

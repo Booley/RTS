@@ -11,7 +11,7 @@ package units {
 		public static const MAX_HEALTH:Number = 50; 
 		public static const HEALTH_REGEN:Number = 1;
 		public static const DAMAGE:Number = 50;
-		public static const ROF:Number = 5;
+		public static const ROF:Number = 10;
 		public static const ATTACK_RANGE:Number = 200;
 		
 		public function Sniper(startPos:Point, owner:int = 1) {
