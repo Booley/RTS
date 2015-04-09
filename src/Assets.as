@@ -13,18 +13,33 @@ package
 		[Embed(source="/../assets/images/backgrounds/menu_background.jpg")]
 		private static const MenuBackground:Class;
 		
-		[Embed(source="/../assets/images/units/base.png")]
-		private static const BaseTexture:Class;
+		[Embed(source="/../assets/images/units/base1.png")]
+		private static const BaseTexture1:Class;
 		
-		[Embed(source="/../assets/images/units/square.png")]
-		private static const InfantryTexture:Class;
+		[Embed(source="/../assets/images/units/base2.png")]
+		private static const BaseTexture2:Class;
 		
-		[Embed(source="/../assets/images/units/circle.png")]
-		private static const RaiderTexture:Class;
+		[Embed(source="/../assets/images/units/square1.png")]
+		private static const InfantryTexture1:Class;
 		
-		[Embed(source="/../assets/images/units/triangle.png")]
-		private static const SniperTexture:Class;
+		[Embed(source="/../assets/images/units/square2.png")]
+		private static const InfantryTexture2:Class;
 		
+		[Embed(source="/../assets/images/units/circle1.png")]
+		private static const RaiderTexture1:Class;
+		
+		[Embed(source="/../assets/images/units/circle2.png")]
+		private static const RaiderTexture2:Class;
+		
+		[Embed(source="/../assets/images/units/triangle1.png")]
+		private static const SniperTexture1:Class;
+		
+		[Embed(source="/../assets/images/units/triangle2.png")]
+		private static const SniperTexture2:Class;
+		
+		[Embed(source="/../assets/images/units/highlight.png")]
+		private static const HighlightTexture:Class;
+
 		[Embed(source = "../assets/images/units/bullet.png")]
 		private static const BulletTexture:Class;
 		

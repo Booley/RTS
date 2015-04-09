@@ -15,7 +15,7 @@ package {
 		
 		private var starling:Starling;
 
-		public function PreMain() {
+		public function PreMain() { 
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			stage.align = StageAlign.TOP_LEFT;
 			stage.addEventListener(Event.DEACTIVATE, deactivate);

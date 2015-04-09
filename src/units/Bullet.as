@@ -1,5 +1,9 @@
 package units {
+	
+	import screens.PlayScreen;
+	
 	import flash.geom.Point;
+	
 	import starling.display.Image;
 	import starling.events.Event;
 	import starling.display.Sprite;
@@ -9,7 +13,7 @@ package units {
 		// bullet types
 		public static const MAIN_BULLET:int = 0;
 		
-		public static const MAX_SPEED:Number = 150; // REPLACE THIS WHEN CREATING SUBCLASSES
+		public static const MAX_SPEED:Number = 100; // REPLACE THIS WHEN CREATING SUBCLASSES
 		
 		public var damage:int; 
 		
@@ -48,37 +52,47 @@ package units {
 		// Idk about this method.. might remove it
 		public function createArt():void {
 			image = new Image(Assets.getTexture(textureName));
-			image.scaleX *= 0.3;
-			image.scaleY *= 0.3; // TEMPORARY
-			image.x = -image.width / 2;
-			image.y = -image.height / 2;
+			image.scaleX *= 0.1;
+			image.scaleY *= 0.1; // TEMPORARY
+			image.alignPivot();
 			addChild(image);
 		}	
 		
 		// 
 		public function tick(dt:Number):void {
-			//begin updating unit's movement {{{
+			//begin updating bullet's movement {{{
+			
+			//update velocity
+			vel = target.pos.subtract(pos);
+			vel.normalize(MAX_SPEED);
+			
 			var v:Point = vel.clone();
 			v.normalize(v.length * dt);
-			pos = pos.add(v);
 			
+			// reached target
+			var dist:Number = target.pos.subtract(pos).length;  // CHECK "if (target)" first before accessing target.pos
+			if (dist < v.length) {
+				PlayScreen.game.removeBullet(this);
+				if (target.flock != null) {
+					target.takeDamage(damage);
+				}
+				return;
+			}
+			
+			pos = pos.add(v);
 			this.x = pos.x;
 			this.y = pos.y;
 			
-			//update velocity
-			vel = this.target.pos.subtract(pos);
-			vel.normalize(MAX_SPEED);
-			if (vel.length > MAX_SPEED) {
-				vel.normalize(MAX_SPEED);
+			//update rotation
+			image.rotation %= 2*Math.PI;
+			var dir:Number = Math.atan2(vel.y, vel.x);
+			if (Math.abs(dir - image.rotation) > Math.PI) {
+				if (dir < image.rotation) dir += 2*Math.PI;
+				else dir -= 2*Math.PI;
 			}
+			image.rotation = dir;
 			
-			// }}} end updating unit's movement
-			
-			// reached target
-			if (this.pos.equals(this.target.pos)) {
-				// removeBullet(); ?
-				this.target.takeDamage(damage);
-			}
+			// }}} end updating bullet's movement
 		}
 		
 	}
