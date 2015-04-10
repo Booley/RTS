@@ -19,13 +19,11 @@ package units {
 		public static const TEXTURE_NAME:String = "BaseTexture";
 		public static const MAX_SPEED:Number = 0;
 		public static const MAX_ACCEL:Number = 0;
-		public static const MAX_HEALTH:Number = 50; 
+		public static const MAX_HEALTH:Number = 500; 
 		public static const HEALTH_REGEN:Number = 2;
 		public static const DAMAGE:Number = 50;
 		public static const ROF:Number = 1;
 		public static const ATTACK_RANGE:Number = 120;
-		
-		private static const UNIT_BUILD_COOLDOWN_RESET:Number = 3; // seconds
 		
 		private var totalResources:int;
 		private var resourceRate:Number;
@@ -36,7 +34,7 @@ package units {
 		
 		public var infiniteBuild:Boolean = false; // Should units be re-queued after creation?
 		
-		public var unitBuildCooldown:Number = UNIT_BUILD_COOLDOWN_RESET;
+		public var unitBuildCooldown:Number = int.MIN_VALUE;
 		
 		public function Base(startPos:Point, owner:int = 1, rotation:Number = 0) {
 			super(startPos, owner);
@@ -62,6 +60,20 @@ package units {
 		
 		public function queueUnit(unit:int):void {
 			unitQueue.push(unit);
+			if (unitQueue.length == 1) {
+				var nextUnitClass:Class = Unit.getClass(unit)
+				if (nextUnitClass) {
+					unitBuildCooldown = nextUnitClass.BUILD_TIME;
+				}
+			}
+		}
+		
+		public function peekNextUnit():int {
+			if (unitQueue.length > 0) {
+				return unitQueue[0];
+			} else {
+				return -1;
+			}
 		}
 		
 		public function nextUnit():int {
@@ -81,8 +93,11 @@ package units {
 				unitBuildCooldown -= dt;
 			}
 			if (unitBuildCooldown < 0) {
-				unitBuildCooldown = UNIT_BUILD_COOLDOWN_RESET;
 				PlayScreen.game.spawn(nextUnit(), this.pos, this.owner);
+				var nextUnitClass:Class = Unit.getClass(peekNextUnit())
+				if (nextUnitClass) {
+					unitBuildCooldown = nextUnitClass.BUILD_TIME;
+				}
 			}
 		}
 		

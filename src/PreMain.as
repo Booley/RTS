@@ -13,7 +13,7 @@ package {
 
 	public class PreMain extends Sprite {
 		
-		private var starling:Starling;
+		private var starl:Starling;
 
 		public function PreMain() { 
 			stage.scaleMode = StageScaleMode.NO_SCALE;
@@ -23,9 +23,9 @@ package {
 			// touch or gesture?
 			Multitouch.inputMode = MultitouchInputMode.GESTURE;
 			
-			starling = new Starling(Main, stage);
-			starling.antiAliasing = 1;
-			starling.start();
+			starl = new Starling(Main, stage);
+			starl.antiAliasing = 1;
+			starl.start();
 			
 			Starling.current.showStats = true;
 		}

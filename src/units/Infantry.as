@@ -6,13 +6,14 @@ package units {
 
 		public static const UNIT_TYPE:int = Unit.INFANTRY;
 		public static const TEXTURE_NAME:String = "InfantryTexture";
-		public static const MAX_SPEED:Number = 50; // 15;
+		public static const MAX_SPEED:Number = 30; // 15;
 		public static const MAX_ACCEL:Number = 10;
 		public static const MAX_HEALTH:Number = 200; 
 		public static const HEALTH_REGEN:Number = 2;
 		public static const DAMAGE:Number = 10;
 		public static const ROF:Number = 2;
 		public static const ATTACK_RANGE:Number = 100;
+		public static const BUILD_TIME:Number = 2;
 		
 		public function Infantry(startPos:Point, owner:int = 1) {
 			super(startPos, owner);
@@ -26,9 +27,8 @@ package units {
 			this.damage = DAMAGE;
 			this.rateOfFire = ROF;
 			this.attackRange = ATTACK_RANGE;
+			this.buildTime = BUILD_TIME;
 		}
-		
-		
 		
 	}
 	

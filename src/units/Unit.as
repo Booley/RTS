@@ -7,6 +7,7 @@ package units {
 	import starling.display.Quad;
 	import starling.events.Event;
 	import starling.display.Sprite;
+	import starling.display.BlendMode;
 	
 	import screens.PlayScreen;
 	
@@ -30,6 +31,13 @@ package units {
 		public static var DEFAULT_DAMAGE:Number = 10; // REPLACE THIS WHEN CREATING SUBCLASSES
 		public static var DEFAULT_ROF:Number = 2; // REPLACE THIS WHEN CREATING SUBCLASSES
 		public static var DEFAULT_ATTACK_RANGE:Number = 100; // REPLACE THIS WHEN CREATING SUBCLASSES
+		public static var DEFAULT_BUILD_TIME:Number = 2; // REPLACE THIS WHEN CREATING SUBCLASSES
+		
+		private static var COLOR_HEALTH_NORMAL:uint = 0x00ff00;
+		private static var COLOR_HEALTH_WARNING:uint = 0xffff00;
+		private static var COLOR_HEALTH_CRITICAL:uint = 0xff0000;
+		private static var COLOR_HEALTH_WARNING_CUTOFF:Number = 0.66;
+		private static var COLOR_HEALTH_CRITICAL_CUTOFF:Number = 0.33;
 		
 		// constants which depend on unit type
 		public var unitType:int;
@@ -43,6 +51,7 @@ package units {
 		public var rateOfFire:Number = DEFAULT_ROF; // seconds per shot
 		public var attackRange:int = DEFAULT_ATTACK_RANGE;
 		public var attackCooldown:Number = 0;
+		public var buildTime:Number = DEFAULT_ATTACK_RANGE;
 		
 		public var pos:Point;
 		public var vel:Point;
@@ -66,6 +75,22 @@ package units {
 			this.owner = owner;
 			
 			this.addEventListener(Event.ADDED_TO_STAGE, onAddToStage);
+		}
+		
+		public static function getClass(unitType:int):Class {
+			switch (unitType) {
+				case INFANTRY:
+					return Infantry;
+					break;
+				case RAIDER:
+					return Raider;
+					break;
+				case SNIPER:
+					return Sniper;
+					break;
+				default:
+					return null;
+			}
 		}
 		
 		public function onAddToStage(e:Event):void {
@@ -98,6 +123,7 @@ package units {
 		// Idk about this method.. might remove it
 		public function createArt():void {
 			image = new Image(Assets.getTexture(textureName + owner));
+			image.blendMode = BlendMode.ADD;
 			image.scaleX *= 0.2;
 			image.scaleY *= 0.2; // TEMPORARY
 			image.alignPivot();
@@ -141,16 +167,26 @@ package units {
 			}
 		}
 		
+		private function getHealthBarColor(health:int, maxHealth:int):uint {
+			if (health / maxHealth < COLOR_HEALTH_CRITICAL_CUTOFF) {
+				return COLOR_HEALTH_CRITICAL;
+			} else if (health / maxHealth < COLOR_HEALTH_WARNING_CUTOFF) {
+				return COLOR_HEALTH_WARNING;
+			} else {
+				return COLOR_HEALTH_NORMAL;
+			}
+		}
+		
 		// 
 		public function tick(dt:Number, neighbors:Vector.<Unit> = null, goal:Point = null):void {
 			health += healthRegen * dt;
 			health = Math.min(health, maxHealth);
 			healthBar.width = healthBackground.width * health / maxHealth;
+			healthBar.color = getHealthBarColor(health, maxHealth);
 			if (this.health <= 0) {
 				PlayScreen.game.removeUnit(this);
 			}
-			
-			
+			 
 			// attempt to find a target if one doesn't exist
 			if (target) {
 				// make sure target is within attack range
