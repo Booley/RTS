@@ -149,8 +149,60 @@ package units {
 			healthBar.y = -10 - healthBar.height / 2;
 			healthBar.alpha = 0.5;
 			addChild(healthBar);
-			
 		}	
+		
+		
+		public function tick(dt:Number, neighbors:Vector.<Unit> = null, goal:Point = null):void {
+			updateHealth(dt);
+			findTarget(); // if necessary
+			attackTarget(dt);
+			
+			// only move mobile units
+			if (!(this.unitType == Unit.BASE || this.unitType == Unit.RESOURCE || this.unitType == Unit.TURRET)) { 
+				updateMovement(dt, neighbors, goal);
+			}
+		}
+		
+		//////////////////////////////////////// Private functions ///////////////////////////////////////////
+		
+		private function updateHealth(dt:Number):void {
+			health += healthRegen * dt;
+			health = Math.min(health, maxHealth);
+			healthBar.width = healthBackground.width * health / maxHealth;
+			healthBar.color = getHealthBarColor(health, maxHealth);
+			if (this.health <= 0) {
+				PlayScreen.game.removeUnit(this);
+			}
+		}
+		
+		private function getHealthBarColor(health:int, maxHealth:int):uint {
+			if (health / maxHealth < COLOR_HEALTH_CRITICAL_CUTOFF) {
+				return COLOR_HEALTH_CRITICAL;
+			} else if (health / maxHealth < COLOR_HEALTH_WARNING_CUTOFF) {
+				return COLOR_HEALTH_WARNING;
+			} else {
+				return COLOR_HEALTH_NORMAL;
+			}
+		}
+		
+		
+		// attempt to find a target if one doesn't exist
+		// make sure target is within attack range
+		private function findTarget():void {
+			if (target) {
+				// make sure target is within attack range
+				if (target.pos.subtract(pos).length > attackRange) {
+					target = null;
+				}
+			}
+			if (target && target.parent == null) {
+				 target = null;
+			}
+			// target can become null in previous if statement
+			if (target == null) {
+				pickTarget(PlayScreen.game.getEnemyUnits(this.owner));
+			}
+		}
 		
 		// prioritize closest target
 		private function pickTarget(unitVector:Vector.<Unit>):void {
@@ -169,41 +221,9 @@ package units {
 			}
 		}
 		
-		private function getHealthBarColor(health:int, maxHealth:int):uint {
-			if (health / maxHealth < COLOR_HEALTH_CRITICAL_CUTOFF) {
-				return COLOR_HEALTH_CRITICAL;
-			} else if (health / maxHealth < COLOR_HEALTH_WARNING_CUTOFF) {
-				return COLOR_HEALTH_WARNING;
-			} else {
-				return COLOR_HEALTH_NORMAL;
-			}
-		}
 		
-		// 
-		public function tick(dt:Number, neighbors:Vector.<Unit> = null, goal:Point = null):void {
-			health += healthRegen * dt;
-			health = Math.min(health, maxHealth);
-			healthBar.width = healthBackground.width * health / maxHealth;
-			healthBar.color = getHealthBarColor(health, maxHealth);
-			if (this.health <= 0) {
-				PlayScreen.game.removeUnit(this);
-			}
-			 
-			// attempt to find a target if one doesn't exist
-			if (target) {
-				// make sure target is within attack range
-				if (target.pos.subtract(pos).length > attackRange) {
-					target = null;
-				}
-			}
-			if (target && target.parent == null) {
-				 target = null;
-			}
-			// target can become null in previous if statement
-			if (target == null) {
-				pickTarget(PlayScreen.game.getEnemyUnits(this.owner));
-			}
-			// attack target
+		// update attack cooldown and shoot
+		private function attackTarget(dt:Number):void {
 			attackCooldown -= dt;
 			if (target != null) {
 				if (attackCooldown < 0) {
@@ -211,17 +231,9 @@ package units {
 					shoot();
 				}
 			}
-			
-			if (this.unitType == Unit.BASE || this.unitType == Unit.RESOURCE || this.unitType == Unit.TURRET) return;
-			
-			//begin updating unit's movement {{{
-			var v:Point = vel.clone();
-			v.normalize(v.length * dt);
-			pos = pos.add(v);
-			
-			this.x = pos.x;
-			this.y = pos.y;
-			
+		}
+		
+		private function updateMovement(dt:Number, neighbors:Vector.<Unit> = null, goal:Point = null):void {
 			//update acceleration
 			var otherFlockUnits:Vector.<Unit> = PlayScreen.game.getOtherFlockUnits(this);
 			var accel:Point = Flocking.getAcceleration(this, neighbors, otherFlockUnits, goal);
@@ -237,26 +249,36 @@ package units {
 				vel.normalize(maxSpeed);
 			}
 			
-			// }}} end updating unit's movement
-			//update rotation
-			image.rotation %= 2*Math.PI;
+			// update position
+			var v:Point = vel.clone();
+			v.normalize(v.length * dt);
+			pos = pos.add(v);
+			
+			// update image position
+			this.x = pos.x;
+			this.y = pos.y;
+			
+			//update image rotation
+			image.rotation %= 2 * Math.PI;
+			// face target
 			if (target) {
 				var diff:Point = target.pos.subtract(this.pos);
-				//update rotation
 				dir = Math.atan2(diff.y, diff.x);
 				if (Math.abs(dir - image.rotation) > Math.PI) {
 					if (dir < image.rotation) dir += 2*Math.PI;
 					else dir -= 2*Math.PI;
 				}
 				image.rotation += (dir - image.rotation) * ROTATION_DAMPENING;
-			} else {
-				//update rotation
+			} 
+			// otherwise, face movement direction
+			else {
 				var dir:Number = Math.atan2(vel.y, vel.x);
 				if (Math.abs(dir - image.rotation) > Math.PI) {
 					if (dir < image.rotation) dir += 2*Math.PI;
 					else dir -= 2*Math.PI;
 				}
-				image.rotation += (dir - image.rotation) * ROTATION_DAMPENING * vel.length / maxSpeed;
+				image.rotation += (dir - image.rotation) * ROTATION_DAMPENING 
+									* vel.length / maxSpeed; // rotation speed proportional to movement speed
 			}
 			
 		}
