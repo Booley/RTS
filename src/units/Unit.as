@@ -91,7 +91,7 @@ package units {
 		
 		public function shoot():void {
 			//create a bullet object
-			var bullet:Bullet = new Bullet(this.pos, target, this.damage, 0); //need to change bullet type
+			var bullet:Bullet = new Bullet(this.pos, target, this.damage, 0, owner); //need to change bullet type
 			
 			//add to list of bullets
 			PlayScreen.game.addBullet(bullet); //how to access PlayScreen?

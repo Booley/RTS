@@ -23,10 +23,12 @@ package units {
 		
 		public var target:Unit;
 		
+		public var owner:int;
+		
 		public var image:Image;
 		public var textureName:String = "BulletTexture"; // fix later.  just to make compiler happy.  don't actually use the Unit() constructor
 		
-		public function Bullet(startPos:Point, target:Unit, damage:int, bulletType:int) {
+		public function Bullet(startPos:Point, target:Unit, damage:int, bulletType:int, owner:int) {
 			pos = startPos.clone();
 			this.x = pos.x;
 			this.y = pos.y;
@@ -35,6 +37,8 @@ package units {
 			this.target = target;
 			this.damage = damage;
 			this.bulletType = bulletType;
+			
+			this.owner = owner;
 			
 			this.addEventListener(Event.ADDED_TO_STAGE, onAddToStage);
 		}
