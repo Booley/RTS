@@ -17,6 +17,8 @@ package units {
 		public static const INFANTRY:int = 1;
 		public static const RAIDER:int = 2;
 		public static const SNIPER:int = 3;
+		public static const RESOURCE:int = 4;
+		public static const TURRET:int = 5;
 		
 		// global movement constants
 		public static const DAMPENING:Number = 0.95; // dampening time constant to help smooth movement.  applied to vel each tick
@@ -174,7 +176,7 @@ package units {
 				}
 			}
 			
-			if (this.unitType == Unit.BASE) return;
+			if (this.unitType == Unit.BASE || this.unitType == Unit.RESOURCE || this.unitType == Unit.TURRET) return;
 			
 			//begin updating unit's movement {{{
 			var v:Point = vel.clone();

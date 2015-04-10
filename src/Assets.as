@@ -43,6 +43,9 @@ package
 		[Embed(source = "../assets/images/units/bullet.png")]
 		private static const BulletTexture:Class;
 		
+		[Embed(source="../assets/images/units/neutral_point.png")]
+		private static const NeutralCaptureTexture:Class;
+		
 		private static var gameTextures:Dictionary = new Dictionary();
 
 		// avoid creating a texture from a bitmap more than once for optimization.
