@@ -26,6 +26,7 @@ package {
 		private var bases:Vector.<Base>;
 		private var selectedUnits:Vector.<Unit>;
 		private var bullets:Vector.<Bullet>;
+		private var capturePoints:Vector.<TurretPoint>;
 		
 		private var pause:Boolean = true;
 		
@@ -40,6 +41,7 @@ package {
 			flocks = new Vector.<Flock>();
 			bases = new Vector.<Base>();
 			bullets = new Vector.<Bullet>();
+			capturePoints = new Vector.<TurretPoint>();
 			
 			this.addEventListener(NavEvent.GAME_OVER_LOSE, onGameOverLose);
 			this.addEventListener(NavEvent.GAME_OVER_WIN, onGameOverWin);
@@ -97,6 +99,11 @@ package {
 			base2 = new Base(new Point(320 / 2, 10), 2, Math.PI);
 			bases.push(base2)
 			addChild(base2);
+			
+			var turret:TurretPoint = new TurretPoint(new Point(320 / 4, 80), 2);
+			//turret = new TurretPoint(new Point(320 / 4, 80), 2);
+			capturePoints.push(turret);
+			addChild(turret);
 		}
 		
 		public function start():void {
@@ -109,6 +116,11 @@ package {
 		
 		public function tick(dt:Number):void {
 			if (pause) return;
+			for each (var turret:TurretPoint in capturePoints) {
+				turret.tick(dt);
+				
+			}
+			
 			for each (var base:Base in bases) {
 				base.tick(dt);
 			}
