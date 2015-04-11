@@ -13,6 +13,7 @@ package units {
 		public static const DAMAGE:Number = 50;
 		public static const ROF:Number = 10;
 		public static const ATTACK_RANGE:Number = 200;
+		public static const BUILD_TIME:Number = 3;
 		
 		public function Sniper(startPos:Point, owner:int = 1) {
 			super(startPos, owner);
@@ -26,6 +27,7 @@ package units {
 			this.damage = DAMAGE;
 			this.rateOfFire = ROF;
 			this.attackRange = ATTACK_RANGE;
+			this.buildTime = BUILD_TIME;
 		}
 	}
 	

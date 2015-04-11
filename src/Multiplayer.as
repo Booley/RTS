@@ -56,13 +56,12 @@ package
 		protected function initialize():void {
 			mConnection = new MultiUserSession(SERV_KEY, "multiuser/test"); 		// create a new instance of MultiUserSession
 			
-			mConnection.onConnect 		= handleConnect;	//T					// set the method to be executed when connected
+			mConnection.onConnect 		= handleConnect;						// set the method to be executed when connected
 			mConnection.onUserAdded 	= handleUserAdded;						// set the method to be executed once a user has connected
 			mConnection.onUserRemoved 	= handleUserRemoved;					// set the method to be executed once a user has disconnected
 			mConnection.onObjectRecieve = handleGetObject;						// set the method to be executed when we recieve data from a user
 			
 			mMyName  = mConnection.userCount;
-			mMyColor = 0x888888 + Math.random() * 0x888888;
 			
 			mConnection.connect(""+mMyName);
 			
