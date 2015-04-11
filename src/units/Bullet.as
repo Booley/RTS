@@ -7,13 +7,14 @@ package units {
 	import starling.display.Image;
 	import starling.events.Event;
 	import starling.display.Sprite;
+	import starling.display.BlendMode;
 	
 	public class Bullet extends Sprite {
 		
 		// bullet types
 		public static const MAIN_BULLET:int = 0;
 		
-		public static const MAX_SPEED:Number = 100; // REPLACE THIS WHEN CREATING SUBCLASSES
+		public static const MAX_SPEED:Number = 200; // REPLACE THIS WHEN CREATING SUBCLASSES
 		
 		public var damage:int; 
 		public var bulletType:int;
@@ -53,6 +54,7 @@ package units {
 		// Idk about this method.. might remove it
 		public function createArt():void {
 			image = new Image(Assets.getTexture(textureName));
+			image.blendMode = BlendMode.ADD;
 			image.scaleX *= 0.1;
 			image.scaleY *= 0.1; // TEMPORARY
 			image.alignPivot();

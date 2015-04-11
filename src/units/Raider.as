@@ -13,6 +13,7 @@ package units {
 		public static const DAMAGE:Number = 10;
 		public static const ROF:Number = 1;
 		public static const ATTACK_RANGE:Number = 80;
+		public static const BUILD_TIME:Number = 1;
 		
 		public function Raider(startPos:Point, owner:int = 1) {
 			super(startPos, owner);
@@ -26,6 +27,7 @@ package units {
 			this.damage = DAMAGE;
 			this.rateOfFire = ROF;
 			this.attackRange = ATTACK_RANGE;
+			this.buildTime = BUILD_TIME;
 		}
 		
 	}

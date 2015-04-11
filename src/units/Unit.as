@@ -7,6 +7,7 @@ package units {
 	import starling.display.Quad;
 	import starling.events.Event;
 	import starling.display.Sprite;
+	import starling.display.BlendMode;
 	
 	import screens.PlayScreen;
 	
@@ -32,6 +33,13 @@ package units {
 		public static var DEFAULT_DAMAGE:Number = 10; // REPLACE THIS WHEN CREATING SUBCLASSES
 		public static var DEFAULT_ROF:Number = 2; // REPLACE THIS WHEN CREATING SUBCLASSES
 		public static var DEFAULT_ATTACK_RANGE:Number = 100; // REPLACE THIS WHEN CREATING SUBCLASSES
+		public static var DEFAULT_BUILD_TIME:Number = 2; // REPLACE THIS WHEN CREATING SUBCLASSES
+		
+		private static var COLOR_HEALTH_NORMAL:uint = 0x00ff00;
+		private static var COLOR_HEALTH_WARNING:uint = 0xffff00;
+		private static var COLOR_HEALTH_CRITICAL:uint = 0xff0000;
+		private static var COLOR_HEALTH_WARNING_CUTOFF:Number = 0.66;
+		private static var COLOR_HEALTH_CRITICAL_CUTOFF:Number = 0.33;
 		
 		// constants which depend on unit type
 		public var unitType:int;
@@ -45,6 +53,7 @@ package units {
 		public var rateOfFire:Number = DEFAULT_ROF; // seconds per shot
 		public var attackRange:int = DEFAULT_ATTACK_RANGE;
 		public var attackCooldown:Number = 0;
+		public var buildTime:Number = DEFAULT_ATTACK_RANGE;
 		
 		public var pos:Point;
 		public var vel:Point;
@@ -68,6 +77,22 @@ package units {
 			this.owner = owner;
 			
 			this.addEventListener(Event.ADDED_TO_STAGE, onAddToStage);
+		}
+		
+		public static function getClass(unitType:int):Class {
+			switch (unitType) {
+				case INFANTRY:
+					return Infantry;
+					break;
+				case RAIDER:
+					return Raider;
+					break;
+				case SNIPER:
+					return Sniper;
+					break;
+				default:
+					return null;
+			}
 		}
 		
 		public function onAddToStage(e:Event):void {
@@ -100,6 +125,7 @@ package units {
 		// Idk about this method.. might remove it
 		public function createArt():void {
 			image = new Image(Assets.getTexture(textureName + owner));
+			image.blendMode = BlendMode.ADD;
 			image.scaleX *= 0.2;
 			image.scaleY *= 0.2; // TEMPORARY
 			image.alignPivot();
@@ -123,8 +149,60 @@ package units {
 			healthBar.y = -10 - healthBar.height / 2;
 			healthBar.alpha = 0.5;
 			addChild(healthBar);
-			
 		}	
+		
+		
+		public function tick(dt:Number, neighbors:Vector.<Unit> = null, goal:Point = null):void {
+			updateHealth(dt);
+			findTarget(); // if necessary
+			attackTarget(dt);
+			
+			// only move mobile units
+			if (!(this.unitType == Unit.BASE || this.unitType == Unit.RESOURCE || this.unitType == Unit.TURRET)) { 
+				updateMovement(dt, neighbors, goal);
+			}
+		}
+		
+		//////////////////////////////////////// Private functions ///////////////////////////////////////////
+		
+		private function updateHealth(dt:Number):void {
+			health += healthRegen * dt;
+			health = Math.min(health, maxHealth);
+			healthBar.width = healthBackground.width * health / maxHealth;
+			healthBar.color = getHealthBarColor(health, maxHealth);
+			if (this.health <= 0) {
+				PlayScreen.game.removeUnit(this);
+			}
+		}
+		
+		private function getHealthBarColor(health:int, maxHealth:int):uint {
+			if (health / maxHealth < COLOR_HEALTH_CRITICAL_CUTOFF) {
+				return COLOR_HEALTH_CRITICAL;
+			} else if (health / maxHealth < COLOR_HEALTH_WARNING_CUTOFF) {
+				return COLOR_HEALTH_WARNING;
+			} else {
+				return COLOR_HEALTH_NORMAL;
+			}
+		}
+		
+		
+		// attempt to find a target if one doesn't exist
+		// make sure target is within attack range
+		private function findTarget():void {
+			if (target) {
+				// make sure target is within attack range
+				if (target.pos.subtract(pos).length > attackRange) {
+					target = null;
+				}
+			}
+			if (target && target.parent == null) {
+				 target = null;
+			}
+			// target can become null in previous if statement
+			if (target == null) {
+				pickTarget(PlayScreen.game.getEnemyUnits(this.owner));
+			}
+		}
 		
 		// prioritize closest target
 		private function pickTarget(unitVector:Vector.<Unit>):void {
@@ -143,31 +221,9 @@ package units {
 			}
 		}
 		
-		// 
-		public function tick(dt:Number, neighbors:Vector.<Unit> = null, goal:Point = null):void {
-			health += healthRegen * dt;
-			health = Math.min(health, maxHealth);
-			healthBar.width = healthBackground.width * health / maxHealth;
-			if (this.health <= 0) {
-				PlayScreen.game.removeUnit(this);
-			}
-			
-			
-			// attempt to find a target if one doesn't exist
-			if (target) {
-				// make sure target is within attack range
-				if (target.pos.subtract(pos).length > attackRange) {
-					target = null;
-				}
-			}
-			if (target && target.parent == null) {
-				 target = null;
-			}
-			// target can become null in previous if statement
-			if (target == null) {
-				pickTarget(PlayScreen.game.getEnemyUnits(this.owner));
-			}
-			// attack target
+		
+		// update attack cooldown and shoot
+		private function attackTarget(dt:Number):void {
 			attackCooldown -= dt;
 			if (target != null) {
 				if (attackCooldown < 0) {
@@ -175,17 +231,9 @@ package units {
 					shoot();
 				}
 			}
-			
-			if (this.unitType == Unit.BASE || this.unitType == Unit.RESOURCE || this.unitType == Unit.TURRET) return;
-			
-			//begin updating unit's movement {{{
-			var v:Point = vel.clone();
-			v.normalize(v.length * dt);
-			pos = pos.add(v);
-			
-			this.x = pos.x;
-			this.y = pos.y;
-			
+		}
+		
+		private function updateMovement(dt:Number, neighbors:Vector.<Unit> = null, goal:Point = null):void {
 			//update acceleration
 			var otherFlockUnits:Vector.<Unit> = PlayScreen.game.getOtherFlockUnits(this);
 			var accel:Point = Flocking.getAcceleration(this, neighbors, otherFlockUnits, goal);
@@ -201,26 +249,36 @@ package units {
 				vel.normalize(maxSpeed);
 			}
 			
-			// }}} end updating unit's movement
-			//update rotation
-			image.rotation %= 2*Math.PI;
+			// update position
+			var v:Point = vel.clone();
+			v.normalize(v.length * dt);
+			pos = pos.add(v);
+			
+			// update image position
+			this.x = pos.x;
+			this.y = pos.y;
+			
+			//update image rotation
+			image.rotation %= 2 * Math.PI;
+			// face target
 			if (target) {
 				var diff:Point = target.pos.subtract(this.pos);
-				//update rotation
 				dir = Math.atan2(diff.y, diff.x);
 				if (Math.abs(dir - image.rotation) > Math.PI) {
 					if (dir < image.rotation) dir += 2*Math.PI;
 					else dir -= 2*Math.PI;
 				}
 				image.rotation += (dir - image.rotation) * ROTATION_DAMPENING;
-			} else {
-				//update rotation
+			} 
+			// otherwise, face movement direction
+			else {
 				var dir:Number = Math.atan2(vel.y, vel.x);
 				if (Math.abs(dir - image.rotation) > Math.PI) {
 					if (dir < image.rotation) dir += 2*Math.PI;
 					else dir -= 2*Math.PI;
 				}
-				image.rotation += (dir - image.rotation) * ROTATION_DAMPENING * vel.length / maxSpeed;
+				image.rotation += (dir - image.rotation) * ROTATION_DAMPENING 
+									* vel.length / maxSpeed; // rotation speed proportional to movement speed
 			}
 			
 		}

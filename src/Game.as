@@ -3,7 +3,6 @@ package {
 	
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	import screens.GameOverMenu;
 	
 	import starling.display.Button;
 	import starling.display.Sprite;
@@ -13,9 +12,21 @@ package {
 	import starling.events.Touch;
 	import starling.textures.Texture;
 	import starling.display.Quad;
+	import starling.filters.BlurFilter;
+	import starling.filters.ColorMatrixFilter;
+	
+	import be.dauntless.astar.core.Astar;
+	import be.dauntless.astar.core.PathRequest;
+	import be.dauntless.astar.core.AstarEvent;
+	import be.dauntless.astar.core.AstarError;
+	import be.dauntless.astar.core.IAstarTile;
+	import be.dauntless.astar.basic2d.Map;
+	import be.dauntless.astar.basic2d.BasicTile;
+	import be.dauntless.astar.basic2d.analyzers.WalkableAnalyzer;
 	
 	import units.*;
 	import screens.QueueMenu;
+	import screens.GameOverMenu;
 	
 	public class Game extends Sprite {
 		
@@ -35,6 +46,11 @@ package {
 		private var base1:Base;
 		private var base2:Base;
 		
+		private var dataMap:Array;
+		private var map : Map;
+		private var astar : Astar;
+		private var req:PathRequest;
+		
 		public function Game() {
 			super();
 			
@@ -45,10 +61,74 @@ package {
 			
 			this.addEventListener(NavEvent.GAME_OVER_LOSE, onGameOverLose);
 			this.addEventListener(NavEvent.GAME_OVER_WIN, onGameOverWin);
+			
 			test();
+			
+			//testStuff();
+			
+			// the blur filter handles also drop shadow and glow
+			var blur:BlurFilter = new BlurFilter();
+			var dropShadow:BlurFilter = BlurFilter.createDropShadow();
+			var glow:BlurFilter = BlurFilter.createGlow(0xaaffff, 0.5, 0.5, 0.5);
+
+			// the ColorMatrixFilter contains some handy helper methods
+			var colorMatrixFilter:ColorMatrixFilter = new ColorMatrixFilter();
+			colorMatrixFilter.invert();                // invert image
+			colorMatrixFilter.adjustSaturation(-1);    // make image Grayscale
+			colorMatrixFilter.adjustContrast(0.75);    // raise contrast
+			colorMatrixFilter.adjustHue(1);            // change hue
+			colorMatrixFilter.adjustBrightness(-0.25); // darken image
+
+			// to use a filter, just set it to the "filter" property
+			this.filter = glow;
 			
 			// END TESTING UNIT MOVEMENT }}}}}}}}}}}}}}}}}}
 		}
+		
+		public function testStuff():void {
+			dataMap = [ [0,0,1,1,1,0],
+						[0,0,0,0,1,0],
+						[0,1,1,0,0,0],
+						[0,0,0,0,1,0],
+						[0,1,1,0,1,0],
+						[1,1,0,0,0,0] ];
+ 
+			//create a new map and fill it with BasicTiles
+			map = new Map((dataMap[0] as Array).length, dataMap.length);
+			for(var y:Number = 0; y< dataMap.length; y++)
+			{
+				for(var x:Number = 0; x< (dataMap[y] as Array).length; x++)
+				{
+					map.setTile(new BasicTile(1, new Point(x, y), (dataMap[y][x]==0)));
+				}
+			}
+ 
+			//create the Astar instance and add the listeners
+			astar = new Astar();
+			astar.addEventListener(AstarEvent.PATH_FOUND, onPathFound);
+			astar.addEventListener(AstarEvent.PATH_NOT_FOUND, onPathNotFound);
+ 
+			//create a new PathRequest
+			req = new PathRequest(IAstarTile(map.getTileAt(new Point(0, 0))), IAstarTile(map.getTileAt(new Point(5, 5))), map);
+ 
+			//a general analyzer
+			astar.addAnalyzer(new WalkableAnalyzer());
+			astar.getPath(req);
+		}
+ 
+		private function onPathNotFound(event : AstarEvent) : void
+		{
+			trace("path not found");
+		}
+ 
+ 
+		private function onPathFound(event : AstarEvent):void {
+			trace("Path was found: ");
+			for(var i:int = 0; i < event.result.path.length;i++) {
+				trace((event.result.path[i] as BasicTile).getPosition());
+			}
+		}
+		
 		
 		public function onGameOverLose(event:NavEvent):void {
 			pause = true;
@@ -131,6 +211,9 @@ package {
 			
 			for each (var flock:Flock in flocks) {
 				flock.tick(dt);
+			}
+			if (this.contains(queueMenu)) {
+				queueMenu.tick(dt);
 			}
 		}
 		
@@ -250,6 +333,14 @@ package {
 					unitVector.push(base);
 				}
 			}
+			
+			for each (var turret:TurretPoint in capturePoints) {
+				if (turret.owner != owner) {
+					unitVector.push(turret);
+				}
+				
+			}
+			
 			return unitVector;
 		}
 		
@@ -273,26 +364,16 @@ package {
 		
 		public function spawn(unitType:int, pos:Point, owner:int):void {
 			var unit:Unit;
-			switch (unitType) {
-				case Unit.INFANTRY:
-					unit = new Infantry(pos, owner)
-					break;
-				case Unit.RAIDER:
-					unit = new Raider(pos, owner)
-					break;
-				case Unit.SNIPER:
-					unit = new Sniper(pos, owner)
-					break;
-				default:
-					trace("Unknown unit type in game.spawn()");
-					return;
+			var unitClass:Class = Unit.getClass(unitType);
+			if (unitClass) {
+				unit = new unitClass(pos, owner);
+				var unitVector:Vector.<Unit> = new Vector.<Unit>();
+				unitVector.push(unit);
+				addChild(unit);
+				var flock:Flock = new Flock(unitVector);
+				flock.goal = new Point(200, 200); // TEMPORARY
+				flocks.push(flock);
 			}
-			var unitVector:Vector.<Unit> = new Vector.<Unit>();
-			unitVector.push(unit);
-			addChild(unit);
-			var flock:Flock = new Flock(unitVector);
-			flock.goal = new Point(200, 200); // TEMPORARY
-			flocks.push(flock);
 		}
 		
 		public function removeUnit(unit:Unit):void {

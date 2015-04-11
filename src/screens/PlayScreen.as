@@ -44,7 +44,8 @@ package screens {
 			// fake invisible rectangle so touch events don't fall through
 			// will be removed when a background is added
 			var bg:Quad = new Quad(1000, 2000);
-			bg.alpha = 0;
+			bg.color = 0x000000;
+			//bg.alpha = 0;
 			addChildAt(bg, 0);
 			
 			selectRect = new Quad(1, 1, 0x00ffff);

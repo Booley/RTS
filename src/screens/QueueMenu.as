@@ -1,5 +1,7 @@
 package screens {
 	
+	import starling.display.DisplayObjectContainer;
+	import starling.display.Image;
 	import starling.textures.Texture;
 	import starling.display.Sprite;
 	import starling.events.Event;
@@ -7,8 +9,8 @@ package screens {
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
 	import starling.events.Touch;
-	import units.Base;
-	import units.Unit;
+	
+	import units.*;
 	
 	public class QueueMenu extends Sprite {
 		
@@ -20,6 +22,7 @@ package screens {
 		private var button6:Button;
 		
 		private var portal:Base;
+		private var queuePreview:Sprite;
 		
 		public function QueueMenu(base:Base) {
 			super();
@@ -27,23 +30,27 @@ package screens {
 			this.portal = base;
 			
 			// initialize and add buttons
-			button1 = new Button(Assets.getTexture("ButtonTexture"), "Inf");
+			button1 = new Button(Assets.getTexture(Infantry.TEXTURE_NAME + "1"));
 			button1.y = 0;
 			button1.width = 100;
 			button1.height = 100;
 			addChild(button1);
 			
-			button2 = new Button(Assets.getTexture("ButtonTexture"), "Sni");
+			button2 = new Button(Assets.getTexture(Sniper.TEXTURE_NAME + "1"));
 			button2.y = 100;
 			button2.width = 100;
 			button2.height = 100;
 			addChild(button2);
 			
-			button3 = new Button(Assets.getTexture("ButtonTexture"), "Rai");
+			button3 = new Button(Assets.getTexture(Raider.TEXTURE_NAME + "1"));
 			button3.y = 200;
 			button3.width = 100;
 			button3.height = 100;
 			addChild(button3);
+			
+			queuePreview = new Sprite();
+			queuePreview.y = 440;
+			addChild(queuePreview);
 			
 			this.addEventListener(Event.ADDED_TO_STAGE, onAddToStage);
 		}
@@ -102,6 +109,10 @@ package screens {
 					portal.queueUnit(Unit.RAIDER);
 				}
 			}
+		}
+		
+		public function tick(dt:Number):void {
+			
 		}
 
 	}
