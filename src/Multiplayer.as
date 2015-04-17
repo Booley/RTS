@@ -5,7 +5,9 @@ package
 	import com.reyco1.multiuser.MultiUserSession;
 	import flash.geom.Point;
 	import mx.core.FlexApplicationBootstrap;
+	import units.Base;
 	import units.Flock;
+	import units.Unit;
 	
 	public class Multiplayer 
 	{
@@ -37,6 +39,7 @@ package
 			initialize(); //T
 		}
 		
+		/*
 		//the tick?
 		public function update() :void {
 			var aPlayer :Ship = (FlxG.state as PlayState).player;
@@ -46,7 +49,7 @@ package
 				sendPosition((FlxG.state as PlayState).player);
 			}
 		}
-		
+		*/
 		//???
 		//private function isPlayerControlled(theShip :Ship) :Boolean {
 			//return theShip == null || theShip.owner == (FlxG.state as PlayState).player.owner;
@@ -61,7 +64,7 @@ package
 			mConnection.onUserRemoved 	= handleUserRemoved;					// set the method to be executed once a user has disconnected
 			mConnection.onObjectRecieve = handleGetObject;						// set the method to be executed when we recieve data from a user
 			
-			mMyName  = mConnection.userCount;
+			var mMyName:int  = mConnection.userCount;
 			
 			mConnection.connect(""+mMyName);
 			
@@ -104,6 +107,39 @@ package
 			mConnection.sendObject( { op: OP_FLOCK_DESTROY, flock: mFlock } );
 		}
 		
+		public function sendBaseShoot(mBase:Base, mTarget:Unit):void {
+			mConnection.sendObject( { op: OP_BASE_SHOOT, base: mBase, target: mTarget} );
+		}
+		
+		public function sendBaseDamage(mBase:Base, dmg:int):void {
+			mConnection.sendObject( { op: OP_BASE_DAMAGE, damage: dmg } );
+		}
+		
+		public function sendBaseDestroy(mBase:Base):void {
+			mConnection.sendObject( { op: OP_BASE_DESTROY } );
+		}
+		
+		public function sendUnitShoot(mUnit:Unit, mTarget:Unit):void {
+			mConnection.sendObject( { op: OP_UNIT_SHOOT, unit: mUnit, target: mTarget } );
+		}
+		
+		public function sendUnitDamage(mUnit:Unit, dmg:int):void {
+			mConnection.sendObject( { op: OP_UNIT_DAMAGE, unit: mUnit, damage: dmg } );
+		}
+		
+		public function sendUnitDestroy(mUnit:Unit):void {
+			mConnection.sendObject( { op: OP_UNIT_DESTROY, unit: mUnit } );
+		}
+		
+		public function sendUnitSpawn(mUnit:Unit):void {
+			mConnection.sendObject( { op: OP_UNIT_SPAWN, unit: mUnit } );
+		}
+		
+		public function sendUnitPosition(mUnit:Unit):void {
+			mConnection.sendObject( { op: OP_UNIT_POSITION, unit: mUnit } );
+		}
+		
+		/*
 		public function sendPosition(theShip :Ship) :void	{
 			mConnection.sendObject({op: OP_POSITION, x: theShip.x, y: theShip.y, angle: theShip.angle});
 		}
@@ -115,11 +151,12 @@ package
 		public function sendDie(theShip :Ship) :void	{
 			mConnection.sendObject({op: OP_DIE, x: theShip.x, y: theShip.y});
 		}
-		
+		*/
 		protected function handleGetObject(theUserId :String, theData :Object) :void {
 			var aOpCode :String = theData.op;
 			
 			switch(aOpCode) {
+				/*
 				case OP_POSITION:
 					syncPosition(theUserId, theData);
 					break;
@@ -135,9 +172,48 @@ package
 				case OP_DIE:
 					mShips[theUserId].kill();
 					break;
+				*/
+				case OP_FLOCK_SET_GOAL:
+					theData.flock = theData.goal;
+					break;
+					
+				case OP_FLOCK_SPLIT:
+					
+					break;
+				case OP_FLOCK_MERGE:
+					
+					break;
+				case OP_FLOCK_DESTROY:
+					
+					break;
+					
+				case OP_BASE_SHOOT:
+					theData.base.target = theData.target;
+					theData.base.shoot(); //don't worry about cooldown, that's not a state represented by the other player
+					break;
+				
+				case OP_BASE_DAMAGE:
+					theData.base.takeDamage(theData.damage);
+					break;
+				case OP_BASE_DESTROY:
+					
+					break;
+				case OP_UNIT_SHOOT:
+					theData.unit.target = theData.target;
+					theData.unit.shoot();
+					break;
+				case OP_UNIT_DAMAGE:
+					theData.unit.takeDamage(theData.damage);
+					break;
+				case OP_UNIT_DESTROY:
+					//PlayScreen.game.removeUnit(theData.unit);
+					break;
+				case OP_UNIT_SPAWN:
+					//PlayScreen.game.spawn(theData.unit.unitType, theData.unit.pos, theData.unit.owner);
+					break;
 			}
 		}
-		
+		/*
 		private function syncPosition(theUserId :String, theData :Object) :void {
 			mShips[theUserId].x  = theData.x;
 			mShips[theUserId].y  = theData.y;
@@ -146,5 +222,6 @@ package
 				mShips[theUserId].angle = theData.angle;
 			}
 		}
+		*/
 	}
 }

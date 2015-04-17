@@ -50,6 +50,8 @@ package {
 		private var astar : Astar;
 		private var req:PathRequest;
 		
+		private var multiplayer:Multiplayer;
+		
 		public function Game() {
 			super();
 			
@@ -81,6 +83,8 @@ package {
 			this.filter = glow;
 			
 			// END TESTING UNIT MOVEMENT }}}}}}}}}}}}}}}}}}
+			
+			multiplayer = new Multiplayer();
 		}
 		
 		public function testStuff():void {
