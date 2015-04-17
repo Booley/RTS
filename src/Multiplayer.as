@@ -30,6 +30,8 @@ package
 		private const OP_FLOCK_MERGE:String = "FM";
 		private const OP_FLOCK_DESTROY:String = "FD";
 		
+		private const OP_PLAYER_TAPPED:String = "PT"
+		
 		private var mConnection		:MultiUserSession;
 		private var mMyID:int;
 		
@@ -139,6 +141,10 @@ package
 			mConnection.sendObject( { op: OP_UNIT_POSITION, unit: mUnit } );
 		}
 		
+		public function sendPlayerTapped():void {
+			mConnection.sendObject( { op: OP_PLAYER_TAPPED } );
+		}
+		
 		/*
 		public function sendPosition(theShip :Ship) :void	{
 			mConnection.sendObject({op: OP_POSITION, x: theShip.x, y: theShip.y, angle: theShip.angle});
@@ -210,6 +216,9 @@ package
 					break;
 				case OP_UNIT_SPAWN:
 					//PlayScreen.game.spawn(theData.unit.unitType, theData.unit.pos, theData.unit.owner);
+					break;
+				case OP_PLAYER_TAPPED:
+					trace("The player just tapped something!");
 					break;
 			}
 		}

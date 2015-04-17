@@ -22,6 +22,8 @@ package screens {
 		public var userField:TextField;
 		public var passwordField:TextField;
 		private var messageField:TextField;
+		private var userText:TextField;
+		private var passwordText:TextField;
 		
 		public function LoginScreen() {
 			super();
@@ -29,23 +31,42 @@ package screens {
 			messageField = new TextField();
 			userField = new TextField();
 			passwordField = new TextField();
+			userText = new TextField();
+			passwordText = new TextField();
 			
-			var textFormat:TextFormat = new TextFormat("Arial", 24, 0x000000);
+			var textFormat:TextFormat = new TextFormat("Arial", 20, 0x000000);
 			textFormat.align = TextFormatAlign.LEFT;
 			
 			userField.defaultTextFormat = textFormat;
 			passwordField.defaultTextFormat = textFormat;
 			messageField.defaultTextFormat = textFormat;
+			userText.defaultTextFormat = textFormat;
+			passwordText.defaultTextFormat = textFormat;
+			
+			userField.background = true;
+			passwordField.background = true;
+			
+			userField.backgroundColor = 0xFF9966;
+			passwordField.backgroundColor = 0xFF9966;
+			
+			userText.text = "Username";
+			passwordText.text = "Password";
+			
+			userField.height = 50;
+			passwordField.height = 50;
+			
+			userField.x = 150;
+			passwordField.x = 150;
 			
 			userField.type = TextFieldType.INPUT;
 			passwordField.type = TextFieldType.INPUT;
 			
-			
-			messageField.text = "testing";
 			messageField.width = 300;
 			
 			userField.y = 0;
+			userText.y = 0;
 			passwordField.y = 100;
+			passwordText.y = 100;
 			messageField.y = 200;
 			
 			userField.restrict = "A-Za-z0-9";
@@ -59,6 +80,8 @@ package screens {
 			addChild(userField);
 			addChild(passwordField);
 			addChild(messageField);
+			addChild(userText);
+			addChild(passwordText);
 		}
 		
 		// authenticate user

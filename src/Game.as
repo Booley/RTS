@@ -211,6 +211,8 @@ package {
 		
 		// tap to select A FLOCK. Return true if a flock was selected.
 		public function tap(startTap:Point, endTap:Point):void {
+			multiplayer.sendPlayerTapped();
+			
 			if (contains(queueMenu)) {
 				removeChild(queueMenu);
 			}
