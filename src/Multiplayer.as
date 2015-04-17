@@ -8,6 +8,7 @@ package
 	import units.Base;
 	import units.Flock;
 	import units.Unit;
+	import screens.PlayScreen;
 	
 	public class Multiplayer 
 	{
@@ -141,8 +142,8 @@ package
 			mConnection.sendObject( { op: OP_UNIT_POSITION, unit: mUnit } );
 		}
 		
-		public function sendPlayerTapped():void {
-			mConnection.sendObject( { op: OP_PLAYER_TAPPED } );
+		public function sendPlayerTapped(startTap:Point, endTap:Point):void {
+			mConnection.sendObject( { op: OP_PLAYER_TAPPED , startX: startTap.x, startY: startTap.y, endX: endTap.x, endY: endTap.y } );
 		}
 		
 		/*
@@ -219,6 +220,8 @@ package
 					break;
 				case OP_PLAYER_TAPPED:
 					trace("The player just tapped something!");
+					PlayScreen.game.handleTap(theData.startX, theData.startY, theData.endX, theData.endY);
+					
 					break;
 			}
 		}
