@@ -1,0 +1,116 @@
+[Starling] Initialization complete.
+
+[Starling] Display Driver: DirectX9Ex (Baseline Constrained)
+
+[MultiUserSession] global listeners added
+
+[Session] group specs with auth
+
+[Session] connecting...
+
+[Session] NetConnection.Connect.Success
+
+[Session] connected. joining group...
+
+[Session] NetGroup.Connect.Success
+
+[ChatGroup] joined. creating own user
+
+[MultiUserSession] initializing ChannelManager
+
+I'm connected: 0, total: 1
+
+[ChatGroup] NetGroup.Neighbor.Connect
+
+[ChatGroup] initializing expired and alive timers
+
+[ChatGroup] announcing self
+
+[ChatGroup] user list requested
+
+[ChatGroup] NetGroup.Neighbor.Connect
+
+[Session] NetGroup.Neighbor.Connect
+
+[ChatGroup] NetGroup.SendTo.Notify
+
+[ChatGroup] responding to user list request
+
+[ChatGroup] NetGroup.SendTo.Notify
+
+[Session] NetGroup.SendTo.Notify
+
+[ChatGroup] NetGroup.SendTo.Notify
+
+[ChatGroup] user list recieved
+
+[MultiUserSession] user added: 0
+
+User has joined: 0, total: 2
+
+[ChatGroup] NetGroup.SendTo.Notify
+
+[Session] NetGroup.SendTo.Notify
+
+[ChatGroup] NetGroup.SendTo.Notify
+
+[ChatGroup] user list recieved
+
+[ChatGroup] NetGroup.SendTo.Notify
+
+[Session] NetGroup.SendTo.Notify
+
+[ChatGroup] NetGroup.SendTo.Notify
+
+[ChatGroup] responding to user list request
+
+[ChatGroup] NetGroup.SendTo.Notify
+
+[Session] NetGroup.SendTo.Notify
+
+[ChatGroup] NetGroup.SendTo.Notify
+
+[ChatGroup] user list recieved
+
+[ChatGroup] NetGroup.SendTo.Notify
+
+[Session] NetGroup.SendTo.Notify
+
+[ChatGroup] NetGroup.SendTo.Notify
+
+[ChatGroup] user list recieved
+
+[ChatGroup] NetGroup.SendTo.Notify
+
+[Session] NetGroup.SendTo.Notify
+
+[Session] NetStream.Connect.Success
+
+[ChatGroup] NetGroup.Posting.Notify
+
+[ChatGroup] resolving keep alive request
+
+[ChatGroup] NetGroup.Posting.Notify
+
+[Session] NetGroup.Posting.Notify
+
+[ChatGroup] announcing self
+
+[ChatGroup] invalidating user list
+
+[ChatGroup] NetGroup.Posting.Notify
+
+[ChatGroup] resolving keep alive request
+
+[ChatGroup] NetGroup.Posting.Notify
+
+[Session] NetGroup.Posting.Notify
+
+[ChatGroup] announcing self
+
+[ChatGroup] invalidating user list
+
+[ChatGroup] announcing self
+
+[ChatGroup] invalidating user list
+

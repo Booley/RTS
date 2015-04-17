@@ -92,56 +92,9 @@ package screens {
 			*/
 			var urlLoader:URLLoader = URLLoader(event.target);
 			messageField.text = urlLoader.data.msg;
+			trace(urlLoader.data.msg);
 		 
 		}
-		
-		// create a user
-		/*public function createUser(userName:String, password:String, email:String):void {
-			var urlVariables:URLVariables = new URLVariables();
-			urlVariables.userName = userName;
-			urlVariables.password = password;
-			urlVariables.email = email;
-			sendData(SIGNUP_URL, urlVariables);
-		}
-		
-		private function sendData(url:String, urlVars:URLVariables):void {
-			var urlRequest:URLRequest = new URLRequest(url);
-			urlRequest.data = urlVars;
-			urlRequest.method = URLRequestMethod.POST;
-			
-			var urlLoader:URLLoader = new URLLoader();
-			urlLoader.dataFormat = URLLoaderDataFormat.VARIABLES;
-			urlLoader.addEventListener(Event.COMPLETE, onSendDataComplete);
-			urlLoader.addEventListener(IOErrorEvent.IO_ERROR, onSendDataIOError);
-			urlLoader.load(urlRequest);
-		}
-		
-		private function onSendDataComplete(event:Event):void {
-			var urlLoader:URLLoader = URLLoader(event.target);
-			
-			var par:int = int(urlLoader.data.par);
-			trace(par);
-			var msg:String = urlLoader.data.msg;
-			
-			switch(par) {
-				case ON_LOGIN_SUCCESS:
-					dispatchEvent(new NavigationEvent(NavigationEvent.LOGIN_SUCCESS));
-				break;
-				
-				case ON_LOGIN_FAIL:
-					dispatchEvent(new NavigationEvent(NavigationEvent.LOGIN_FAILED, msg));
-					trace("Failed to log in.");
-				break;
-			}
-			trace("Par: " + urlLoader.data.par);
-			trace("Message: " + urlLoader.data.msg);
-			
-		}
-		
-		private function onSendDataIOError(event:IOErrorEvent):void {
-			trace("Send data error: " + event.toString());
-		}
-		*/
 		
 	}
 }
