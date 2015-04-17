@@ -6,6 +6,7 @@ package
 	import starling.display.Sprite;
 	import starling.events.EnterFrameEvent;
 	import starling.events.TouchEvent;
+	import starling.core.Starling;
 	
 	public class Main extends Sprite {
 		
@@ -15,6 +16,10 @@ package
 		private var mpMenu:MPMenu;
 		private var leaderboardMenu:LeaderboardMenu;
 		private var optsMenu:OptsMenu;
+		private var loginScreen:LoginScreen;
+		private var loginButtonScreen:LoginButtonScreen;
+		private var signupScreen:SignupScreen;
+		private var signupButtonScreen:SignupButtonScreen;
 		
 		private var playScreen:PlayScreen;
 		
@@ -36,6 +41,11 @@ package
 			optsMenu = new OptsMenu();
 			
 			playScreen = new PlayScreen();
+			
+			loginScreen = new LoginScreen();
+			loginButtonScreen = new LoginButtonScreen();
+			signupScreen = new SignupScreen();
+			signupButtonScreen = new SignupButtonScreen();
 				
 			// register event listeners
 			addMainMenuEventListeners();
@@ -44,6 +54,8 @@ package
 			addLeaderboardMenuEventListeners();
 			addOptsMenuEventListeners();
 			addPlayScreenEventListeners();
+			addLoginScreenEventListeners();
+			addSignupScreenEventListeners();
 		}
 		
 		private function addMainMenuEventListeners():void {
@@ -51,6 +63,8 @@ package
 			mainMenu.addEventListener(NavEvent.MAIN_MENU_MP, onMPBtnPress);
 			mainMenu.addEventListener(NavEvent.MAIN_MENU_LEADERBOARD, onLeaderboardBtnPress);
 			mainMenu.addEventListener(NavEvent.MAIN_MENU_OPTS, onOptsBtnPress);
+			mainMenu.addEventListener(NavEvent.MAIN_MENU_LOGIN, onLoginBtnPress);
+			mainMenu.addEventListener(NavEvent.MAIN_MENU_SIGNUP, onSignupBtnPress);
 		}
 		
 		private function removeMainMenuEventListeners():void {
@@ -58,6 +72,8 @@ package
 			mainMenu.removeEventListener(NavEvent.MAIN_MENU_MP, onMPBtnPress);
 			mainMenu.removeEventListener(NavEvent.MAIN_MENU_LEADERBOARD, onLeaderboardBtnPress);
 			mainMenu.removeEventListener(NavEvent.MAIN_MENU_OPTS, onOptsBtnPress);
+			mainMenu.removeEventListener(NavEvent.MAIN_MENU_LOGIN, onLoginBtnPress);
+			mainMenu.removeEventListener(NavEvent.MAIN_MENU_SIGNUP, onSignupBtnPress);
 		}
 		
 		private function addSPMenuEventListeners():void {
@@ -104,6 +120,26 @@ package
 			playScreen.removeEventListener(NavEvent.GAME_QUIT, onGameQuit);
 		}
 		
+		private function addLoginScreenEventListeners():void {
+			loginButtonScreen.addEventListener(NavEvent.LOGIN_SCREEN_BACK, onLoginScreenBackBtnPress);
+			loginButtonScreen.addEventListener(NavEvent.LOGIN_SCREEN_SUBMIT, onLoginScreenSubmitBtnPress);
+		}
+		
+		private function removeLoginScreenEventListeners():void {
+			loginButtonScreen.removeEventListener(NavEvent.LOGIN_SCREEN_BACK, onLoginScreenBackBtnPress);
+			loginButtonScreen.removeEventListener(NavEvent.LOGIN_SCREEN_SUBMIT, onLoginScreenSubmitBtnPress);
+		}
+		
+		private function addSignupScreenEventListeners():void {
+			signupButtonScreen.addEventListener(NavEvent.SIGNUP_SCREEN_BACK, onSignupScreenBackBtnPress);
+			signupButtonScreen.addEventListener(NavEvent.SIGNUP_SCREEN_SUBMIT, onSignupScreenSubmitBtnPress);
+		}
+		
+		private function removeSignupScreenEventListeners():void {
+			signupButtonScreen.removeEventListener(NavEvent.SIGNUP_SCREEN_BACK, onSignupScreenBackBtnPress);
+			signupButtonScreen.removeEventListener(NavEvent.SIGNUP_SCREEN_SUBMIT, onSignupScreenSubmitBtnPress);
+		}
+		
 		// handle spMenu button press
 		private function onSPBtnPress(e:Event):void {
 			removeChild(mainMenu);
@@ -128,12 +164,28 @@ package
 			addChild(optsMenu);
 		}
 		
+		//handle loginScreen button press
+		private function onLoginBtnPress(e:Event):void {
+			removeChild(mainMenu);
+			addChild(loginButtonScreen);
+			Starling.current.nativeOverlay.addChild(loginScreen);
+			
+		}
+		
+		//handle signupScreen button press
+		private function onSignupBtnPress(e:Event):void {
+			removeChild(mainMenu);
+			addChild(signupButtonScreen);
+			Starling.current.nativeOverlay.addChild(signupScreen);
+		}
+		
 		// handle SPMenu's back button press
 		private function onSPBackBtnPress(e:Event):void {
 			removeChild(spMenu);
 			addChild(mainMenu);
 		}
 				
+		
 		// handle SPMenu's play button press
 		private function onSPPlayBtnPress(e:Event):void {
 			removeChild(spMenu);
@@ -168,6 +220,35 @@ package
 		private function onGameQuit(e:Event):void {
 			removeChild(playScreen);
 			addChild(mainMenu);
+		}
+		
+		// handle LoginScreen's back button press
+		private function onLoginScreenBackBtnPress(e:Event):void {
+			removeChild(loginButtonScreen);
+			Starling.current.nativeOverlay.removeChild(loginScreen);
+			addChild(mainMenu);
+		}
+		
+		//handle LoginScreen's submit button press
+		private function onLoginScreenSubmitBtnPress(e:Event):void {
+			var user:String = loginScreen.userField.text;
+			var password:String = loginScreen.passwordField.text;
+			loginScreen.login(user, password);
+		}
+		
+		// handle SignupScreen's back button press
+		private function onSignupScreenBackBtnPress(e:Event):void {
+			removeChild(signupButtonScreen);
+			Starling.current.nativeOverlay.removeChild(signupScreen);
+			addChild(mainMenu);
+		}
+		
+		//handle SignupScreen's submit button press
+		private function onSignupScreenSubmitBtnPress(e:Event):void {
+			var user:String = signupScreen.userField.text;
+			var password:String = signupScreen.passwordField.text;
+			var email:String = signupScreen.emailField.text;
+			signupScreen.signup(user, password, email);
 		}
 		
 	}
