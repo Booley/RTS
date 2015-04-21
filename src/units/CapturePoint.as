@@ -18,9 +18,6 @@ package units
 			this.attackRange = 40;
 		}
 		
-		
-		
-		
 	}
 
 }

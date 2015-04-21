@@ -35,7 +35,9 @@
       <path-element>C:\Users\Evan\Documents\RTS\src</path-element>
       <path-element>C:\Program Files (x86)\FlashDevelop\Library\AS3\classes</path-element>
     </source-path>
-    <library-path append="true" />
+    <library-path append="true">
+      <path-element>C:\Users\Evan\Documents\RTS\lib\starling.swc</path-element>
+    </library-path>
   </compiler>
   <file-specs>
     <path-element>C:\Users\Evan\Documents\RTS\src\PreMain.as</path-element>
