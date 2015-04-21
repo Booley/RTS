@@ -226,6 +226,7 @@ package {
 			if (selectedUnits) {
 				var newFlock:Flock = new Flock();
 				for each (var unit:Unit in selectedUnits) {		
+					// remove unit from old flock
 					var oldFlock:Flock = unit.flock;
 					if (oldFlock) {
 						oldFlock.removeUnit(unit);
