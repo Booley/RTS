@@ -69,7 +69,11 @@ package units {
 		public var healthBackground:Quad;
 		public var healthBar:Quad;
 		public var highlightTextureName:String = "HighlightTexture";
-		
+
+		//id
+		private static var counter:int;
+		public var id:int;
+
 		// given unit type constant, return the corresponding class
 		public static function getClass(unitType:int):Class {
 			switch (unitType) {
@@ -89,6 +93,7 @@ package units {
 
 		// a constructor for a unit
 		public function Unit(startPos:Point, owner:int = 1, rotation:Number = 0) {
+			this.id = counter++;
 			this.pos = startPos.clone();
 			this.x = pos.x;
 			this.y = pos.y;

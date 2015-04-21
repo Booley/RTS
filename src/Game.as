@@ -53,7 +53,7 @@ package {
 		
 		private var multiplayer:Multiplayer;
 		
-		private var dictionary:Dictionary;
+		public var dictionary:Dictionary;
 		
 		public function Game() {
 			super();
@@ -195,11 +195,11 @@ package {
 			addChild(base2);
 		}
 		
-		public function addToDictionary(u:Unit) {
-			dictonary[u.id] = u;
+		public function addToDictionary(u:Unit):void {
+			dictionary[u.id] = u;
 		}
 		
-		public function removeFromDictionary(u:Unit) {
+		public function removeFromDictionary(u:Unit):void {
 			delete dictionary[u.id];
 		}
 		
