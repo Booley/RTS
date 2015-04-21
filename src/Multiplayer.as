@@ -32,7 +32,8 @@ package
 		private const OP_FLOCK_MERGE:String = "FM";
 		private const OP_FLOCK_DESTROY:String = "FD";
 		
-		private const OP_PLAYER_TAPPED:String = "PT"
+		private const OP_PLAYER_TAPPED:String = "PT";
+		private const OP_MOVEMENT:String = "MO";
 		
 		private var mConnection		:MultiUserSession;
 		private var mMyID:int;
@@ -147,6 +148,10 @@ package
 			mConnection.sendObject( { op: OP_PLAYER_TAPPED , startX: startTap.x, startY: startTap.y, endX: endTap.x, endY: endTap.y } );
 		}
 		
+		public function sendMovement(units:String, newX:int, newY:int):void {
+			mConnection.sendObject( { op: OP_MOVEMENT, ids: units, x: newX, y: newY } );
+		}
+		
 		/*
 		public function sendPosition(theShip :Ship) :void	{
 			mConnection.sendObject({op: OP_POSITION, x: theShip.x, y: theShip.y, angle: theShip.angle});
@@ -224,6 +229,8 @@ package
 					PlayScreen.game.handleTap(theData.startX, theData.startY, theData.endX, theData.endY);
 					
 					break;
+				case OP_MOVEMENT:
+					PlayScreen.game.handleMovement(theData.ids, new Point(theData.x, theData.y));
 			}
 		}
 		/*

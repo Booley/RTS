@@ -483,5 +483,9 @@ package {
 			bullets.splice(bullets.indexOf(bullet), 1)
 			removeChild(bullet);
 		}
+		
+		public function handleMovement(ids:String, goal:Point):void {
+			
+		}
 	}
 }
