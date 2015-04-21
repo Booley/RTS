@@ -432,13 +432,14 @@ package {
 			for each (var unit:Unit in unitVector) {
 				idString += unit.id + " ";
 			}
+			idString = idString.substr(0, idString.length - 1);
 			return idString;
 		}
 		
 		// conver a string of unit ids into a flock full of units
 		public function idStringToFlock(string:String):Flock {
 			var unitVector:Vector.<Unit> = new Vector.<Unit>();
-			for each (var idString:String in string.split()) {
+			for each (var idString:String in string.split(" ")) {
 				var id:int = parseInt(idString);
 				if (id >= 0) {
 					var unit:Unit = dictionary[id];
@@ -500,7 +501,8 @@ package {
 		
 		public function handleMovement(ids:String, goal:Point):void {
 			var newFlock:Flock = idStringToFlock(ids);
-			for each (var unit:Unit in newFlock.units) {		
+			for each (var unit:Unit in newFlock.units) {
+				
 				var oldFlock:Flock = unit.flock;
 				if (oldFlock) {
 					oldFlock.removeUnit(unit);
