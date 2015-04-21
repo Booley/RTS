@@ -30,7 +30,7 @@ package {
 	import be.dauntless.astar.basic2d.BasicTile;
 	import be.dauntless.astar.basic2d.analyzers.WalkableAnalyzer;
 	
-	import unitstuff.*;
+	import units.*;
 	import screens.QueueMenu;
 	import screens.GameOverMenu;
 	import pathfinding.*;
@@ -294,6 +294,8 @@ package {
 				if (newFlock.units.length > 0) {
 					newFlock.goal = startTap;					
 					flocks.push(newFlock); 
+					
+					multiplayer.sendMovement(idsToString(newFlock.units), newFlock.goal);
 				} else {
 					trace("Empty flock error");
 				}
@@ -427,7 +429,7 @@ package {
 		// convert unit vector to string array to send in multiplayer game
 		public function idsToString(unitVector:Vector.<Unit>):String {
 			var idString:String = "";
-			for (var unit:Unit in unitVector) {
+			for each (var unit:Unit in unitVector) {
 				idString += unit.id + " ";
 			}
 			return idString;
@@ -436,9 +438,9 @@ package {
 		// conver a string of unit ids into a flock full of units
 		public function idStringToFlock(string:String):Flock {
 			var unitVector:Vector.<Unit> = new Vector.<Unit>();
-			for (var idString:String in string.split()) {
+			for each (var idString:String in string.split()) {
 				var id:int = parseInt(idString);
-				if (id >= 0) {
+				if (id != NaN) {
 					var unit:Unit = dictionary[id];
 					unitVector.push(unit);
 				}
@@ -497,7 +499,20 @@ package {
 		}
 		
 		public function handleMovement(ids:String, goal:Point):void {
+			var newFlock:Flock = idStringToFlock(ids);
+			for each (var unit:Unit in newFlock.units) {		
+				var oldFlock:Flock = unit.flock;
+				if (oldFlock) {
+					oldFlock.removeUnit(unit);
+					if (oldFlock.units.length == 0) {
+						flocks.splice(flocks.indexOf(oldFlock), 1);
+					}
+				}
+			}
 			
+			
+			newFlock.goal = goal;
+			flocks.push(newFlock);
 		}
 	}
 }
