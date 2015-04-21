@@ -4,6 +4,11 @@ package {
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
+	import unitstuff.Base;
+	import unitstuff.Bullet;
+	import unitstuff.Flock;
+	import unitstuff.Infantry;
+	import unitstuff.Unit;
 	
 	import starling.display.Button;
 	import starling.display.Sprite;
@@ -70,18 +75,8 @@ package {
 			
 			testStuff();
 			
-			// the blur filter handles also drop shadow and glow
-			var blur:BlurFilter = new BlurFilter();
-			var dropShadow:BlurFilter = BlurFilter.createDropShadow();
 			var glow:BlurFilter = BlurFilter.createGlow(0xaaffff, 0.5, 0.5, 0.5);
 
-			// the ColorMatrixFilter contains some handy helper methods
-			var colorMatrixFilter:ColorMatrixFilter = new ColorMatrixFilter();
-			colorMatrixFilter.invert();                // invert image
-			colorMatrixFilter.adjustSaturation(-1);    // make image Grayscale
-			colorMatrixFilter.adjustContrast(0.75);    // raise contrast
-			colorMatrixFilter.adjustHue(1);            // change hue
-			colorMatrixFilter.adjustBrightness(-0.25); // darken image
 
 			// to use a filter, just set it to the "filter" property
 			this.filter = glow;
@@ -150,6 +145,7 @@ package {
 				var unit:Unit = new Infantry(new Point(x, y));
 				unitVector.push(unit);
 				addChild(unit);
+				addToDictionary(unit);
 			}
 			var flock:Flock = new Flock(unitVector);
 			flocks.push(flock);
@@ -163,36 +159,26 @@ package {
 				unit = new Infantry(new Point(x, y), 2);
 				unitVector.push(unit);
 				addChild(unit);
+				addToDictionary(unit);
 			}
 			
 			flock = new Flock(unitVector);
 			flocks.push(flock);
 			flock.goal = new Point(200, 100);
 			
-			unitVector = new Vector.<Unit>();
-			for (i = 0; i < 20; i++) {
-				x = i * 10;
-				y =  200;
-				if (i % 4 == 0) {
-					i += 1;
-				}
-				unit = new Obstacle(new Point(x, y), 2);
-				unitVector.push(unit);
-				addChild(unit);
-			}
-			
 			flock = new Flock(unitVector);
 			flocks.push(flock);
-			
 			
 			base1 = new Base(new Point(320 / 2, 480 - 10));
 			bases.push(base1);
 			addChild(base1);
+			addToDictionary(base1);
 			queueMenu = new QueueMenu(base1);
 			
 			base2 = new Base(new Point(320 / 2, 10), 2, Math.PI);
 			bases.push(base2)
 			addChild(base2);
+			addToDictionary(base2);
 		}
 		
 		public function addToDictionary(u:Unit):void {
@@ -243,14 +229,14 @@ package {
 					var oldFlock:Flock = unit.flock;
 					if (oldFlock) {
 						oldFlock.removeUnit(unit);
-						if (oldFlock.neighbors.length == 0) {
+						if (oldFlock.units.length == 0) {
 							flocks.splice(flocks.indexOf(oldFlock), 1);
 						}
 					}
 					newFlock.addUnit(unit);
 					unit.unHighlight();
 				}
-				if (newFlock.neighbors.length > 0) {
+				if (newFlock.units.length > 0) {
 					newFlock.goal = startTap;
 					flocks.push(newFlock); 
 				} else {
@@ -270,7 +256,7 @@ package {
 			var bestDist:int = DISTANCE_TO_TAP_UNIT;
 			var closestFlock:Flock;
 			for each (var flock:Flock in flocks) {
-				for each (unit in flock.neighbors) {
+				for each (unit in flock.units) {
 					var thisDist:int = unit.pos.subtract(startTap).length;
 					if (thisDist < bestDist) {
 						bestDist = thisDist;
@@ -279,7 +265,7 @@ package {
 				}
 			}
 			if (closestFlock) {
-				selectUnits(closestFlock.neighbors);
+				selectUnits(closestFlock.units);
 			}
 		}
 		
@@ -297,15 +283,15 @@ package {
 					var oldFlock:Flock = unit.flock;
 					if (oldFlock) {
 						oldFlock.removeUnit(unit);
-						if (oldFlock.neighbors.length == 0) {
+						if (oldFlock.units.length == 0) {
 							flocks.splice(flocks.indexOf(oldFlock), 1);
 						}
 					}
 					newFlock.addUnit(unit);
 					unit.unHighlight();
 				}
-				if (newFlock.neighbors.length > 0) {
-					newFlock.goal = startTap;
+				if (newFlock.units.length > 0) {
+					newFlock.goal = startTap;					
 					flocks.push(newFlock); 
 				} else {
 					trace("Empty flock error");
@@ -324,7 +310,7 @@ package {
 			var bestDist:int = DISTANCE_TO_TAP_UNIT;
 			var closestFlock:Flock;
 			for each (var flock:Flock in flocks) {
-				for each (unit in flock.neighbors) {
+				for each (unit in flock.units) {
 					var thisDist:int = unit.pos.subtract(startTap).length;
 					if (thisDist < bestDist) {
 						bestDist = thisDist;
@@ -333,7 +319,7 @@ package {
 				}
 			}
 			if (closestFlock) {
-				selectUnits(closestFlock.neighbors);
+				selectUnits(closestFlock.units);
 			}
 		}
 		
@@ -352,7 +338,7 @@ package {
 			// determine which units were inside the box selection
 			var unitVector:Vector.<Unit> = new Vector.<Unit>();
 			for each (var flock:Flock in flocks) {
-				for each (var unit:Unit in flock.neighbors) {
+				for each (var unit:Unit in flock.units) {
 					if (containsPoint(startTap, endTap, unit.pos)) {
 						if (unit.owner == 1) {
 							unitVector.push(unit);
@@ -388,7 +374,7 @@ package {
 			// determine which units were inside the box selection
 			var unitVector:Vector.<Unit> = new Vector.<Unit>();
 			for each (var flock:Flock in flocks) {
-				for each (var unit:Unit in flock.neighbors) {
+				for each (var unit:Unit in flock.units) {
 					if (unit.owner != owner) {
 						unitVector.push(unit);
 					} else {
@@ -408,7 +394,7 @@ package {
 			// determine which units were inside the box selection
 			var unitVector:Vector.<Unit> = new Vector.<Unit>();
 			for each (var flock:Flock in flocks) {
-				for each (var unit:Unit in flock.neighbors) {
+				for each (var unit:Unit in flock.units) {
 					if (!(unit.flock === thisUnit.flock)) {
 						unitVector.push(unit);
 					} else {
@@ -433,18 +419,43 @@ package {
 				var flock:Flock = new Flock(unitVector);
 				flock.goal = new Point(200, 200); // TEMPORARY
 				flocks.push(flock);
+				addToDictionary(unit);
 			}
+		}
+		
+		// convert unit vector to string array to send in multiplayer game
+		public function idsToString(unitVector:Vector.<Unit>):String {
+			var idString:String = "";
+			for (var unit:Unit in unitVector) {
+				idString += unit.id + " ";
+			}
+			return idString;
+		}
+		
+		// conver a string of unit ids into a flock full of units
+		public function idStringToFlock(string:String):Flock {
+			var unitVector:Vector.<Unit> = new Vector.<Unit>();
+			for (var idString:String in string.split()) {
+				var id:int = parseInt(idString);
+				if (id != NaN) {
+					var unit:Unit = dictionary[id];
+					unitVector.push(unit);
+				}
+			}
+			var flock:Flock = new Flock(unitVector);
+			return flock;
 		}
 		
 		public function removeUnit(unit:Unit):void {
 			if (unit == null) {
 				return;
 			}
+			removeFromDictionary(unit);
 			var flock:Flock = unit.flock;
 			if (unit.flock != null) {
 				// remove unit from its flock
 				flock.removeUnit(unit);
-				if (flock.neighbors.length == 0) {
+				if (flock.units.length == 0) {
 					flocks.splice(flocks.indexOf(flock), 1);
 				}
 			}
