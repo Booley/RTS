@@ -1,5 +1,4 @@
 *.bat
-bin
 lib
 AIR*
 *.xml
