@@ -17,12 +17,11 @@ package screens {
 		private var button1:Button;
 		private var button2:Button;
 		private var button3:Button;
-		private var button4:Button;
-		private var button5:Button;
-		private var button6:Button;
 		
 		private var portal:Base;
 		private var queuePreview:Sprite;
+		
+		private var ang:Number;
 		
 		public function QueueMenu(base:Base) {
 			super();

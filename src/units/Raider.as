@@ -15,8 +15,8 @@ package units {
 		public static const ATTACK_RANGE:Number = 80;
 		public static const BUILD_TIME:Number = 1;
 		
-		public function Raider(startPos:Point, owner:int = 1) {
-			super(startPos, owner);
+		public function Raider(startPos:Point, owner:int = 1, rotation:Number = 0) {
+			super(startPos, owner, rotation);
 			this.unitType = Unit.SNIPER;
 			this.textureName = TEXTURE_NAME;
 			this.maxSpeed = MAX_SPEED;

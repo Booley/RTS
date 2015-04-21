@@ -15,8 +15,8 @@ package units {
 		public static const ATTACK_RANGE:Number = 100;
 		public static const BUILD_TIME:Number = 2;
 		
-		public function Infantry(startPos:Point, owner:int = 1) {
-			super(startPos, owner);
+		public function Infantry(startPos:Point, owner:int = 1, rotation:Number = 0) {
+			super(startPos, owner, rotation);
 			this.unitType = Unit.SNIPER;
 			this.textureName = TEXTURE_NAME;
 			this.maxSpeed = MAX_SPEED;

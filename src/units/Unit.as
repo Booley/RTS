@@ -63,22 +63,13 @@ package units {
 		
 		// image variables
 		public var image:Image;
+		public var initialImageRotation:Number;
 		public var highlightImage:Image;
 		public var healthBackground:Quad;
 		public var healthBar:Quad;
 		public var highlightTextureName:String = "HighlightTexture";
-
-		// a constructor for a unit
-		public function Unit(startPos:Point, owner:int = 1) {
-			pos = startPos.clone();
-			this.x = pos.x;
-			this.y = pos.y;
-			vel = new Point();
-			this.owner = owner;
-			
-			this.addEventListener(Event.ADDED_TO_STAGE, onAddToStage);
-		}
 		
+		// given unit type constant, return the corresponding class
 		public static function getClass(unitType:int):Class {
 			switch (unitType) {
 				case INFANTRY:
@@ -94,6 +85,19 @@ package units {
 					return null;
 			}
 		}
+
+		// a constructor for a unit
+		public function Unit(startPos:Point, owner:int = 1, rotation:Number = 0) {
+			this.pos = startPos.clone();
+			this.x = pos.x;
+			this.y = pos.y;
+			this.vel = new Point();
+			this.owner = owner;
+			this.initialImageRotation = rotation;
+			
+			this.addEventListener(Event.ADDED_TO_STAGE, onAddToStage);
+		}
+		
 		
 		public function onAddToStage(e:Event):void {
 			this.removeEventListener(Event.ADDED_TO_STAGE, onAddToStage);
@@ -123,12 +127,13 @@ package units {
 		}
 		
 		// Idk about this method.. might remove it
-		public function createArt():void {
+		public function createArt(rotation:Number = 0):void {
 			image = new Image(Assets.getTexture(textureName + owner));
-			image.blendMode = BlendMode.ADD;
+			//image.blendMode = BlendMode.NORMAL;
 			image.scaleX *= 0.2;
 			image.scaleY *= 0.2; // TEMPORARY
 			image.alignPivot();
+			image.rotation = initialImageRotation;
 			addChild(image);
 			
 			highlightImage = new Image(Assets.getTexture(highlightTextureName));
@@ -145,6 +150,7 @@ package units {
 			addChild(healthBackground);
 			
 			healthBar = new Quad(30, 4, 0x00ff00);
+			//healthBar.blendMode = BlendMode.NORMAL;
 			healthBar.x = -healthBar.width / 2;
 			healthBar.y = -10 - healthBar.height / 2;
 			healthBar.alpha = 0.5;

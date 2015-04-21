@@ -27,6 +27,7 @@ package {
 	import units.*;
 	import screens.QueueMenu;
 	import screens.GameOverMenu;
+	import pathfinding.*;
 	
 	public class Game extends Sprite {
 		
@@ -45,7 +46,6 @@ package {
 		private var base1:Base;
 		private var base2:Base;
 		
-		private var dataMap:Array;
 		private var map : Map;
 		private var astar : Astar;
 		private var req:PathRequest;
@@ -62,7 +62,7 @@ package {
 			
 			test();
 			
-			//testStuff();
+			testStuff();
 			
 			// the blur filter handles also drop shadow and glow
 			var blur:BlurFilter = new BlurFilter();
@@ -84,20 +84,12 @@ package {
 		}
 		
 		public function testStuff():void {
-			dataMap = [ [0,0,1,1,1,0],
-						[0,0,0,0,1,0],
-						[0,1,1,0,0,0],
-						[0,0,0,0,1,0],
-						[0,1,1,0,1,0],
-						[1,1,0,0,0,0] ];
- 
-			//create a new map and fill it with BasicTiles
-			map = new Map((dataMap[0] as Array).length, dataMap.length);
-			for(var y:Number = 0; y< dataMap.length; y++)
-			{
-				for(var x:Number = 0; x< (dataMap[y] as Array).length; x++)
-				{
-					map.setTile(new BasicTile(1, new Point(x, y), (dataMap[y][x]==0)));
+			
+			var mapData:Vector.<Vector.<Tile>> = MapGen.map1();
+			map = new Map(mapData[0].length, mapData.length);
+			for(var y:Number = 0; y < mapData.length; y++) {
+				for(var x:Number = 0; x < mapData[y].length; x++) {
+					map.setTile(mapData[y][x].basicTile);
 				}
 			}
  
@@ -107,7 +99,7 @@ package {
 			astar.addEventListener(AstarEvent.PATH_NOT_FOUND, onPathNotFound);
  
 			//create a new PathRequest
-			req = new PathRequest(IAstarTile(map.getTileAt(new Point(0, 0))), IAstarTile(map.getTileAt(new Point(5, 5))), map);
+			req = new PathRequest(IAstarTile(map.getTileAt(new Point(0, 0))), IAstarTile(map.getTileAt(new Point(0, 13))), map);
  
 			//a general analyzer
 			astar.addAnalyzer(new WalkableAnalyzer());
@@ -342,11 +334,11 @@ package {
 			return unitVector;
 		}
 		
-		public function spawn(unitType:int, pos:Point, owner:int):void {
+		public function spawn(unitType:int, pos:Point, owner:int, rotation:Number):void {
 			var unit:Unit;
 			var unitClass:Class = Unit.getClass(unitType);
 			if (unitClass) {
-				unit = new unitClass(pos, owner);
+				unit = new unitClass(pos, owner, rotation);
 				var unitVector:Vector.<Unit> = new Vector.<Unit>();
 				unitVector.push(unit);
 				addChild(unit);

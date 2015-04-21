@@ -93,7 +93,7 @@ package units {
 				unitBuildCooldown -= dt;
 			}
 			if (unitBuildCooldown < 0) {
-				PlayScreen.game.spawn(nextUnit(), this.pos, this.owner);
+				PlayScreen.game.spawn(nextUnit(), this.pos, this.owner, this.rotation - Math.PI/2);
 				var nextUnitClass:Class = Unit.getClass(peekNextUnit())
 				if (nextUnitClass) {
 					unitBuildCooldown = nextUnitClass.BUILD_TIME;
