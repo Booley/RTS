@@ -148,8 +148,9 @@ package
 			mConnection.sendObject( { op: OP_PLAYER_TAPPED , startX: startTap.x, startY: startTap.y, endX: endTap.x, endY: endTap.y } );
 		}
 		
-		public function sendMovement(units:String, newX:int, newY:int):void {
-			mConnection.sendObject( { op: OP_MOVEMENT, ids: units, x: newX, y: newY } );
+		public function sendMovement(units:String, goal:Point):void {
+			trace("sent movement signal");
+			mConnection.sendObject( { op: OP_MOVEMENT, ids: units, x: goal.x, y: goal.y } );
 		}
 		
 		/*
