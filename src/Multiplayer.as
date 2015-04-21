@@ -27,10 +27,10 @@ package
 		private const OP_BASE_DAMAGE:String = "BDA";
 		private const OP_BASE_DESTROY:String = "BDE";
 		
-		private const OP_FLOCK_SET_GOAL:String = "FSG";
-		private const OP_FLOCK_SPLIT:String = "FS";
-		private const OP_FLOCK_MERGE:String = "FM";
-		private const OP_FLOCK_DESTROY:String = "FD";
+		//private const OP_FLOCK_SET_GOAL:String = "FSG";
+		//private const OP_FLOCK_SPLIT:String = "FS";
+		//private const OP_FLOCK_MERGE:String = "FM";
+		//private const OP_FLOCK_DESTROY:String = "FD";
 		
 		private const OP_PLAYER_TAPPED:String = "PT"
 		

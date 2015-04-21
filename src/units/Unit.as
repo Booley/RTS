@@ -68,9 +68,15 @@ package units {
 		public var healthBackground:Quad;
 		public var healthBar:Quad;
 		public var highlightTextureName:String = "HighlightTexture";
-
+		
+		//id
+		private static var counter:int;
+		public var id:int;
+		
 		// a constructor for a unit
 		public function Unit(startPos:Point, owner:int = 1) {
+			this.id = counter++;
+			
 			pos = startPos.clone();
 			this.x = pos.x;
 			this.y = pos.y;
