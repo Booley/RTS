@@ -3,6 +3,7 @@ package {
 	
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
+	import flash.utils.Dictionary;
 	
 	import starling.display.Button;
 	import starling.display.Sprite;
@@ -52,12 +53,15 @@ package {
 		
 		private var multiplayer:Multiplayer;
 		
+		private var dictionary:Dictionary;
+		
 		public function Game() {
 			super();
 			
 			flocks = new Vector.<Flock>();
 			bases = new Vector.<Base>();
 			bullets = new Vector.<Bullet>();
+			dictionary = new Dictionary();
 			
 			this.addEventListener(NavEvent.GAME_OVER_LOSE, onGameOverLose);
 			this.addEventListener(NavEvent.GAME_OVER_WIN, onGameOverWin);
@@ -189,6 +193,14 @@ package {
 			base2 = new Base(new Point(320 / 2, 10), 2, Math.PI);
 			bases.push(base2)
 			addChild(base2);
+		}
+		
+		public function addToDictionary(u:Unit) {
+			dictonary[u.id] = u;
+		}
+		
+		public function removeFromDictionary(u:Unit) {
+			delete dictionary[u.id];
 		}
 		
 		public function start():void {
