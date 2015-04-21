@@ -15,7 +15,7 @@ package units {
 		public static const ATTACK_RANGE:Number = 0;
 		public static const BUILD_TIME:Number = +2;
 		
-		public function Obstacle(startPos:Point, owner:int = 1) {
+		public function Obstacle(startPos:Point, owner:int = 3) {
 			super(startPos, owner);
 			this.unitType = Unit.OBSTACLE;
 			this.textureName = TEXTURE_NAME;
