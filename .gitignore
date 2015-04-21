@@ -5,6 +5,5 @@ AIR*
 *.xml
 References
 *.swf
-/bin/*
-/bin/RTS.swf
-/obj
+bin/*
+bin/RTS.swf
