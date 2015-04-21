@@ -3,7 +3,6 @@ package {
 	
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
-	import mx.core.FlexApplicationBootstrap;
 	
 	import starling.display.Button;
 	import starling.display.Sprite;

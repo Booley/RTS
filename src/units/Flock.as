@@ -8,11 +8,17 @@ package units {
 	import screens.PlayScreen;
 	
 	public class Flock {
+		private static var counter:int = 0;
 		
 		public var neighbors:Vector.<Unit>;
 		public var goal:Point;
-
+		public var id:String;
+		
 		public function Flock(units:Vector.<Unit> = null) {
+			//create flock id
+			this.id = "flock-" + counter;
+			counter++;
+			
 			if (units == null) {
 				this.neighbors = new Vector.<Unit>();
 			} else {
@@ -22,7 +28,7 @@ package units {
 				}
 			}
 		}
-			
+		
 		public function addUnit(unit:Unit):void {
 			neighbors.push(unit);
 			unit.flock = this;

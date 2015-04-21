@@ -22,6 +22,7 @@ package
 		private const OP_UNIT_SPAWN:String = "USP";
 		private const OP_UNIT_POSITION:String = "UP";
 		
+		
 		private const OP_BASE_SHOOT:String = "BS";
 		private const OP_BASE_DAMAGE:String = "BDA";
 		private const OP_BASE_DESTROY:String = "BDE";
