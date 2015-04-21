@@ -20,6 +20,7 @@ package units {
 		public static const SNIPER:int = 3;
 		public static const RESOURCE:int = 4;
 		public static const TURRET:int = 5;
+		public static const OBSTACLE:int = 6;
 		
 		// global movement constants
 		public static const DAMPENING:Number = 0.95; // dampening time constant to help smooth movement.  applied to vel each tick

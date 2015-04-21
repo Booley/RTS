@@ -23,6 +23,10 @@ package screens {
 		public var passwordField:TextField;
 		public var emailField:TextField;
 		private var messageField:TextField;
+		private var userText:TextField;
+		private var passwordText:TextField;
+		private var emailText:TextField;
+		
 		
 		public function SignupScreen() {
 			super();
@@ -33,33 +37,58 @@ package screens {
 			emailField = new TextField();
 			userText = new TextField();
 			passwordText = new TextField();
-			emailField = new TextField();
-			userText.defaultTextFormat = textFormat;
-			passwordText.defaultTextFormat = textFormat;
+			emailText = new TextField();
 			
-			var textFormat:TextFormat = new TextFormat("Arial", 24, 0x000000);
+			
+			var textFormat:TextFormat = new TextFormat("Arial", 20, 0x000000);
 			textFormat.align = TextFormatAlign.LEFT;
 			
 			userField.defaultTextFormat = textFormat;
 			passwordField.defaultTextFormat = textFormat;
 			messageField.defaultTextFormat = textFormat;
 			emailField.defaultTextFormat = textFormat;
+			userText.defaultTextFormat = textFormat;
+			passwordText.defaultTextFormat = textFormat;
+			emailText.defaultTextFormat = textFormat;
 			
 			userField.type = TextFieldType.INPUT;
 			passwordField.type = TextFieldType.INPUT;
 			emailField.type = TextFieldType.INPUT;
 			
 			
-			messageField.text = "testing";
+			messageField.text = "";
 			messageField.width = 300;
 			
+			userField.background = true;
+			passwordField.background = true;
+			emailField.background = true;
+			
+			userField.backgroundColor = 0xFF9966;
+			passwordField.backgroundColor = 0xFF9966;
+			emailField.backgroundColor = 0xFF9966;
+			
 			userField.y = 0;
+			userText.y = 0;
 			passwordField.y = 100;
+			passwordText.y = 100;
 			emailField.y = 200;
+			emailText.y = 200;
 			messageField.y = 250;
 			
 			userField.restrict = "A-Za-z0-9";
 			passwordField.restrict = "A-Za-z0-9";
+			
+			userField.height = 50;
+			passwordField.height = 50;
+			emailField.height = 50;
+			
+			userField.x = 150;
+			passwordField.x = 150;
+			emailField.x = 150;
+			
+			userText.text = "Username";
+			passwordText.text = "Password";
+			emailText.text = "Email";
 			
 			userField.maxChars = 15;
 			passwordField.maxChars = 15;
@@ -70,6 +99,10 @@ package screens {
 			addChild(passwordField);
 			addChild(messageField);
 			addChild(emailField);
+			addChild(userText);
+			addChild(passwordText);
+			addChild(emailText);
+			
 		}
 		
 		// authenticate user
