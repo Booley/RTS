@@ -22,15 +22,9 @@ package
 		private const OP_UNIT_SPAWN:String = "USP";
 		private const OP_UNIT_POSITION:String = "UP";
 		
-		
 		private const OP_BASE_SHOOT:String = "BS";
 		private const OP_BASE_DAMAGE:String = "BDA";
 		private const OP_BASE_DESTROY:String = "BDE";
-		
-		private const OP_FLOCK_SET_GOAL:String = "FSG";
-		private const OP_FLOCK_SPLIT:String = "FS";
-		private const OP_FLOCK_MERGE:String = "FM";
-		private const OP_FLOCK_DESTROY:String = "FD";
 		
 		private const OP_PLAYER_TAPPED:String = "PT";
 		private const OP_MOVEMENT:String = "MO";
@@ -92,26 +86,6 @@ package
 			trace("User disconnected: " + theUser.name + ", total users: " + mConnection.userCount); 
 		}
 		
-		//move the flock to the goal
-		public function sendFlockSetGoal(mFlock:Flock, mGoal:Point):void {
-			mConnection.sendObject( { op: OP_FLOCK_SET_GOAL, flock: mFlock, goal: mGoal } );
-		}
-		
-		//replace flock0 with the two flocks: flock1, flock2
-		public function sendFlockSplit(mFlock0:Flock, mFlock1:Flock, mFlock2:Flock):void {
-			mConnection.sendObject( { op: OP_FLOCK_SPLIT, flock0: mFlock0, flock1: mFlock1, flock2: mFlock2 } );
-		}
-		
-		//merge two flocks
-		public function sendFlockMerge(mFlock1:Flock, mFlock2:Flock):void {
-			mConnection.sendObject( { op: OP_FLOCK_MERGE, flock1: mFlock1, flock2: mFlock2 } );
-		}
-		
-		//remove a flock
-		public function sendFlockDestroy(mFlock:Flock):void {
-			mConnection.sendObject( { op: OP_FLOCK_DESTROY, flock: mFlock } );
-		}
-		
 		public function sendBaseShoot(mBase:Base, mTarget:Unit):void {
 			mConnection.sendObject( { op: OP_BASE_SHOOT, base: mBase, target: mTarget} );
 		}
@@ -132,8 +106,8 @@ package
 			mConnection.sendObject( { op: OP_UNIT_DAMAGE, unit: mUnit, damage: dmg } );
 		}
 		
-		public function sendUnitDestroy(mUnit:Unit):void {
-			mConnection.sendObject( { op: OP_UNIT_DESTROY, unit: mUnit } );
+		public function sendUnitDestroy(unitId:int):void {
+			mConnection.sendObject( { op: OP_UNIT_DESTROY, id: unitId } );
 		}
 		
 		public function sendUnitSpawn(mUnit:Unit):void {
@@ -149,7 +123,6 @@ package
 		}
 		
 		public function sendMovement(units:String, goal:Point):void {
-			trace("sent movement signal");
 			mConnection.sendObject( { op: OP_MOVEMENT, ids: units, x: goal.x, y: goal.y } );
 		}
 		
@@ -186,21 +159,7 @@ package
 				case OP_DIE:
 					mShips[theUserId].kill();
 					break;
-				*/
-				case OP_FLOCK_SET_GOAL:
-					theData.flock = theData.goal;
-					break;
-					
-				case OP_FLOCK_SPLIT:
-					
-					break;
-				case OP_FLOCK_MERGE:
-					
-					break;
-				case OP_FLOCK_DESTROY:
-					
-					break;
-					
+				*/					
 				case OP_BASE_SHOOT:
 					theData.base.target = theData.target;
 					theData.base.shoot(); //don't worry about cooldown, that's not a state represented by the other player
@@ -213,6 +172,7 @@ package
 					
 					break;
 				case OP_UNIT_SHOOT:
+					trace("UNIT SHOOTS");
 					theData.unit.target = theData.target;
 					theData.unit.shoot();
 					break;
@@ -220,7 +180,8 @@ package
 					theData.unit.takeDamage(theData.damage);
 					break;
 				case OP_UNIT_DESTROY:
-					//PlayScreen.game.removeUnit(theData.unit);
+					trace("UNIT DIED!!!");
+					PlayScreen.game.handleUnitDestroyed(theData.id);
 					break;
 				case OP_UNIT_SPAWN:
 					//PlayScreen.game.spawn(theData.unit.unitType, theData.unit.pos, theData.unit.owner);
