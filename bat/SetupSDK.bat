@@ -10,6 +10,10 @@ set ANDROID_SDK=C:\Program Files (x86)\FlashDevelop\Tools\android
 
 
 :validation
+if not exist "%FLEX_SDK%\bin" goto flexsdk2
+
+:flexsdk2
+set FLEX_SDK=C:\Users\Evan\AppData\Local\FlashDevelop\Apps\flexairsdk\4.6.0+17.0.0
 if not exist "%FLEX_SDK%\bin" goto flexsdk
 ::if not exist "%ANDROID_SDK%\platform-tools" goto androidsdk
 goto succeed
