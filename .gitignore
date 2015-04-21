@@ -7,7 +7,6 @@ AIR*
 References
 *.swf
 /bin/*
-/bat/*
 /bin/RTS.swf
 /bat/SetupSDK.bat
 /obj
