@@ -1,6 +1,5 @@
 *.bat
 bin
-bat
 lib
 AIR*
 *.xml
@@ -8,5 +7,4 @@ References
 *.swf
 /bin/*
 /bin/RTS.swf
-/bat/SetupSDK.bat
 /obj
