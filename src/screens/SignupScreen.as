@@ -31,6 +31,11 @@ package screens {
 			userField = new TextField();
 			passwordField = new TextField();
 			emailField = new TextField();
+			userText = new TextField();
+			passwordText = new TextField();
+			emailField = new TextField();
+			userText.defaultTextFormat = textFormat;
+			passwordText.defaultTextFormat = textFormat;
 			
 			var textFormat:TextFormat = new TextFormat("Arial", 24, 0x000000);
 			textFormat.align = TextFormatAlign.LEFT;
