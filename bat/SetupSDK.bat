@@ -1,8 +1,4 @@
 :user_configuration
-
-:: Path to Flex SDK
-set FLEX_SDK=C:\Users\bomoon\AppData\Local\FlashDevelop\Apps\flexairsdk\4.6.0+17.0.0
-
 set AUTO_INSTALL_IOS=yes
 
 :: Path to Android SDK
@@ -10,15 +6,27 @@ set ANDROID_SDK=C:\Program Files (x86)\FlashDevelop\Tools\android
 
 
 :validation
+:: Path to Flex SDK
+set FLEX_SDK=C:\Users\bomoon\AppData\Local\FlashDevelop\Apps\flexairsdk\4.6.0+17.0.0
 if not exist "%FLEX_SDK%\bin" goto flexsdk2
+goto foundflexsdk
 
 :flexsdk2
 set FLEX_SDK=C:\Users\Evan\AppData\Local\FlashDevelop\Apps\flexairsdk\4.6.0+17.0.0
-if not exist "%FLEX_SDK%\bin" goto flexsdk
+if not exist "%FLEX_SDK%\bin" goto flexsdk3
+goto foundflexsdk
+
+:flexsdk3
+set FLEX_SDK=C:\Users\cheng\AppData\Local\FlashDevelop\Apps\flexairsdk\4.6.0+17.0.0
+if not exist "%FLEX_SDK%\bin" goto flexsdknotfound
+goto foundflexsdk
+
+:foundflexsdk
+
 ::if not exist "%ANDROID_SDK%\platform-tools" goto androidsdk
 goto succeed
 
-:flexsdk
+:flexsdknotfound
 echo.
 echo ERROR: incorrect path to Flex SDK in 'bat\SetupSDK.bat'
 echo.
