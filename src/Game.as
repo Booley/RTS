@@ -30,7 +30,7 @@ package {
 	import be.dauntless.astar.basic2d.BasicTile;
 	import be.dauntless.astar.basic2d.analyzers.WalkableAnalyzer;
 	
-	import units.*;
+	import unitstuff.*;
 	import screens.QueueMenu;
 	import screens.GameOverMenu;
 	import pathfinding.*;
