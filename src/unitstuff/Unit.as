@@ -1,4 +1,4 @@
-package units {
+package unitstuff {
 	/*
 	 * Models all "units" in game: infantry, sniper, raider.
 	 */
