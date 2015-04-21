@@ -174,21 +174,6 @@ package {
 			flocks.push(flock);
 			flock.goal = new Point(200, 100);
 			
-			unitVector = new Vector.<Unit>();
-			for (i = 0; i < 20; i++) {
-				x = i * 10;
-				y =  200;
-				if (i % 4 == 0) {
-					i += 1;
-				}
-				unit = new Obstacle(new Point(x, y), 2);
-				unitVector.push(unit);
-				addChild(unit);
-			}
-			
-			flock = new Flock(unitVector);
-			flocks.push(flock);
-			
 			
 			base1 = new Base(new Point(320 / 2, 480 - 10));
 			bases.push(base1);
