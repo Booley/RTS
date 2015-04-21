@@ -231,6 +231,7 @@ package
 					
 					break;
 				case OP_MOVEMENT:
+					trace("OPPONENT MOVED!!!");
 					PlayScreen.game.handleMovement(theData.ids, new Point(theData.x, theData.y));
 			}
 		}
