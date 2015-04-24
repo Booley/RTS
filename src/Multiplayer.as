@@ -133,40 +133,10 @@ package
 			mConnection.sendObject( { op: OP_MOVEMENT, ids: units, x: goal.x, y: goal.y } );
 		}
 		
-		/*
-		public function sendPosition(theShip :Ship) :void	{
-			mConnection.sendObject({op: OP_POSITION, x: theShip.x, y: theShip.y, angle: theShip.angle});
-		}
-		
-		public function sendShot(theShip :Ship, theBulletType :Class) :void	{
-			mConnection.sendObject({op: OP_SHOT, x: theShip.x, y: theShip.y, dx: theShip.direction.x, dy: theShip.direction.y, b: convertBulletClassToString(theBulletType)});
-		}
-		
-		public function sendDie(theShip :Ship) :void	{
-			mConnection.sendObject({op: OP_DIE, x: theShip.x, y: theShip.y});
-		}
-		*/
 		protected function handleGetObject(theUserId :String, theData :Object) :void {
 			var aOpCode :String = theData.op;
 			
-			switch(aOpCode) {
-				/*
-				case OP_POSITION:
-					syncPosition(theUserId, theData);
-					break;
-					
-				case OP_SHOT:
-					syncPosition(theUserId, theData);
-					mShips[theUserId].direction.x = theData.dx;
-					mShips[theUserId].direction.y = theData.dy;
-
-					(FlxG.state as PlayState).shoot(mShips[theUserId], convertBulletStringToClass(theData.b));
-					break;
-					
-				case OP_DIE:
-					mShips[theUserId].kill();
-					break;
-				*/					
+			switch(aOpCode) {			
 				case OP_BASE_SHOOT:
 					theData.base.target = theData.target;
 					theData.base.shoot(); //don't worry about cooldown, that's not a state represented by the other player
@@ -193,10 +163,6 @@ package
 					break;
 				case OP_UNIT_SPAWN:
 					//PlayScreen.game.spawn(theData.unit.unitType, theData.unit.pos, theData.unit.owner);
-					break;
-				case OP_PLAYER_TAPPED:
-					trace("The player just tapped something!");
-					//signals.handleTap(theData.startX, theData.startY, theData.endX, theData.endY);
 					break;
 				case OP_MOVEMENT:
 					trace("OPPONENT MOVED!!!");
