@@ -5,6 +5,7 @@ package unitstuff
 	import starling.display.Quad;
 	import starling.events.Event;
 	import starling.display.Sprite;
+	import Assets;
 	
 	public class CapturePoint extends Unit
 	{
