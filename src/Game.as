@@ -437,7 +437,7 @@ package {
 		}
 		
 		// conver a string of unit ids into a flock full of units
-		public function idStringToFlock(string:String):Flock {
+		public function idStringToUnitVector(string:String):Vector.<Unit> {
 			var unitVector:Vector.<Unit> = new Vector.<Unit>();
 			for each (var idString:String in string.split(" ")) {
 				var id:int = parseInt(idString);
@@ -446,8 +446,7 @@ package {
 					unitVector.push(unit);
 				}
 			}
-			var flock:Flock = new Flock(unitVector);
-			return flock;
+			return unitVector;
 		}
 		
 		public function removeUnit(unit:Unit):void {
@@ -500,9 +499,8 @@ package {
 		}
 		
 		public function handleMovement(ids:String, goal:Point):void {
-			var newFlock:Flock = idStringToFlock(ids);
-			for each (var unit:Unit in newFlock.units) {
-				
+			var units:Vector.<Unit> = idStringToUnitVector(ids);
+			for each (var unit:Unit in units) {
 				var oldFlock:Flock = unit.flock;
 				if (oldFlock) {
 					oldFlock.removeUnit(unit);
@@ -511,7 +509,7 @@ package {
 					}
 				}
 			}
-			
+			var newFlock:Flock = new Flock(units);
 			newFlock.goal = goal;
 			flocks.push(newFlock);
 		}
