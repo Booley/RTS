@@ -184,6 +184,7 @@ package unitstuff {
 			healthBar.color = getHealthBarColor(health, maxHealth);
 			if (this.health <= 0) {
 				PlayScreen.game.removeUnit(this);
+				PlayScreen.game.multiplayer.sendUnitDestroy(this.id);
 			}
 		}
 		

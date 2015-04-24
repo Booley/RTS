@@ -56,7 +56,7 @@ package {
 		private var astar : Astar;
 		private var req:PathRequest;
 		
-		private var multiplayer:Multiplayer;
+		public var multiplayer:Multiplayer;
 		
 		public var dictionary:Dictionary;
 		
@@ -512,6 +512,11 @@ package {
 			var newFlock:Flock = new Flock(units);
 			newFlock.goal = goal;
 			flocks.push(newFlock);
+		}
+		
+		public function handleUnitDestroyed(id:int):void {
+			var unit:Unit = dictionary[id];
+			removeUnit(unit);
 		}
 	}
 }
