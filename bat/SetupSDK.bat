@@ -21,7 +21,7 @@ goto foundflexsdk
 
 :flexsdk4
 :: IGNACIO PUT YOUR PATH HERE
-set FLEX_SDK=C:\Users\John\AppData\Local\FlashDevelop\Apps\flexairsdk\4.6.0+17.0.0
+set FLEX_SDK=C:\Users\John\Desktop\FlashDevelop-4.7.2\Apps\flexairsdk\4.6.0+17.0.0
 if not exist "%FLEX_SDK%\bin" goto flexsdknotfound
 goto foundflexsdk
 
