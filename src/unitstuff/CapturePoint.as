@@ -32,7 +32,6 @@ package unitstuff
 			this.attackRange = ATTACK_RANGE;
 		}
 		
-<<<<<<< HEAD:src/units/CapturePoint.as
 		override public function createArt():void {
 			image = new Image(Assets.getTexture(textureName));
 			image.scaleX *= 0.2;
@@ -60,9 +59,6 @@ package unitstuff
 			addChild(healthBar);
 			
 		}
-		
-=======
->>>>>>> 84a371e1ef3863b6b19613eac3196143b7329107:src/unitstuff/CapturePoint.as
 	}
 
 }
