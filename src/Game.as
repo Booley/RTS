@@ -80,6 +80,8 @@ package {
 			// END TESTING UNIT MOVEMENT }}}}}}}}}}}}}}}}}}
 			
 			multiplayer = new Multiplayer();
+			multiplayer.game = this;
+			multiplayer.createSignalHandler();
 		}
 		
 		public function testStuff():void {

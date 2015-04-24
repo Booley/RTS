@@ -32,7 +32,7 @@ package
 		private var mConnection		:MultiUserSession;
 		private var mMyID:int;
 		
-		private var game:Game;
+		public var game:Game;
 		private var signals:SignalHandler;
 		
 		//necessary for reco1
@@ -40,7 +40,9 @@ package
 			Logger.LEVEL = Logger.ALL;
 			initialize(); //T
 			
-			game = PlayScreen.game;
+		}
+		
+		public function createSignalHandler():void {
 			signals = new SignalHandler();
 		}
 		
