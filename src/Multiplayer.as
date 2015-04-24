@@ -66,7 +66,7 @@ package
 			mConnection.onUserRemoved 	= handleUserRemoved;					// set the method to be executed once a user has disconnected
 			mConnection.onObjectRecieve = handleGetObject;						// set the method to be executed when we recieve data from a user
 			
-			var mMyName  = "User_" + Math.round(Math.random()*1000);
+			var mMyName:String  = "User_" + Math.round(Math.random()*100);
 			mConnection.connect(""+mMyName);
 			
 			//need some kind of loading/waiting screen?
