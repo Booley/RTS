@@ -63,7 +63,7 @@ package
 			mConnection.onUserRemoved 	= handleUserRemoved;					// set the method to be executed once a user has disconnected
 			mConnection.onObjectRecieve = handleGetObject;						// set the method to be executed when we recieve data from a user
 			
-			var mMyName:int  = mConnection.userCount;
+			var mMyName  = "User_" + Math.round(Math.random()*100);
 			mConnection.connect(""+mMyName);
 			
 			//need some kind of loading/waiting screen?
@@ -78,7 +78,7 @@ package
 		//send a message saying that player X has joined, then start screen?
 		protected function handleUserAdded(theUser:UserObject) :void {
 			trace("FOUND USER");
-			trace("User has joined: " + theUser.name + ", total: " + mConnection.userCount);
+			trace("User has joined: " + theUser.name + ", total: " + mConnection.userCount + ", " + theUser.id);
 		}
 		
 		//stop the game if a user disconnects?
