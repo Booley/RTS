@@ -20,12 +20,17 @@ package
 		
 		public function handleUnitDestroyed(id:int):void {
 			var unit:Unit = game.dictionary[id];
-			game.removeUnit(unit);
+			if (!unit) {
+				game.removeUnit(unit);
+			}
 		}
 		
 		public function handleMovement(ids:String, goal:Point):void {
 			var units:Vector.<Unit> = game.idStringToUnitVector(ids);
 			for each (var unit:Unit in units) {
+				if (!unit) {
+					throw new Error("Can't move null unit");
+				}
 				var oldFlock:Flock = unit.flock;
 				if (oldFlock) {
 					oldFlock.removeUnit(unit);

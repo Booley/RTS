@@ -90,6 +90,11 @@ package
 			trace("User disconnected: " + theUser.name + ", total users: " + mConnection.userCount); 
 		}
 		
+		public function update():void {
+			
+			
+		}
+		
 		public function sendBaseShoot(mBase:Base, mTarget:Unit):void {
 			mConnection.sendObject( { op: OP_BASE_SHOOT, base: mBase, target: mTarget} );
 		}
@@ -116,7 +121,7 @@ package
 		}
 		
 		public function sendUnitSpawn(mUnit:Unit):void {
-			mConnection.sendObject( { op: OP_UNIT_SPAWN, unit: mUnit } );
+			//mConnection.sendObject( { op: OP_UNIT_SPAWN, type: mUnit.unitType, } );
 		}
 		
 		public function sendUnitPosition(mUnit:Unit):void {
@@ -150,15 +155,13 @@ package
 					trace("UNIT SHOOTS");
 					var unit:Unit = game.dictionary[theData.unitId];
 					var target:Unit = game.dictionary[theData.targetId];
-					syncUnitPosition(theData.unitId, theData.posX, theData.posY);
-					//syncUnitPosition(theData.targetId, theData.targetX, theData.targetY);
-					if (!unit) {
-						throw new Error("UNIT IS UNDEFINED!");
+					if (!unit || !target) {
+						break;
 					}
 					
-					if (!target) {
-						throw new Error("TARGET IS UNDEFINED");
-					}
+					syncUnitPosition(theData.unitId, theData.posX, theData.posY);
+					syncUnitPosition(theData.targetId, theData.targetX, theData.targetY);
+					
 					unit.target = target;
 					unit.shoot();
 					break;
