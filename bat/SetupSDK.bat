@@ -5,9 +5,14 @@ set ANDROID_SDK=C:\Program Files (x86)\FlashDevelop\Tools\android
 
 :validation
 :: Path to Flex SDK
+<<<<<<< HEAD
+set FLEX_SDK=C:\Users\John\Desktop\FlashDevelop-4.7.2\Apps\flexairsdk\4.6.0+17.0.0
+set AUTO_INSTALL_IOS=yes
+=======
 set FLEX_SDK=C:\Users\bomoon\AppData\Local\FlashDevelop\Apps\flexairsdk\4.6.0+17.0.0
 if not exist "%FLEX_SDK%\bin" goto flexsdk2
 goto foundflexsdk
+>>>>>>> 84a371e1ef3863b6b19613eac3196143b7329107
 
 :flexsdk2
 set FLEX_SDK=C:\Users\Evan\AppData\Local\FlashDevelop\Apps\flexairsdk\4.6.0+17.0.0

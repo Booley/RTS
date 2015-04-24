@@ -40,10 +40,18 @@ package {
 		private static const DISTANCE_TO_TAP_UNIT:Number = 30; // max distance from a unit you can tap for it to select its flock
 		private static const DISTANCE_TO_TAP_BASE:Number = 40; // max distance from a unit you can tap for it to select its flock
 		
+<<<<<<< HEAD
+		private var flocks:Vector.<Flock>;
+		private var bases:Vector.<Base>;
+		private var selectedUnits:Vector.<Unit>;
+		private var bullets:Vector.<Bullet>;
+		private var capturePoints:Vector.<TurretPoint>;
+=======
 		public var flocks:Vector.<Flock>;
 		public var bases:Vector.<Base>;
 		public var selectedUnits:Vector.<Unit>;
 		public var bullets:Vector.<Bullet>;
+>>>>>>> 84a371e1ef3863b6b19613eac3196143b7329107
 		
 		private var pause:Boolean = true;
 		
@@ -65,7 +73,11 @@ package {
 			flocks = new Vector.<Flock>();
 			bases = new Vector.<Base>();
 			bullets = new Vector.<Bullet>();
+<<<<<<< HEAD
+			capturePoints = new Vector.<TurretPoint>();
+=======
 			dictionary = new Dictionary();
+>>>>>>> 84a371e1ef3863b6b19613eac3196143b7329107
 			
 			this.addEventListener(NavEvent.GAME_OVER_LOSE, onGameOverLose);
 			this.addEventListener(NavEvent.GAME_OVER_WIN, onGameOverWin);
@@ -179,6 +191,13 @@ package {
 			base2 = new Base(new Point(320 / 2, 10), 2, Math.PI);
 			bases.push(base2)
 			addChild(base2);
+<<<<<<< HEAD
+			
+			var turret:TurretPoint = new TurretPoint(new Point(320 / 4, 80), 2);
+			//turret = new TurretPoint(new Point(320 / 4, 80), 2);
+			capturePoints.push(turret);
+			addChild(turret);
+=======
 			addToDictionary(base2);
 		}
 		
@@ -188,6 +207,7 @@ package {
 		
 		public function removeFromDictionary(u:Unit):void {
 			delete dictionary[u.id];
+>>>>>>> 84a371e1ef3863b6b19613eac3196143b7329107
 		}
 		
 		public function start():void {
@@ -200,6 +220,11 @@ package {
 		
 		public function tick(dt:Number):void {
 			if (pause) return;
+			for each (var turret:TurretPoint in capturePoints) {
+				turret.tick(dt);
+				
+			}
+			
 			for each (var base:Base in bases) {
 				base.tick(dt);
 			}
@@ -391,6 +416,14 @@ package {
 					unitVector.push(base);
 				}
 			}
+			
+			for each (var turret:TurretPoint in capturePoints) {
+				if (turret.owner != owner) {
+					unitVector.push(turret);
+				}
+				
+			}
+			
 			return unitVector;
 		}
 		
