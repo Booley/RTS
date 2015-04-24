@@ -60,7 +60,7 @@ package
 		
 		//establish connection
 		protected function initialize():void {
-			mConnection = new MultiUserSession(SERV_KEY, "multiuser/test"); 		// create a new instance of MultiUserSession
+			mConnection = new MultiUserSession(SERV_KEY, "multiuser/test/BO"); 		// create a new instance of MultiUserSession
 			
 			mConnection.onConnect 		= handleConnect;						// set the method to be executed when connected
 			mConnection.onUserAdded 	= handleUserAdded;						// set the method to be executed once a user has connected
@@ -102,7 +102,6 @@ package
 			mConnection.sendObject( { op: OP_BASE_DESTROY } );
 		}
 		
-		//maybe send mTarget's position as well?
 		public function sendUnitShoot(mUnit:Unit, mTarget:Unit):void {
 			mConnection.sendObject( { op: OP_UNIT_SHOOT, unitId: mUnit.id, targetId: mTarget.id, 
 			posX: mUnit.pos.x, posY: mUnit.pos.y, targetX: mTarget.pos.x, targetY: mTarget.pos.y } );
@@ -149,10 +148,19 @@ package
 					break;
 				case OP_UNIT_SHOOT:
 					trace("UNIT SHOOTS");
+					var unit:Unit = game.dictionary[theData.unitId];
+					var target:Unit = game.dictionary[theData.targetId];
 					syncUnitPosition(theData.unitId, theData.posX, theData.posY);
-					syncUnitPosition(theData.targetId, theData.targetX, theData.targetY);
-					theData.unit.target = theData.target;
-					theData.unit.shoot();
+					//syncUnitPosition(theData.targetId, theData.targetX, theData.targetY);
+					if (!unit) {
+						throw new Error("UNIT IS UNDEFINED!");
+					}
+					
+					if (!target) {
+						throw new Error("TARGET IS UNDEFINED");
+					}
+					unit.target = target;
+					unit.shoot();
 					break;
 				case OP_UNIT_DAMAGE:
 					theData.unit.takeDamage(theData.damage);
