@@ -10,11 +10,11 @@ package
 	
 	public class SignalHandler 
 	{
-		private var game:Game;
+		public var game:Game;
 		
 		public function SignalHandler() 
 		{
-			game = PlayScreen.game;
+
 			
 		}
 		

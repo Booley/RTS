@@ -33,16 +33,12 @@ package
 		private var mMyID:int;
 		
 		public var game:Game;
-		private var signals:SignalHandler;
+		publica var signals:SignalHandler;
 		
 		//necessary for reco1
 		public function Multiplayer() {
 			Logger.LEVEL = Logger.ALL;
 			initialize(); //T
-			
-		}
-		
-		public function createSignalHandler():void {
 			signals = new SignalHandler();
 		}
 		
