@@ -33,7 +33,7 @@ package
 		private var mMyID:int;
 		
 		public var game:Game;
-		publica var signals:SignalHandler;
+		public var signals:SignalHandler;
 		
 		//necessary for reco1
 		public function Multiplayer() {
