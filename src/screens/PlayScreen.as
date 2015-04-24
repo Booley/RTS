@@ -2,6 +2,7 @@ package screens {
 	//Interface for touch, also executes the tick for game.
 	
 	import flash.geom.Point;
+	import flash.utils.getTimer;
 	
 	import flash.ui.Multitouch;
 	
@@ -26,6 +27,7 @@ package screens {
 		
 		private var startTap:Point;
 		private var selectRect:Quad;
+		private var lastTime:int;
 		
 		// handle events and user input and pass data to the game
 		// the "PlayScreen" abstraction will pass data to Game.  Game will 
@@ -101,8 +103,13 @@ package screens {
 		
 		public function onEnterFrame(e:Event):void {
 			if (game) {
-				game.tick(Constants.FPS);
+				var dt:Number = Constants.FPS;
+				if (lastTime) {
+						dt = (getTimer() - lastTime)/1000.0;
+				}
+				game.tick(dt);
 			}
+			lastTime = getTimer();
 		}
 		
 		

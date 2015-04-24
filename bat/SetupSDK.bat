@@ -1,9 +1,7 @@
 :user_configuration
 set AUTO_INSTALL_IOS=yes
-
 :: Path to Android SDK
 set ANDROID_SDK=C:\Program Files (x86)\FlashDevelop\Tools\android
-
 
 :validation
 :: Path to Flex SDK
@@ -18,8 +16,15 @@ goto foundflexsdk
 
 :flexsdk3
 set FLEX_SDK=C:\Users\cheng\AppData\Local\FlashDevelop\Apps\flexairsdk\4.6.0+17.0.0
+if not exist "%FLEX_SDK%\bin" goto flexsdk4
+goto foundflexsdk
+
+:flexsdk4
+:: IGNACIO PUT YOUR PATH HERE
+set FLEX_SDK=C:\Users\cheng\AppData\Local\FlashDevelop\Apps\flexairsdk\4.6.0+17.0.0
 if not exist "%FLEX_SDK%\bin" goto flexsdknotfound
 goto foundflexsdk
+
 
 :foundflexsdk
 
