@@ -40,10 +40,10 @@ package {
 		private static const DISTANCE_TO_TAP_UNIT:Number = 30; // max distance from a unit you can tap for it to select its flock
 		private static const DISTANCE_TO_TAP_BASE:Number = 40; // max distance from a unit you can tap for it to select its flock
 		
-		private var flocks:Vector.<Flock>;
-		private var bases:Vector.<Base>;
-		private var selectedUnits:Vector.<Unit>;
-		private var bullets:Vector.<Bullet>;
+		public var flocks:Vector.<Flock>;
+		public var bases:Vector.<Base>;
+		public var selectedUnits:Vector.<Unit>;
+		public var bullets:Vector.<Bullet>;
 		
 		private var pause:Boolean = true;
 		
@@ -57,7 +57,6 @@ package {
 		private var req:PathRequest;
 		
 		public var multiplayer:Multiplayer;
-		
 		public var dictionary:Dictionary;
 		
 		public function Game() {
@@ -498,25 +497,6 @@ package {
 			removeChild(bullet);
 		}
 		
-		public function handleMovement(ids:String, goal:Point):void {
-			var units:Vector.<Unit> = idStringToUnitVector(ids);
-			for each (var unit:Unit in units) {
-				var oldFlock:Flock = unit.flock;
-				if (oldFlock) {
-					oldFlock.removeUnit(unit);
-					if (oldFlock.units.length == 0) {
-						flocks.splice(flocks.indexOf(oldFlock), 1);
-					}
-				}
-			}
-			var newFlock:Flock = new Flock(units);
-			newFlock.goal = goal;
-			flocks.push(newFlock);
-		}
 		
-		public function handleUnitDestroyed(id:int):void {
-			var unit:Unit = dictionary[id];
-			removeUnit(unit);
-		}
 	}
 }

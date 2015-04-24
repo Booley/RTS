@@ -33,12 +33,15 @@ package
 		private var mMyID:int;
 		
 		private var game:Game;
+		private var signals:SignalHandler;
 		
 		//necessary for reco1
 		public function Multiplayer() {
 			Logger.LEVEL = Logger.ALL;
 			initialize(); //T
+			
 			game = PlayScreen.game;
+			signals = new SignalHandler();
 		}
 		
 		/*
@@ -186,18 +189,18 @@ package
 					break;
 				case OP_UNIT_DESTROY:
 					trace("UNIT DIED!!!");
-					game.handleUnitDestroyed(theData.id);
+					signals.handleUnitDestroyed(theData.id);
 					break;
 				case OP_UNIT_SPAWN:
 					//PlayScreen.game.spawn(theData.unit.unitType, theData.unit.pos, theData.unit.owner);
 					break;
 				case OP_PLAYER_TAPPED:
 					trace("The player just tapped something!");
-					game.handleTap(theData.startX, theData.startY, theData.endX, theData.endY);
+					//signals.handleTap(theData.startX, theData.startY, theData.endX, theData.endY);
 					break;
 				case OP_MOVEMENT:
 					trace("OPPONENT MOVED!!!");
-					game.handleMovement(theData.ids, new Point(theData.x, theData.y));
+					signals.handleMovement(theData.ids, new Point(theData.x, theData.y));
 			}
 		}
 		
