@@ -32,10 +32,13 @@ package
 		private var mConnection		:MultiUserSession;
 		private var mMyID:int;
 		
+		private var game:Game;
+		
 		//necessary for reco1
 		public function Multiplayer() {
 			Logger.LEVEL = Logger.ALL;
 			initialize(); //T
+			game = PlayScreen.game;
 		}
 		
 		/*
@@ -63,7 +66,7 @@ package
 			mConnection.onUserRemoved 	= handleUserRemoved;					// set the method to be executed once a user has disconnected
 			mConnection.onObjectRecieve = handleGetObject;						// set the method to be executed when we recieve data from a user
 			
-			var mMyName  = "User_" + Math.round(Math.random()*100);
+			var mMyName  = "User_" + Math.round(Math.random()*1000);
 			mConnection.connect(""+mMyName);
 			
 			//need some kind of loading/waiting screen?
@@ -98,8 +101,9 @@ package
 			mConnection.sendObject( { op: OP_BASE_DESTROY } );
 		}
 		
+		//maybe send mTarget's position as well?
 		public function sendUnitShoot(mUnit:Unit, mTarget:Unit):void {
-			mConnection.sendObject( { op: OP_UNIT_SHOOT, unit: mUnit, target: mTarget } );
+			mConnection.sendObject( { op: OP_UNIT_SHOOT, unitId: mUnit.id, targetId: mTarget.id, posX: mUnit.pos.x, posY: mUnit.pos.y } );
 		}
 		
 		public function sendUnitDamage(mUnit:Unit, dmg:int):void {
@@ -173,6 +177,7 @@ package
 					break;
 				case OP_UNIT_SHOOT:
 					trace("UNIT SHOOTS");
+					syncUnitPosition(theData.unitId, theData.posX, theData.posY);
 					theData.unit.target = theData.target;
 					theData.unit.shoot();
 					break;
@@ -181,30 +186,24 @@ package
 					break;
 				case OP_UNIT_DESTROY:
 					trace("UNIT DIED!!!");
-					PlayScreen.game.handleUnitDestroyed(theData.id);
+					game.handleUnitDestroyed(theData.id);
 					break;
 				case OP_UNIT_SPAWN:
 					//PlayScreen.game.spawn(theData.unit.unitType, theData.unit.pos, theData.unit.owner);
 					break;
 				case OP_PLAYER_TAPPED:
 					trace("The player just tapped something!");
-					PlayScreen.game.handleTap(theData.startX, theData.startY, theData.endX, theData.endY);
-					
+					game.handleTap(theData.startX, theData.startY, theData.endX, theData.endY);
 					break;
 				case OP_MOVEMENT:
 					trace("OPPONENT MOVED!!!");
-					PlayScreen.game.handleMovement(theData.ids, new Point(theData.x, theData.y));
+					game.handleMovement(theData.ids, new Point(theData.x, theData.y));
 			}
 		}
-		/*
-		private function syncPosition(theUserId :String, theData :Object) :void {
-			mShips[theUserId].x  = theData.x;
-			mShips[theUserId].y  = theData.y;
-			
-			if(theData.angle) {
-				mShips[theUserId].angle = theData.angle;
-			}
+		
+		private function syncUnitPosition(unitId:int, posX:int, posY:int):void {
+			var unit:Unit = PlayScreen.game.dictionary[unitId];
+			unit.pos = new Point(posX, posY);
 		}
-		*/
 	}
 }
