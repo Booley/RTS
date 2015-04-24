@@ -1,4 +1,4 @@
-package units {
+package unitstuff {
 	//Models the base where units spawn and should attack
 	
 	import flash.geom.Point;
@@ -93,7 +93,8 @@ package units {
 				unitBuildCooldown -= dt;
 			}
 			if (unitBuildCooldown < 0) {
-				PlayScreen.game.spawn(nextUnit(), this.pos, this.owner);
+				if (peekNextUnit() == -1) return;
+				PlayScreen.game.spawn(nextUnit(), this.pos, this.owner, this.rotation - Math.PI/2);
 				var nextUnitClass:Class = Unit.getClass(peekNextUnit())
 				if (nextUnitClass) {
 					unitBuildCooldown = nextUnitClass.BUILD_TIME;

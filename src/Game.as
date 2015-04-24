@@ -3,6 +3,12 @@ package {
 	
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
+	import flash.utils.Dictionary;
+	import unitstuff.Base;
+	import unitstuff.Bullet;
+	import unitstuff.Flock;
+	import unitstuff.Infantry;
+	import unitstuff.Unit;
 	
 	import starling.display.Button;
 	import starling.display.Sprite;
@@ -24,20 +30,28 @@ package {
 	import be.dauntless.astar.basic2d.BasicTile;
 	import be.dauntless.astar.basic2d.analyzers.WalkableAnalyzer;
 	
-	import units.*;
+	import unitstuff.*;
 	import screens.QueueMenu;
 	import screens.GameOverMenu;
+	import pathfinding.*;
 	
 	public class Game extends Sprite {
 		
 		private static const DISTANCE_TO_TAP_UNIT:Number = 30; // max distance from a unit you can tap for it to select its flock
 		private static const DISTANCE_TO_TAP_BASE:Number = 40; // max distance from a unit you can tap for it to select its flock
 		
+<<<<<<< HEAD
 		private var flocks:Vector.<Flock>;
 		private var bases:Vector.<Base>;
 		private var selectedUnits:Vector.<Unit>;
 		private var bullets:Vector.<Bullet>;
 		private var capturePoints:Vector.<TurretPoint>;
+=======
+		public var flocks:Vector.<Flock>;
+		public var bases:Vector.<Base>;
+		public var selectedUnits:Vector.<Unit>;
+		public var bullets:Vector.<Bullet>;
+>>>>>>> 84a371e1ef3863b6b19613eac3196143b7329107
 		
 		private var pause:Boolean = true;
 		
@@ -46,10 +60,12 @@ package {
 		private var base1:Base;
 		private var base2:Base;
 		
-		private var dataMap:Array;
 		private var map : Map;
 		private var astar : Astar;
 		private var req:PathRequest;
+		
+		public var multiplayer:Multiplayer;
+		public var dictionary:Dictionary;
 		
 		public function Game() {
 			super();
@@ -57,49 +73,39 @@ package {
 			flocks = new Vector.<Flock>();
 			bases = new Vector.<Base>();
 			bullets = new Vector.<Bullet>();
+<<<<<<< HEAD
 			capturePoints = new Vector.<TurretPoint>();
+=======
+			dictionary = new Dictionary();
+>>>>>>> 84a371e1ef3863b6b19613eac3196143b7329107
 			
 			this.addEventListener(NavEvent.GAME_OVER_LOSE, onGameOverLose);
 			this.addEventListener(NavEvent.GAME_OVER_WIN, onGameOverWin);
 			
 			test();
 			
-			//testStuff();
+			testStuff();
 			
-			// the blur filter handles also drop shadow and glow
-			var blur:BlurFilter = new BlurFilter();
-			var dropShadow:BlurFilter = BlurFilter.createDropShadow();
 			var glow:BlurFilter = BlurFilter.createGlow(0xaaffff, 0.5, 0.5, 0.5);
 
-			// the ColorMatrixFilter contains some handy helper methods
-			var colorMatrixFilter:ColorMatrixFilter = new ColorMatrixFilter();
-			colorMatrixFilter.invert();                // invert image
-			colorMatrixFilter.adjustSaturation(-1);    // make image Grayscale
-			colorMatrixFilter.adjustContrast(0.75);    // raise contrast
-			colorMatrixFilter.adjustHue(1);            // change hue
-			colorMatrixFilter.adjustBrightness(-0.25); // darken image
 
 			// to use a filter, just set it to the "filter" property
 			this.filter = glow;
 			
 			// END TESTING UNIT MOVEMENT }}}}}}}}}}}}}}}}}}
+			
+			multiplayer = new Multiplayer();
+			multiplayer.game = this;
+			multiplayer.createSignalHandler();
 		}
 		
 		public function testStuff():void {
-			dataMap = [ [0,0,1,1,1,0],
-						[0,0,0,0,1,0],
-						[0,1,1,0,0,0],
-						[0,0,0,0,1,0],
-						[0,1,1,0,1,0],
-						[1,1,0,0,0,0] ];
- 
-			//create a new map and fill it with BasicTiles
-			map = new Map((dataMap[0] as Array).length, dataMap.length);
-			for(var y:Number = 0; y< dataMap.length; y++)
-			{
-				for(var x:Number = 0; x< (dataMap[y] as Array).length; x++)
-				{
-					map.setTile(new BasicTile(1, new Point(x, y), (dataMap[y][x]==0)));
+			
+			var mapData:Vector.<Vector.<Tile>> = MapGen.map1();
+			map = new Map(mapData[0].length, mapData.length);
+			for(var y:Number = 0; y < mapData.length; y++) {
+				for(var x:Number = 0; x < mapData[y].length; x++) {
+					map.setTile(mapData[y][x].basicTile);
 				}
 			}
  
@@ -109,7 +115,7 @@ package {
 			astar.addEventListener(AstarEvent.PATH_NOT_FOUND, onPathNotFound);
  
 			//create a new PathRequest
-			req = new PathRequest(IAstarTile(map.getTileAt(new Point(0, 0))), IAstarTile(map.getTileAt(new Point(5, 5))), map);
+			req = new PathRequest(IAstarTile(map.getTileAt(new Point(0, 0))), IAstarTile(map.getTileAt(new Point(0, 13))), map);
  
 			//a general analyzer
 			astar.addAnalyzer(new WalkableAnalyzer());
@@ -152,6 +158,7 @@ package {
 				var unit:Unit = new Infantry(new Point(x, y));
 				unitVector.push(unit);
 				addChild(unit);
+				addToDictionary(unit);
 			}
 			var flock:Flock = new Flock(unitVector);
 			flocks.push(flock);
@@ -165,25 +172,42 @@ package {
 				unit = new Infantry(new Point(x, y), 2);
 				unitVector.push(unit);
 				addChild(unit);
+				addToDictionary(unit);
 			}
 			
 			flock = new Flock(unitVector);
 			flocks.push(flock);
 			flock.goal = new Point(200, 100);
 			
+			flock = new Flock(unitVector);
+			flocks.push(flock);
+			
 			base1 = new Base(new Point(320 / 2, 480 - 10));
 			bases.push(base1);
 			addChild(base1);
+			addToDictionary(base1);
 			queueMenu = new QueueMenu(base1);
 			
 			base2 = new Base(new Point(320 / 2, 10), 2, Math.PI);
 			bases.push(base2)
 			addChild(base2);
+<<<<<<< HEAD
 			
 			var turret:TurretPoint = new TurretPoint(new Point(320 / 4, 80), 2);
 			//turret = new TurretPoint(new Point(320 / 4, 80), 2);
 			capturePoints.push(turret);
 			addChild(turret);
+=======
+			addToDictionary(base2);
+		}
+		
+		public function addToDictionary(u:Unit):void {
+			dictionary[u.id] = u;
+		}
+		
+		public function removeFromDictionary(u:Unit):void {
+			delete dictionary[u.id];
+>>>>>>> 84a371e1ef3863b6b19613eac3196143b7329107
 		}
 		
 		public function start():void {
@@ -217,8 +241,10 @@ package {
 			}
 		}
 		
-		// tap to select A FLOCK. Return true if a flock was selected.
-		public function tap(startTap:Point, endTap:Point):void {
+		public function handleTap(startX:int, startY:int, endX:int, endY:int):void {
+			var startTap:Point = new Point(startX, startY);
+			var endTap:Point = new Point(endX, endY);
+			
 			if (contains(queueMenu)) {
 				removeChild(queueMenu);
 			}
@@ -226,17 +252,18 @@ package {
 			if (selectedUnits) {
 				var newFlock:Flock = new Flock();
 				for each (var unit:Unit in selectedUnits) {		
+					// remove unit from old flock
 					var oldFlock:Flock = unit.flock;
 					if (oldFlock) {
 						oldFlock.removeUnit(unit);
-						if (oldFlock.neighbors.length == 0) {
+						if (oldFlock.units.length == 0) {
 							flocks.splice(flocks.indexOf(oldFlock), 1);
 						}
 					}
 					newFlock.addUnit(unit);
 					unit.unHighlight();
 				}
-				if (newFlock.neighbors.length > 0) {
+				if (newFlock.units.length > 0) {
 					newFlock.goal = startTap;
 					flocks.push(newFlock); 
 				} else {
@@ -256,7 +283,7 @@ package {
 			var bestDist:int = DISTANCE_TO_TAP_UNIT;
 			var closestFlock:Flock;
 			for each (var flock:Flock in flocks) {
-				for each (unit in flock.neighbors) {
+				for each (unit in flock.units) {
 					var thisDist:int = unit.pos.subtract(startTap).length;
 					if (thisDist < bestDist) {
 						bestDist = thisDist;
@@ -265,7 +292,63 @@ package {
 				}
 			}
 			if (closestFlock) {
-				selectUnits(closestFlock.neighbors);
+				selectUnits(closestFlock.units);
+			}
+		}
+		
+		// tap to select A FLOCK. Return true if a flock was selected.
+		public function tap(startTap:Point, endTap:Point):void {
+			//multiplayer.sendPlayerTapped(startTap, endTap);
+			
+			if (contains(queueMenu)) {
+				removeChild(queueMenu);
+			}
+			// if units were selected from a previous tap or drag
+			if (selectedUnits) {
+				var newFlock:Flock = new Flock();
+				for each (var unit:Unit in selectedUnits) {		
+					var oldFlock:Flock = unit.flock;
+					if (oldFlock) {
+						oldFlock.removeUnit(unit);
+						if (oldFlock.units.length == 0) {
+							flocks.splice(flocks.indexOf(oldFlock), 1);
+						}
+					}
+					newFlock.addUnit(unit);
+					unit.unHighlight();
+				}
+				if (newFlock.units.length > 0) {
+					newFlock.goal = startTap;					
+					flocks.push(newFlock); 
+					
+					multiplayer.sendMovement(idsToString(newFlock.units), newFlock.goal);
+				} else {
+					trace("Empty flock error");
+				}
+				
+				selectedUnits = null;
+				return;
+			}
+			// if no units are currently selected,
+			// check if the base was clicked
+			if (base1.pos.subtract(startTap).length < DISTANCE_TO_TAP_BASE) {
+				addChild(queueMenu);
+				return;
+			} 
+			//select the nearest flock
+			var bestDist:int = DISTANCE_TO_TAP_UNIT;
+			var closestFlock:Flock;
+			for each (var flock:Flock in flocks) {
+				for each (unit in flock.units) {
+					var thisDist:int = unit.pos.subtract(startTap).length;
+					if (thisDist < bestDist) {
+						bestDist = thisDist;
+						closestFlock = unit.flock;
+					}
+				}
+			}
+			if (closestFlock) {
+				selectUnits(closestFlock.units);
 			}
 		}
 		
@@ -284,7 +367,7 @@ package {
 			// determine which units were inside the box selection
 			var unitVector:Vector.<Unit> = new Vector.<Unit>();
 			for each (var flock:Flock in flocks) {
-				for each (var unit:Unit in flock.neighbors) {
+				for each (var unit:Unit in flock.units) {
 					if (containsPoint(startTap, endTap, unit.pos)) {
 						if (unit.owner == 1) {
 							unitVector.push(unit);
@@ -320,7 +403,7 @@ package {
 			// determine which units were inside the box selection
 			var unitVector:Vector.<Unit> = new Vector.<Unit>();
 			for each (var flock:Flock in flocks) {
-				for each (var unit:Unit in flock.neighbors) {
+				for each (var unit:Unit in flock.units) {
 					if (unit.owner != owner) {
 						unitVector.push(unit);
 					} else {
@@ -348,7 +431,7 @@ package {
 			// determine which units were inside the box selection
 			var unitVector:Vector.<Unit> = new Vector.<Unit>();
 			for each (var flock:Flock in flocks) {
-				for each (var unit:Unit in flock.neighbors) {
+				for each (var unit:Unit in flock.units) {
 					if (!(unit.flock === thisUnit.flock)) {
 						unitVector.push(unit);
 					} else {
@@ -362,29 +445,54 @@ package {
 			return unitVector;
 		}
 		
-		public function spawn(unitType:int, pos:Point, owner:int):void {
+		public function spawn(unitType:int, pos:Point, owner:int, rotation:Number):void {
 			var unit:Unit;
 			var unitClass:Class = Unit.getClass(unitType);
 			if (unitClass) {
-				unit = new unitClass(pos, owner);
+				unit = new unitClass(pos, owner, rotation);
 				var unitVector:Vector.<Unit> = new Vector.<Unit>();
 				unitVector.push(unit);
 				addChild(unit);
 				var flock:Flock = new Flock(unitVector);
 				flock.goal = new Point(200, 200); // TEMPORARY
 				flocks.push(flock);
+				addToDictionary(unit);
 			}
+		}
+		
+		// convert unit vector to string array to send in multiplayer game
+		public function idsToString(unitVector:Vector.<Unit>):String {
+			var idString:String = "";
+			for each (var unit:Unit in unitVector) {
+				idString += unit.id + " ";
+			}
+			idString = idString.substr(0, idString.length - 1);
+			return idString;
+		}
+		
+		// conver a string of unit ids into a flock full of units
+		public function idStringToUnitVector(string:String):Vector.<Unit> {
+			var unitVector:Vector.<Unit> = new Vector.<Unit>();
+			for each (var idString:String in string.split(" ")) {
+				var id:int = parseInt(idString);
+				if (id >= 0) {
+					var unit:Unit = dictionary[id];
+					unitVector.push(unit);
+				}
+			}
+			return unitVector;
 		}
 		
 		public function removeUnit(unit:Unit):void {
 			if (unit == null) {
 				return;
 			}
+			removeFromDictionary(unit);
 			var flock:Flock = unit.flock;
 			if (unit.flock != null) {
 				// remove unit from its flock
 				flock.removeUnit(unit);
-				if (flock.neighbors.length == 0) {
+				if (flock.units.length == 0) {
 					flocks.splice(flocks.indexOf(flock), 1);
 				}
 			}
@@ -423,5 +531,7 @@ package {
 			bullets.splice(bullets.indexOf(bullet), 1)
 			removeChild(bullet);
 		}
+		
+		
 	}
 }

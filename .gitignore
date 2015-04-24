@@ -1,13 +1,1 @@
-*.bat
-bin
-bat
-lib
-AIR*
-*.xml
-References
-*.swf
-bin/*
-bat/*
-bin/RTS.swf
-bat/SetupSDK.bat
-
+/bin/RTS.swf

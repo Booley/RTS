@@ -15,6 +15,8 @@ package screens {
 		private var mainMenuMPBtn:Button;
 		private var mainMenuLeaderboardBtn:Button;
 		private var mainMenuOptsBtn:Button;
+		private var mainMenuLoginBtn:Button;
+		private var mainMenuSignupBtn:Button;
 		
 		private var background:Image;
 		
@@ -40,7 +42,19 @@ package screens {
 			
 			mainMenuOptsBtn = new Button(Assets.getTexture("ButtonTexture"), "Options");
 			mainMenuOptsBtn.y = 300;
+			mainMenuOptsBtn.height = 50;
 			addChild(mainMenuOptsBtn);
+			
+			mainMenuLoginBtn = new Button(Assets.getTexture("ButtonTexture"), "Login");
+			mainMenuLoginBtn.y = 350;
+			mainMenuLoginBtn.height = 50;
+			addChild(mainMenuLoginBtn);
+			
+			mainMenuSignupBtn = new Button(Assets.getTexture("ButtonTexture"), "Signup");
+			mainMenuSignupBtn.y = 400;
+			mainMenuSignupBtn.y = 400;
+			addChild(mainMenuSignupBtn);
+			
 			
 			this.addEventListener(Event.ADDED_TO_STAGE, onAddToStage);
 		}
@@ -64,6 +78,8 @@ package screens {
 			mainMenuMPBtn.addEventListener(TouchEvent.TOUCH, onMPBtnPress);
 			mainMenuLeaderboardBtn.addEventListener(TouchEvent.TOUCH, onLeaderboardBtnPress);
 			mainMenuOptsBtn.addEventListener(TouchEvent.TOUCH, onOptsBtnPress);
+			mainMenuLoginBtn.addEventListener(TouchEvent.TOUCH, onLoginBtnPress);
+			mainMenuSignupBtn.addEventListener(TouchEvent.TOUCH, onSignupBtnPress);
 		}
 		
 		private function removeListeners():void {
@@ -71,6 +87,8 @@ package screens {
 			mainMenuMPBtn.removeEventListener(TouchEvent.TOUCH, onMPBtnPress);
 			mainMenuLeaderboardBtn.removeEventListener(TouchEvent.TOUCH, onLeaderboardBtnPress);
 			mainMenuOptsBtn.removeEventListener(TouchEvent.TOUCH, onOptsBtnPress);
+			mainMenuLoginBtn.removeEventListener(TouchEvent.TOUCH, onLoginBtnPress);
+			mainMenuSignupBtn.removeEventListener(TouchEvent.TOUCH, onSignupBtnPress);
 		}
 		
 		// handle mainMenuSPBtn press
@@ -87,7 +105,7 @@ package screens {
 		private function onMPBtnPress(e:TouchEvent):void {
 			var touch:Touch = e.getTouch(mainMenuMPBtn);
 			if (touch) {
-				if(touch.phase == TouchPhase.BEGAN)	{
+				if (touch.phase == TouchPhase.BEGAN)	{
 					dispatchEvent(new NavEvent(NavEvent.MAIN_MENU_MP));
 				}
 			}
@@ -97,7 +115,7 @@ package screens {
 		private function onLeaderboardBtnPress(e:TouchEvent):void {
 			var touch:Touch = e.getTouch(mainMenuLeaderboardBtn);
 			if (touch) {
-				if(touch.phase == TouchPhase.BEGAN) {
+				if (touch.phase == TouchPhase.BEGAN) {
 					dispatchEvent(new NavEvent(NavEvent.MAIN_MENU_LEADERBOARD));
 				}
 			}
@@ -107,8 +125,27 @@ package screens {
 		private function onOptsBtnPress(e:TouchEvent):void {
 			var touch:Touch = e.getTouch(mainMenuOptsBtn);
 			if (touch) {
-				if(touch.phase == TouchPhase.BEGAN){
+				if (touch.phase == TouchPhase.BEGAN){
 					dispatchEvent(new NavEvent(NavEvent.MAIN_MENU_OPTS));
+				}
+			}
+		}
+		
+		// handle mainMenuLoginBtn press
+		private function onLoginBtnPress(e:TouchEvent):void {
+			var touch:Touch = e.getTouch(mainMenuLoginBtn);
+			if (touch) {
+				if (touch.phase == TouchPhase.BEGAN){
+					dispatchEvent(new NavEvent(NavEvent.MAIN_MENU_LOGIN));
+				}
+			}
+		}
+		
+		private function onSignupBtnPress(e:TouchEvent):void {
+			var touch:Touch = e.getTouch(mainMenuSignupBtn);
+			if (touch) {
+				if (touch.phase == TouchPhase.BEGAN){
+					dispatchEvent(new NavEvent(NavEvent.MAIN_MENU_SIGNUP));
 				}
 			}
 		}

@@ -5,7 +5,10 @@ package
 	import com.reyco1.multiuser.MultiUserSession;
 	import flash.geom.Point;
 	import mx.core.FlexApplicationBootstrap;
-	import units.Flock;
+	import unitstuff.Base;
+	import unitstuff.Flock;
+	import unitstuff.Unit;
+	import screens.PlayScreen;
 	
 	public class Multiplayer 
 	{
@@ -23,20 +26,27 @@ package
 		private const OP_BASE_DAMAGE:String = "BDA";
 		private const OP_BASE_DESTROY:String = "BDE";
 		
-		private const OP_FLOCK_SET_GOAL:String = "FSG";
-		private const OP_FLOCK_SPLIT:String = "FS";
-		private const OP_FLOCK_MERGE:String = "FM";
-		private const OP_FLOCK_DESTROY:String = "FD";
+		private const OP_PLAYER_TAPPED:String = "PT";
+		private const OP_MOVEMENT:String = "MO";
 		
 		private var mConnection		:MultiUserSession;
 		private var mMyID:int;
+		
+		public var game:Game;
+		private var signals:SignalHandler;
 		
 		//necessary for reco1
 		public function Multiplayer() {
 			Logger.LEVEL = Logger.ALL;
 			initialize(); //T
+			
 		}
 		
+		public function createSignalHandler():void {
+			signals = new SignalHandler();
+		}
+		
+		/*
 		//the tick?
 		public function update() :void {
 			var aPlayer :Ship = (FlxG.state as PlayState).player;
@@ -46,7 +56,7 @@ package
 				sendPosition((FlxG.state as PlayState).player);
 			}
 		}
-		
+		*/
 		//???
 		//private function isPlayerControlled(theShip :Ship) :Boolean {
 			//return theShip == null || theShip.owner == (FlxG.state as PlayState).player.owner;
@@ -61,8 +71,7 @@ package
 			mConnection.onUserRemoved 	= handleUserRemoved;					// set the method to be executed once a user has disconnected
 			mConnection.onObjectRecieve = handleGetObject;						// set the method to be executed when we recieve data from a user
 			
-			mMyName  = mConnection.userCount;
-			
+			var mMyName:String  = "User_" + Math.round(Math.random()*100);
 			mConnection.connect(""+mMyName);
 			
 			//need some kind of loading/waiting screen?
@@ -76,7 +85,8 @@ package
 		
 		//send a message saying that player X has joined, then start screen?
 		protected function handleUserAdded(theUser:UserObject) :void {
-			trace("User has joined: " + theUser.name + ", total: " + mConnection.userCount);
+			trace("FOUND USER");
+			trace("User has joined: " + theUser.name + ", total: " + mConnection.userCount + ", " + theUser.id);
 		}
 		
 		//stop the game if a user disconnects?
@@ -84,67 +94,87 @@ package
 			trace("User disconnected: " + theUser.name + ", total users: " + mConnection.userCount); 
 		}
 		
-		//move the flock to the goal
-		public function sendFlockSetGoal(mFlock:Flock, mGoal:Point):void {
-			mConnection.sendObject( { op: OP_FLOCK_SET_GOAL, flock: mFlock, goal: mGoal } );
+		public function sendBaseShoot(mBase:Base, mTarget:Unit):void {
+			mConnection.sendObject( { op: OP_BASE_SHOOT, base: mBase, target: mTarget} );
 		}
 		
-		//replace flock0 with the two flocks: flock1, flock2
-		public function sendFlockSplit(mFlock0:Flock, mFlock1:Flock, mFlock2:Flock):void {
-			mConnection.sendObject( { op: OP_FLOCK_SPLIT, flock0: mFlock0, flock1: mFlock1, flock2: mFlock2 } );
+		public function sendBaseDamage(mBase:Base, dmg:int):void {
+			mConnection.sendObject( { op: OP_BASE_DAMAGE, damage: dmg } );
 		}
 		
-		//merge two flocks
-		public function sendFlockMerge(mFlock1:Flock, mFlock2:Flock):void {
-			mConnection.sendObject( { op: OP_FLOCK_MERGE, flock1: mFlock1, flock2: mFlock2 } );
+		public function sendBaseDestroy(mBase:Base):void {
+			mConnection.sendObject( { op: OP_BASE_DESTROY } );
 		}
 		
-		//remove a flock
-		public function sendFlockDestroy(mFlock:Flock):void {
-			mConnection.sendObject( { op: OP_FLOCK_DESTROY, flock: mFlock } );
+		//maybe send mTarget's position as well?
+		public function sendUnitShoot(mUnit:Unit, mTarget:Unit):void {
+			mConnection.sendObject( { op: OP_UNIT_SHOOT, unitId: mUnit.id, targetId: mTarget.id, posX: mUnit.pos.x, posY: mUnit.pos.y } );
 		}
 		
-		public function sendPosition(theShip :Ship) :void	{
-			mConnection.sendObject({op: OP_POSITION, x: theShip.x, y: theShip.y, angle: theShip.angle});
+		public function sendUnitDamage(mUnit:Unit, dmg:int):void {
+			mConnection.sendObject( { op: OP_UNIT_DAMAGE, unit: mUnit, damage: dmg } );
 		}
 		
-		public function sendShot(theShip :Ship, theBulletType :Class) :void	{
-			mConnection.sendObject({op: OP_SHOT, x: theShip.x, y: theShip.y, dx: theShip.direction.x, dy: theShip.direction.y, b: convertBulletClassToString(theBulletType)});
+		public function sendUnitDestroy(unitId:int):void {
+			mConnection.sendObject( { op: OP_UNIT_DESTROY, id: unitId } );
 		}
 		
-		public function sendDie(theShip :Ship) :void	{
-			mConnection.sendObject({op: OP_DIE, x: theShip.x, y: theShip.y});
+		public function sendUnitSpawn(mUnit:Unit):void {
+			mConnection.sendObject( { op: OP_UNIT_SPAWN, unit: mUnit } );
+		}
+		
+		public function sendUnitPosition(mUnit:Unit):void {
+			mConnection.sendObject( { op: OP_UNIT_POSITION, unit: mUnit } );
+		}
+		
+		public function sendPlayerTapped(startTap:Point, endTap:Point):void {
+			mConnection.sendObject( { op: OP_PLAYER_TAPPED , startX: startTap.x, startY: startTap.y, endX: endTap.x, endY: endTap.y } );
+		}
+		
+		public function sendMovement(units:String, goal:Point):void {
+			mConnection.sendObject( { op: OP_MOVEMENT, ids: units, x: goal.x, y: goal.y } );
 		}
 		
 		protected function handleGetObject(theUserId :String, theData :Object) :void {
 			var aOpCode :String = theData.op;
 			
-			switch(aOpCode) {
-				case OP_POSITION:
-					syncPosition(theUserId, theData);
+			switch(aOpCode) {			
+				case OP_BASE_SHOOT:
+					theData.base.target = theData.target;
+					theData.base.shoot(); //don't worry about cooldown, that's not a state represented by the other player
 					break;
+				
+				case OP_BASE_DAMAGE:
+					theData.base.takeDamage(theData.damage);
+					break;
+				case OP_BASE_DESTROY:
 					
-				case OP_SHOT:
-					syncPosition(theUserId, theData);
-					mShips[theUserId].direction.x = theData.dx;
-					mShips[theUserId].direction.y = theData.dy;
-
-					(FlxG.state as PlayState).shoot(mShips[theUserId], convertBulletStringToClass(theData.b));
 					break;
-					
-				case OP_DIE:
-					mShips[theUserId].kill();
+				case OP_UNIT_SHOOT:
+					trace("UNIT SHOOTS");
+					syncUnitPosition(theData.unitId, theData.posX, theData.posY);
+					theData.unit.target = theData.target;
+					theData.unit.shoot();
 					break;
+				case OP_UNIT_DAMAGE:
+					theData.unit.takeDamage(theData.damage);
+					break;
+				case OP_UNIT_DESTROY:
+					trace("UNIT DIED!!!");
+					signals.handleUnitDestroyed(theData.id);
+					break;
+				case OP_UNIT_SPAWN:
+					//PlayScreen.game.spawn(theData.unit.unitType, theData.unit.pos, theData.unit.owner);
+					break;
+				case OP_MOVEMENT:
+					trace("OPPONENT MOVED!!!");
+					signals.handleMovement(theData.ids, new Point(theData.x, theData.y));
 			}
 		}
 		
-		private function syncPosition(theUserId :String, theData :Object) :void {
-			mShips[theUserId].x  = theData.x;
-			mShips[theUserId].y  = theData.y;
-			
-			if(theData.angle) {
-				mShips[theUserId].angle = theData.angle;
-			}
+		private function syncUnitPosition(unitId:int, posX:int, posY:int):void {
+			var unit:Unit = PlayScreen.game.dictionary[unitId];
+			unit.pos = new Point(posX, posY);
 		}
 	}
 }

@@ -8,8 +8,8 @@ package screens {
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
 	import starling.events.Touch;
-	import units.Base;
-	import units.Unit;
+	import unitstuff.Base;
+	import unitstuff.Unit;
 	
 	public class GameOverMenu extends Sprite {
 		
