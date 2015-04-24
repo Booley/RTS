@@ -86,11 +86,8 @@ package {
 			
 			testStuff();
 			
-			var glow:BlurFilter = BlurFilter.createGlow(0xaaffff, 0.5, 0.5, 0.5);
-
-
-			// to use a filter, just set it to the "filter" property
-			this.filter = glow;
+			//var glow:BlurFilter = BlurFilter.createGlow(0xaaffff, 0.5, 0.5, 0.5);
+			//this.filter = glow;
 			
 			// END TESTING UNIT MOVEMENT }}}}}}}}}}}}}}}}}}
 			
