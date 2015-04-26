@@ -96,7 +96,7 @@ package unitstuff {
 
 		// a constructor for a unit
 		public function Unit(startPos:Point, owner:int = 1, rotation:Number = 0) {
-			this.id = counter++;
+			this.id = counter++;			
 			this.pos = startPos.clone();
 			this.x = pos.x;
 			this.y = pos.y;

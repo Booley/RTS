@@ -101,7 +101,9 @@ package unitstuff {
 			}
 			if (unitBuildCooldown < 0) {
 				if (peekNextUnit() == -1) return;
-				PlayScreen.game.spawn(nextUnit(), this.pos, this.owner, this.rotation - Math.PI/2);
+				var createdUnit:Unit = PlayScreen.game.spawn(nextUnit(), this.pos, this.owner, this.rotation - Math.PI / 2);
+				PlayScreen.game.multiplayer.sendUnitSpawn(createdUnit);
+				
 				var nextUnitClass:Class = Unit.getClass(peekNextUnit())
 				if (nextUnitClass) {
 					unitBuildCooldown = nextUnitClass.BUILD_TIME;

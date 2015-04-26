@@ -51,8 +51,8 @@ package {
 		
 		private var queueMenu:QueueMenu;
 		private var gameOverMenu:GameOverMenu;
-		private var base1:Base;
-		private var base2:Base;
+		public var base1:Base;
+		public var base2:Base;
 		
 		public var map : Map;
 		public var mapData:Vector.<Vector.<Tile>>;
@@ -478,7 +478,7 @@ package {
 			return unitVector;
 		}
 		
-		public function spawn(unitType:int, pos:Point, owner:int, rotation:Number):void {
+		public function spawn(unitType:int, pos:Point, owner:int, rotation:Number):Unit {
 			var unit:Unit;
 			var unitClass:Class = Unit.getClass(unitType);
 			if (unitClass) {
@@ -490,7 +490,9 @@ package {
 				getGoals(flock, new Point(200, 200));
 				flocks.push(flock);
 				addToDictionary(unit);
+				return unit;
 			}
+			return null;
 		}
 		
 		// convert unit vector to string array to send in multiplayer game

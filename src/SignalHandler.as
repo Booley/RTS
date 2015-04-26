@@ -41,6 +41,18 @@ package
 			PlayScreen.game.getGoals(newFlock, goal);
 			game.flocks.push(newFlock);
 		}
+		
+		public function handleSpawn(type:int, owner:int):void {
+			var base:Base;
+			if (owner == 1) {
+				base = game.base1;
+			}
+			else {
+				base = game.base2;
+			}
+			trace("spawning unit from opponent: " + type);
+			game.spawn(type, base.pos, owner, base.rotation - Math.PI/2);
+		}
 	}
 
 }
