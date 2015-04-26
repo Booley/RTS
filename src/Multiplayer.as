@@ -121,8 +121,9 @@ package
 			mConnection.sendObject( { op: OP_UNIT_DESTROY, id: unitId } );
 		}
 		
+		//warning: what about moving unit before it spawns?
 		public function sendUnitSpawn(mUnit:Unit):void {
-			//mConnection.sendObject( { op: OP_UNIT_SPAWN, type: mUnit.unitType, } );
+			mConnection.sendObject( { op: OP_UNIT_SPAWN, type: mUnit.unitType, owner: mUnit.owner } );
 		}
 		
 		public function sendUnitPosition(mUnit:Unit):void {
@@ -174,6 +175,7 @@ package
 					signals.handleUnitDestroyed(theData.id);
 					break;
 				case OP_UNIT_SPAWN:
+					signals.handleSpawn(theData.type, theData.owner);
 					//PlayScreen.game.spawn(theData.unit.unitType, theData.unit.pos, theData.unit.owner);
 					break;
 				case OP_MOVEMENT:
