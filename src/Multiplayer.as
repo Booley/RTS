@@ -33,16 +33,12 @@ package
 		private var mMyID:int;
 		
 		public var game:Game;
-		private var signals:SignalHandler;
+		public var signals:SignalHandler;
 		
 		//necessary for reco1
 		public function Multiplayer() {
 			Logger.LEVEL = Logger.ALL;
 			initialize(); //T
-			
-		}
-		
-		public function createSignalHandler():void {
 			signals = new SignalHandler();
 		}
 		
@@ -65,7 +61,7 @@ package
 		
 		//establish connection
 		protected function initialize():void {
-			mConnection = new MultiUserSession(SERV_KEY, "multiuser/test"); 		// create a new instance of MultiUserSession
+			mConnection = new MultiUserSession(SERV_KEY, "multiuser/test/BO"); 		// create a new instance of MultiUserSession
 			
 			mConnection.onConnect 		= handleConnect;						// set the method to be executed when connected
 			mConnection.onUserAdded 	= handleUserAdded;						// set the method to be executed once a user has connected
@@ -95,6 +91,11 @@ package
 			trace("User disconnected: " + theUser.name + ", total users: " + mConnection.userCount); 
 		}
 		
+		public function update():void {
+			
+			
+		}
+		
 		public function sendBaseShoot(mBase:Base, mTarget:Unit):void {
 			mConnection.sendObject( { op: OP_BASE_SHOOT, base: mBase, target: mTarget} );
 		}
@@ -107,9 +108,9 @@ package
 			mConnection.sendObject( { op: OP_BASE_DESTROY } );
 		}
 		
-		//maybe send mTarget's position as well?
 		public function sendUnitShoot(mUnit:Unit, mTarget:Unit):void {
-			mConnection.sendObject( { op: OP_UNIT_SHOOT, unitId: mUnit.id, targetId: mTarget.id, posX: mUnit.pos.x, posY: mUnit.pos.y } );
+			mConnection.sendObject( { op: OP_UNIT_SHOOT, unitId: mUnit.id, targetId: mTarget.id, 
+			posX: mUnit.pos.x, posY: mUnit.pos.y, targetX: mTarget.pos.x, targetY: mTarget.pos.y } );
 		}
 		
 		public function sendUnitDamage(mUnit:Unit, dmg:int):void {
@@ -121,7 +122,7 @@ package
 		}
 		
 		public function sendUnitSpawn(mUnit:Unit):void {
-			mConnection.sendObject( { op: OP_UNIT_SPAWN, unit: mUnit } );
+			//mConnection.sendObject( { op: OP_UNIT_SPAWN, type: mUnit.unitType, } );
 		}
 		
 		public function sendUnitPosition(mUnit:Unit):void {
@@ -153,9 +154,17 @@ package
 					break;
 				case OP_UNIT_SHOOT:
 					trace("UNIT SHOOTS");
+					var unit:Unit = game.dictionary[theData.unitId];
+					var target:Unit = game.dictionary[theData.targetId];
+					if (!unit || !target) {
+						break;
+					}
+					
 					syncUnitPosition(theData.unitId, theData.posX, theData.posY);
-					theData.unit.target = theData.target;
-					theData.unit.shoot();
+					syncUnitPosition(theData.targetId, theData.targetX, theData.targetY);
+					
+					unit.target = target;
+					unit.shoot();
 					break;
 				case OP_UNIT_DAMAGE:
 					theData.unit.takeDamage(theData.damage);

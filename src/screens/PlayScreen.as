@@ -61,7 +61,10 @@ package screens {
 		public function newGame():void {
 			game = new Game();
 			game.start();
+			
 			addChildAt(game, 0);
+			
+			game.createSignalHandler();
 		}
 		
 		public function endGame():void {
