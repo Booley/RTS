@@ -78,8 +78,8 @@ package unitstuff {
 		public var id:int;
 
 		// given unit type constant, return the corresponding class
-		public static function getClass(unitType:int):Class {
-			switch (unitType) {
+		public static function getClass(type:int):Class {
+			switch (type) {
 				case INFANTRY:
 					return Infantry;
 					break;

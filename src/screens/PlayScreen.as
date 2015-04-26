@@ -29,12 +29,16 @@ package screens {
 		private var selectRect:Quad;
 		private var lastTime:int;
 		
+		public static var isMultiplayer:Boolean;
+		
 		// handle events and user input and pass data to the game
 		// the "PlayScreen" abstraction will pass data to Game.  Game will 
 		// not know whether the data comes from user input, an AI opponent,
 		// or an opponent on another device.  
-		public function PlayScreen() {
+		public function PlayScreen(ism:Boolean) {
 			super();
+			
+			isMultiplayer = ism;
 			
 			// initialize and add buttons
 			backBtn = new Button(Assets.getTexture("ButtonTexture"), "X");
@@ -114,7 +118,6 @@ package screens {
 			}
 			lastTime = getTimer();
 		}
-		
 		
 		// screen touches
 		public function onTouch(e:TouchEvent):void {

@@ -17,7 +17,7 @@ package unitstuff {
 		
 		public function Infantry(startPos:Point, owner:int = 1, rotation:Number = 0) {
 			super(startPos, owner, rotation);
-			this.unitType = Unit.SNIPER;
+			this.unitType = UNIT_TYPE;
 			this.textureName = TEXTURE_NAME;
 			this.maxSpeed = MAX_SPEED;
 			this.maxAccel = MAX_ACCEL;
