@@ -57,6 +57,7 @@ package
 			}
 		}
 		*/
+		
 		//???
 		//private function isPlayerControlled(theShip :Ship) :Boolean {
 			//return theShip == null || theShip.owner == (FlxG.state as PlayState).player.owner;

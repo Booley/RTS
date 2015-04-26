@@ -4,12 +4,14 @@ package {
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
+	
 	import unitstuff.Base;
 	import unitstuff.Bullet;
 	import unitstuff.Flock;
 	import unitstuff.Infantry;
 	import unitstuff.Unit;
 	
+	import starling.display.Image;
 	import starling.display.Button;
 	import starling.display.Sprite;
 	import starling.events.Event;
@@ -28,17 +30,16 @@ package {
 	import be.dauntless.astar.core.IAstarTile;
 	import be.dauntless.astar.basic2d.Map;
 	import be.dauntless.astar.basic2d.BasicTile;
-	import be.dauntless.astar.basic2d.analyzers.WalkableAnalyzer;
+	import be.dauntless.astar.basic2d.analyzers.SmartClippingAnalyzer;
 	
 	import unitstuff.*;
-	import screens.QueueMenu;
-	import screens.GameOverMenu;
+	import screens.*;
 	import pathfinding.*;
 	
 	public class Game extends Sprite {
 		
 		private static const DISTANCE_TO_TAP_UNIT:Number = 30; // max distance from a unit you can tap for it to select its flock
-		private static const DISTANCE_TO_TAP_BASE:Number = 40; // max distance from a unit you can tap for it to select its flock
+		private static const DISTANCE_TO_TAP_BASE:Number = 40; // max distance from a base you can tap for it to be selected
 		
 		public var flocks:Vector.<Flock>;
 		public var bases:Vector.<Base>;
@@ -52,9 +53,15 @@ package {
 		private var base1:Base;
 		private var base2:Base;
 		
-		private var map : Map;
-		private var astar : Astar;
-		private var req:PathRequest;
+		public var map : Map;
+		public var mapData:Vector.<Vector.<Tile>>;
+		public var astar : Astar;
+		public var mapWidth:int;
+		public var mapHeight:int;
+		private var pathfindingFlock:Flock;
+		public var obstaclePoints:Vector.<Point>;
+		
+		private var background:Image;
 		
 		public var multiplayer:Multiplayer;
 		public var dictionary:Dictionary;
@@ -70,9 +77,9 @@ package {
 			this.addEventListener(NavEvent.GAME_OVER_LOSE, onGameOverLose);
 			this.addEventListener(NavEvent.GAME_OVER_WIN, onGameOverWin);
 			
-			test();
+			testMap();
 			
-			testStuff();
+			test();
 			
 			//var glow:BlurFilter = BlurFilter.createGlow(0xaaffff, 0.5, 0.5, 0.5);
 			//this.filter = glow;
@@ -84,42 +91,74 @@ package {
 			multiplayer.createSignalHandler();
 		}
 		
-		public function testStuff():void {
+		public function testMap():void {
+			// get map background
+			background = new Image(Assets.getTexture("Map1Background"));
+			background.width = Constants.SCREEN_WIDTH;
+			background.height =  Constants.SCREEN_HEIGHT;
+			addChildAt(background, 0);
 			
-			var mapData:Vector.<Vector.<Tile>> = MapGen.map1();
-			map = new Map(mapData[0].length, mapData.length);
+			obstaclePoints = new Vector.<Point>();
+			mapData = MapGen.getMapObstacles(MapGen.Map1Obstacles);
+			mapWidth = mapData[0].length;
+			mapHeight = mapData.length;
+			map = new Map(mapWidth, mapHeight);
 			for(var y:Number = 0; y < mapData.length; y++) {
 				for(var x:Number = 0; x < mapData[y].length; x++) {
 					map.setTile(mapData[y][x].basicTile);
+					if (mapData[y][x].basicTile.getCost() == Tile.WALL) {
+						obstaclePoints.push(indexToPos(new Point(x, y)));
+					}
 				}
 			}
- 
+			
 			//create the Astar instance and add the listeners
 			astar = new Astar();
 			astar.addEventListener(AstarEvent.PATH_FOUND, onPathFound);
 			astar.addEventListener(AstarEvent.PATH_NOT_FOUND, onPathNotFound);
- 
-			//create a new PathRequest
-			req = new PathRequest(IAstarTile(map.getTileAt(new Point(0, 0))), IAstarTile(map.getTileAt(new Point(0, 13))), map);
- 
+			
 			//a general analyzer
-			astar.addAnalyzer(new WalkableAnalyzer());
-			astar.getPath(req);
+			astar.addAnalyzer(new SmartClippingAnalyzer());
 		}
- 
-		private function onPathNotFound(event : AstarEvent) : void
-		{
-			trace("path not found");
-		}
- 
- 
-		private function onPathFound(event : AstarEvent):void {
-			trace("Path was found: ");
-			for(var i:int = 0; i < event.result.path.length;i++) {
-				trace((event.result.path[i] as BasicTile).getPosition());
+		
+		// starts pathfinding for the flock towards the endPoint.  onPathFound is called when this successfully finds a path.
+		public function getGoals(flock:Flock, endPoint:Point):void {
+			//create a new PathRequest
+			try {
+				var startTile:IAstarTile = IAstarTile(map.getTileAt(posToIndex(flock.getAvgPos())));
+				var endTile:IAstarTile = IAstarTile(map.getTileAt(posToIndex(endPoint)));
+				var req:PathRequest = new PathRequest(startTile, endTile, map);
+				pathfindingFlock = flock;
+				astar.getPath(req);
+			} catch (e:AstarError) {
+				
 			}
 		}
 		
+		// convert position in pixels to map coordinates for pathfinding
+		public function posToIndex(p:Point):Point {
+			return new Point(int(mapWidth * p.x / Constants.SCREEN_WIDTH), int(mapHeight * p.y / Constants.SCREEN_HEIGHT));
+		}
+			
+		// convert position in pixels to map coordinates for pathfinding
+		public function indexToPos(p:Point):Point {
+			return new Point((p.x + 0.5)/ mapWidth * Constants.SCREEN_WIDTH, (p.y + 0.5) / mapHeight * Constants.SCREEN_HEIGHT);
+		}
+ 
+		private function onPathNotFound(event:AstarEvent):void {
+			trace("path not found");
+		}
+ 
+		private function onPathFound(event:AstarEvent):void {
+			var path:Vector.<Point> = new Vector.<Point>();
+			for (var i:int = 0; i < event.result.path.length; i++) {
+				path.unshift((event.result.path[i] as BasicTile).getPosition());
+				//trace("x: " + path[0].x + ", y: " + path[0].y);
+			}
+			if (pathfindingFlock) {
+				pathfindingFlock.setGoals(path);
+			}
+		}
 		
 		public function onGameOverLose(event:NavEvent):void {
 			pause = true;
@@ -137,43 +176,42 @@ package {
 			// TESTING UNIT MOVEMENT AND STUFF {{{{{{{{{{{{{{{{
 			// TEAM 1
 			var unitVector:Vector.<Unit> = new Vector.<Unit>();
-			for (var i:int = 0; i < 20; i++) {
-				var x:Number = Math.random() * 100;
-				var y:Number = Math.random() * 100 + 400;
+			for (var i:int = 0; i < 1; i++) {
+				var x:Number = Math.random() * 100 + 30;
+				var y:Number = Math.random() * 100 + 300;
 				var unit:Unit = new Infantry(new Point(x, y));
 				unitVector.push(unit);
 				addChild(unit);
 				addToDictionary(unit);
 			}
-			var flock:Flock = new Flock(unitVector);
+			var flock:Flock = new Flock(unitVector)
+			getGoals(flock, new Point(200, 300));
 			flocks.push(flock);
-			flock.goal = new Point(200, 300);
 			
 			// TEAM 2
 			unitVector = new Vector.<Unit>();
 			for (i = 0; i < 20; i++) {
-				x = Math.random() * 100;
-				y = Math.random() * 100;
+				x = Math.random() * 70 + 30;
+				y = Math.random() * 70 + 30;
 				unit = new Infantry(new Point(x, y), 2);
 				unitVector.push(unit);
 				addChild(unit);
 				addToDictionary(unit);
 			}
+			flock = new Flock(unitVector);
+			getGoals(flock, new Point(200, 100));
+			flocks.push(flock);
 			
 			flock = new Flock(unitVector);
 			flocks.push(flock);
-			flock.goal = new Point(200, 100);
 			
-			flock = new Flock(unitVector);
-			flocks.push(flock);
-			
-			base1 = new Base(new Point(320 / 2, 480 - 10));
+			base1 = new Base(new Point(Constants.SCREEN_WIDTH / 2, Constants.SCREEN_HEIGHT - 20));
 			bases.push(base1);
 			addChild(base1);
 			addToDictionary(base1);
 			queueMenu = new QueueMenu(base1);
 			
-			base2 = new Base(new Point(320 / 2, 10), 2, Math.PI);
+			base2 = new Base(new Point(Constants.SCREEN_WIDTH / 2, 20), 2, Math.PI);
 			bases.push(base2)
 			addChild(base2);
 			addToDictionary(base2);
@@ -200,17 +238,25 @@ package {
 			for each (var base:Base in bases) {
 				base.tick(dt);
 			}
-			
 			for each (var bullet:Bullet in bullets) {
 				bullet.tick(dt);
 			}
-			
 			for each (var flock:Flock in flocks) {
 				flock.tick(dt);
 			}
 			if (this.contains(queueMenu)) {
 				queueMenu.tick(dt);
 			}
+			// remove bullets which have hit an obstacle
+			for each (bullet in bullets) {
+				var pos:Point = posToIndex(bullet.pos);
+				if (pos.x >= 0 && pos.x < mapData[0].length && pos.y >= 0 && pos.y < mapData.length) {
+					if (mapData[pos.y][pos.x].basicTile.getCost() == Tile.WALL) {
+						removeBullet(bullet);
+					}
+				}
+			}
+			
 		}
 		
 		public function handleTap(startX:int, startY:int, endX:int, endY:int):void {
@@ -221,7 +267,7 @@ package {
 				removeChild(queueMenu);
 			}
 			// if units were selected from a previous tap or drag
-			if (selectedUnits) {
+			if (selectedUnits && selectedUnits.length > 0) {
 				var newFlock:Flock = new Flock();
 				for each (var unit:Unit in selectedUnits) {		
 					// remove unit from old flock
@@ -236,7 +282,7 @@ package {
 					unit.unHighlight();
 				}
 				if (newFlock.units.length > 0) {
-					newFlock.goal = startTap;
+					getGoals(newFlock, startTap)
 					flocks.push(newFlock); 
 				} else {
 					trace("Empty flock error");
@@ -290,10 +336,10 @@ package {
 					unit.unHighlight();
 				}
 				if (newFlock.units.length > 0) {
-					newFlock.goal = startTap;					
+					getGoals(newFlock, startTap);
 					flocks.push(newFlock); 
 					
-					multiplayer.sendMovement(idsToString(newFlock.units), newFlock.goal);
+					multiplayer.sendMovement(idsToString(newFlock.units), startTap);
 				} else {
 					trace("Empty flock error");
 				}
@@ -418,7 +464,7 @@ package {
 				unitVector.push(unit);
 				addChild(unit);
 				var flock:Flock = new Flock(unitVector);
-				flock.goal = new Point(200, 200); // TEMPORARY
+				getGoals(flock, new Point(200, 200));
 				flocks.push(flock);
 				addToDictionary(unit);
 			}

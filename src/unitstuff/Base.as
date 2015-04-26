@@ -19,7 +19,7 @@ package unitstuff {
 		public static const TEXTURE_NAME:String = "BaseTexture";
 		public static const MAX_SPEED:Number = 0;
 		public static const MAX_ACCEL:Number = 0;
-		public static const MAX_HEALTH:Number = 500; 
+		public static const MAX_HEALTH:Number = 5000; 
 		public static const HEALTH_REGEN:Number = 2;
 		public static const DAMAGE:Number = 50;
 		public static const ROF:Number = 1;
@@ -58,6 +58,13 @@ package unitstuff {
 			unitQueue = new Vector.<int>();
 		}
 		
+		// Idk about this method.. might remove it
+		override public function createArt(rotation:Number = 0):void {
+			super.createArt(rotation);
+			image.scaleX *= 1.3;
+			image.scaleY *= 1.3;
+		}
+		
 		public function queueUnit(unit:int):void {
 			unitQueue.push(unit);
 			if (unitQueue.length == 1) {
@@ -85,8 +92,8 @@ package unitstuff {
 			return unit;
 		}
 		
-		override public function tick(dt:Number, neighbors:Vector.<Unit> = null, goal:Point = null):void {
-			super.tick(dt, neighbors, goal);
+		override public function tick(dt:Number, neighbors:Vector.<Unit> = null):void {
+			super.tick(dt, neighbors);
 			
 			updateResources();
 			if (unitQueue.length > 0) {

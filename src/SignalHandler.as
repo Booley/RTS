@@ -8,12 +8,11 @@ package
 	import screens.PlayScreen;
 	import unitstuff.*;
 	
-	public class SignalHandler 
-	{
+	public class SignalHandler {
+		
 		private var game:Game;
 		
-		public function SignalHandler() 
-		{
+		public function SignalHandler() {
 			game = PlayScreen.game;
 			
 		}
@@ -35,7 +34,7 @@ package
 				}
 			}
 			var newFlock:Flock = new Flock(units);
-			newFlock.goal = goal;
+			PlayScreen.game.getGoals(newFlock, goal);
 			game.flocks.push(newFlock);
 		}
 	}

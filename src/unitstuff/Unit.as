@@ -23,8 +23,9 @@ package unitstuff {
 		public static const OBSTACLE:int = 6;
 		
 		// global movement constants
-		public static const DAMPENING:Number = 0.95; // dampening time constant to help smooth movement.  applied to vel each tick
+		public static const DAMPENING:Number = 0.9; // dampening time constant to help smooth movement.  applied to vel each tick
 		public static const ROTATION_DAMPENING:Number = 0.1; // time constant for rotation adjustment based on velocity direction
+		public static const GOAL_DISTANCE_CUTOFF:Number = 35; // distance from goal before unit chooses the next goal in the pathfinding path
 		
 		// constants to override
 		public static var DEFAULT_MAX_SPEED:Number = 20; // REPLACE THIS WHEN CREATING SUBCLASSES
@@ -61,6 +62,8 @@ package unitstuff {
 		public var flock:Flock;
 		public var target:Unit;
 		public var owner:int; // ID of player which owns the unit
+		public var goal:Point;
+		public var goals:Vector.<Point>;
 		
 		// image variables
 		public var image:Image;
@@ -100,6 +103,7 @@ package unitstuff {
 			this.vel = new Point();
 			this.owner = owner;
 			this.initialImageRotation = rotation;
+			this.goals = new Vector.<Point>();
 			
 			this.addEventListener(Event.ADDED_TO_STAGE, onAddToStage);
 		}
@@ -149,29 +153,29 @@ package unitstuff {
 			addChild(highlightImage);
 			highlightImage.visible = false;
 			
-			healthBackground = new Quad(30, 6, 0x000000);
+			healthBackground = new Quad(20, 5, 0x000000);
 			healthBackground.x = -healthBackground.width / 2;
-			healthBackground.y = -10 - healthBackground.height / 2;
-			healthBackground.alpha = 0.5;
+			healthBackground.y = -7 - healthBackground.height / 2;
+			healthBackground.alpha = 0.4;
 			addChild(healthBackground);
 			
-			healthBar = new Quad(30, 4, 0x00ff00);
+			healthBar = new Quad(20, 3, 0x00ff00);
 			//healthBar.blendMode = BlendMode.NORMAL;
 			healthBar.x = -healthBar.width / 2;
-			healthBar.y = -10 - healthBar.height / 2;
-			healthBar.alpha = 0.5;
+			healthBar.y = -7 - healthBar.height / 2;
+			healthBar.alpha = 0.4;
 			addChild(healthBar);
 		}	
 		
-		
-		public function tick(dt:Number, neighbors:Vector.<Unit> = null, goal:Point = null):void {
+		public function tick(dt:Number, neighbors:Vector.<Unit> = null):void {
 			updateHealth(dt);
 			findTarget(); // if necessary
 			attackTarget(dt);
 			
 			// only move mobile units
 			if (!(this.unitType == Unit.BASE || this.unitType == Unit.RESOURCE || this.unitType == Unit.TURRET)) { 
-				updateMovement(dt, neighbors, goal);
+				updateGoal(dt);
+				updateMovement(dt, neighbors);
 			}
 		}
 		
@@ -246,10 +250,30 @@ package unitstuff {
 			}
 		}
 		
-		private function updateMovement(dt:Number, neighbors:Vector.<Unit> = null, goal:Point = null):void {
+		private function updateGoal(dt:Number):void {
+			if (goal) {
+				// check whether it has reached the goal
+				var dx:Number = this.x - goal.x;
+				var dy:Number = this.y - goal.y;
+				var distance:Number = Math.sqrt(dx * dx + dy * dy);
+				// it has reached the goal
+				if (distance < GOAL_DISTANCE_CUTOFF) {
+					// attempt to get the next goal
+					if (goals.length > 0) {
+						goal = PlayScreen.game.indexToPos(goals.pop());
+					} 
+				}
+			} else {
+				if (goals.length > 0) {
+					goal = PlayScreen.game.indexToPos(goals.pop());
+				}
+			}
+		}
+		
+		private function updateMovement(dt:Number, neighbors:Vector.<Unit> = null):void {
 			//update acceleration
 			var otherFlockUnits:Vector.<Unit> = PlayScreen.game.getOtherFlockUnits(this);
-			var accel:Point = Flocking.getAcceleration(this, neighbors, otherFlockUnits, goal);
+			var accel:Point = Flocking.getAcceleration(this, neighbors, otherFlockUnits, PlayScreen.game.obstaclePoints);
 			accel.normalize(accel.length * dt);
 			if (accel.length > maxAccel) {
 				accel.normalize(maxAccel);

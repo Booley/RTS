@@ -46,6 +46,11 @@ package
 		[Embed(source="../assets/images/units/neutral_point.png")]
 		private static const NeutralCaptureTexture:Class;
 		
+		
+		// MAPSSSSSSSSSS
+		[Embed(source="../assets/images/maps/map1/background.png")]
+		public static const Map1Background:Class;
+
 		private static var gameTextures:Dictionary = new Dictionary();
 
 		// avoid creating a texture from a bitmap more than once for optimization.
@@ -58,5 +63,6 @@ package
 			}
 			return gameTextures[name];
 		}
+		
 	}
 }
