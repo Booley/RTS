@@ -51,7 +51,6 @@ package
 			else {
 				base = game.base2;
 			}
-			trace("spawning unit from opponent: " + type);
 			game.spawn(type, base.pos, owner, base.rotation - Math.PI/2);
 		}
 	}

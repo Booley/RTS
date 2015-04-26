@@ -97,37 +97,53 @@ package
 		}
 		
 		public function sendBaseShoot(mBase:Base, mTarget:Unit):void {
-			mConnection.sendObject( { op: OP_BASE_SHOOT, base: mBase, target: mTarget} );
+			if(PlayScreen.isMultiplayer) {
+				mConnection.sendObject( { op: OP_BASE_SHOOT, base: mBase, target: mTarget } );
+			}
 		}
 		
 		public function sendBaseDamage(mBase:Base, dmg:int):void {
-			mConnection.sendObject( { op: OP_BASE_DAMAGE, damage: dmg } );
+			if(PlayScreen.isMultiplayer) {
+				mConnection.sendObject( { op: OP_BASE_DAMAGE, damage: dmg } );
+			}
 		}
 		
 		public function sendBaseDestroy(mBase:Base):void {
-			mConnection.sendObject( { op: OP_BASE_DESTROY } );
+			if(PlayScreen.isMultiplayer) {
+				mConnection.sendObject( { op: OP_BASE_DESTROY } );
+			}
 		}
 		
 		public function sendUnitShoot(mUnit:Unit, mTarget:Unit):void {
-			mConnection.sendObject( { op: OP_UNIT_SHOOT, unitId: mUnit.id, targetId: mTarget.id, 
-			posX: mUnit.pos.x, posY: mUnit.pos.y, targetX: mTarget.pos.x, targetY: mTarget.pos.y } );
+			if(PlayScreen.isMultiplayer) {
+				mConnection.sendObject( { op: OP_UNIT_SHOOT, unitId: mUnit.id, targetId: mTarget.id, 
+				posX: mUnit.pos.x, posY: mUnit.pos.y, targetX: mTarget.pos.x, targetY: mTarget.pos.y } );
+			}
 		}
 		
 		public function sendUnitDamage(mUnit:Unit, dmg:int):void {
-			mConnection.sendObject( { op: OP_UNIT_DAMAGE, unit: mUnit, damage: dmg } );
+			if(PlayScreen.isMultiplayer) {
+				mConnection.sendObject( { op: OP_UNIT_DAMAGE, unit: mUnit, damage: dmg } );
+			}
 		}
 		
 		public function sendUnitDestroy(unitId:int):void {
-			mConnection.sendObject( { op: OP_UNIT_DESTROY, id: unitId } );
+			if(PlayScreen.isMultiplayer) {
+				mConnection.sendObject( { op: OP_UNIT_DESTROY, id: unitId } );
+			}
 		}
 		
 		//warning: what about moving unit before it spawns?
 		public function sendUnitSpawn(mUnit:Unit):void {
-			mConnection.sendObject( { op: OP_UNIT_SPAWN, type: mUnit.unitType, owner: mUnit.owner } );
+			if(PlayScreen.isMultiplayer) {
+				mConnection.sendObject( { op: OP_UNIT_SPAWN, type: mUnit.unitType, owner: mUnit.owner } );
+			}
 		}
 		
 		public function sendUnitPosition(mUnit:Unit):void {
-			mConnection.sendObject( { op: OP_UNIT_POSITION, unit: mUnit } );
+			if(PlayScreen.isMultiplayer) {
+				mConnection.sendObject( { op: OP_UNIT_POSITION, unit: mUnit } );
+			}
 		}
 		
 		public function sendPlayerTapped(startTap:Point, endTap:Point):void {
@@ -135,7 +151,9 @@ package
 		}
 		
 		public function sendMovement(units:String, goal:Point):void {
-			mConnection.sendObject( { op: OP_MOVEMENT, ids: units, x: goal.x, y: goal.y } );
+			if(PlayScreen.isMultiplayer) {
+				mConnection.sendObject( { op: OP_MOVEMENT, ids: units, x: goal.x, y: goal.y } );
+			}
 		}
 		
 		protected function handleGetObject(theUserId :String, theData :Object) :void {
