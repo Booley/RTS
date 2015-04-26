@@ -27,7 +27,8 @@ package
 			var units:Vector.<Unit> = game.idStringToUnitVector(ids);
 			for each (var unit:Unit in units) {
 				if (!unit) {
-					throw new Error("Can't move null unit");
+					return;
+					//throw new Error("Can't move null unit");
 				}
 				var oldFlock:Flock = unit.flock;
 				if (oldFlock) {

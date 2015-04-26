@@ -556,7 +556,7 @@ package {
 				dispatchEvent(new NavEvent(NavEvent.GAME_OVER_WIN));
 			}
 		}
-		
+
 		public function addBullet(bullet:Bullet):void {
 			bullets.push(bullet);
 			addChild(bullet);
@@ -567,6 +567,35 @@ package {
 			removeChild(bullet);
 		}
 		
+				
+		// given an owner, return a string encoded with all of their units' ids + positions
+		public function getUnitMovementString(owner:int):String {
+			var s:String = "";
+			for each (var flock:Flock in flocks) {
+				for each (var unit:Unit in flock.units) {
+					if (unit.owner == owner) {
+						 s += unit.id + ",";
+						 s += unit.pos.x + ",";
+						 s += unit.pos.y + ";";
+					} else {
+						break;
+					}
+				}
+			}
+			s = s.substr(0, s.length - 1); // don't include final ";" to parse correctly
+		}
 		
+		// given the string with id + position data, update the units' positions
+		public function updateUnitsFromMovementString(s:String):void {
+			var unitDatas:Array = s.split(";");
+			for each (var unitDataString:String in unitDatas) {
+				var unitData:Array = unitDataString.split(",");
+				var unit:Unit = dictionary[int(unitData[0])];
+				if (unit != null) {
+					var pos:Point = new Point(int(unitData[1]), int(unitData[2]));
+					unit.pos = pos;
+				}
+			}
+		}
 	}
 }
