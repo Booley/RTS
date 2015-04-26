@@ -537,7 +537,7 @@ package {
 			
 			// make sure unit isn't in selectedUnits
 			for each (var unit2:Unit in selectedUnits) {
-				if (unit == unit2) {
+				if (unit.id == unit2.id) {
 					selectedUnits.splice(selectedUnits.indexOf(unit), 1);
 				}
 			}
