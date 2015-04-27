@@ -81,6 +81,8 @@ package
 		protected function handleConnect(theUser:UserObject) :void {
 			trace("I'm connected: " + theUser.name + ", total: " + mConnection.userCount); 
 			isConnected = true;
+			game.currentPlayer = mConnection.userCount;
+			trace(game.currentPlayer);
 		}
 		
 		//send a message saying that player X has joined, then start screen?

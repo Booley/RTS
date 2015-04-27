@@ -67,7 +67,8 @@ package {
 		public var multiplayer:Multiplayer;
 		public var dictionary:Dictionary;
 		
-		private var currentPlayer:int = 1;
+		public var currentPlayer:int = 1;
+		private static var tickCounter = 0;
 		
 		public function Game() {
 			super();
@@ -248,7 +249,9 @@ package {
 		public function tick(dt:Number):void {
 			if (pause) return;
 			
-			if (multiplayer.isConnected) {
+			tickCounter++;
+			if (multiplayer.isConnected && tickCounter >= 60) {
+				tickCounter = 0;
 				multiplayer.sendAllPositions(getUnitMovementString(currentPlayer));
 			}
 			
