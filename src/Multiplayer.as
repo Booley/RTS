@@ -28,12 +28,14 @@ package
 		
 		private const OP_PLAYER_TAPPED:String = "PT";
 		private const OP_MOVEMENT:String = "MO";
+		private const OP_ALL_POSITIONS:String = "APO";
 		
 		private var mConnection		:MultiUserSession;
 		private var mMyID:int;
 		
 		public var game:Game;
 		public var signals:SignalHandler;
+		public var isConnected:Boolean;
 		
 		//necessary for reco1
 		public function Multiplayer() {
@@ -78,6 +80,7 @@ package
 		//maybe display waiting screen?
 		protected function handleConnect(theUser:UserObject) :void {
 			trace("I'm connected: " + theUser.name + ", total: " + mConnection.userCount); 
+			isConnected = true;
 		}
 		
 		//send a message saying that player X has joined, then start screen?
@@ -156,6 +159,12 @@ package
 			}
 		}
 		
+		public function sendAllPositions(positions:String):void {
+			if(PlayScreen.isMultiplayer) {
+				mConnection.sendObject( { op: OP_ALL_POSITIONS, posString: positions } );
+			}
+		}
+		
 		protected function handleGetObject(theUserId :String, theData :Object) :void {
 			var aOpCode :String = theData.op;
 			
@@ -199,6 +208,10 @@ package
 				case OP_MOVEMENT:
 					trace("OPPONENT MOVED!!!");
 					signals.handleMovement(theData.ids, new Point(theData.x, theData.y));
+					break;
+				case OP_ALL_POSITIONS:
+					signals.handlePositions(theData.posString);
+					break;
 			}
 		}
 		

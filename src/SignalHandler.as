@@ -53,6 +53,11 @@ package
 			}
 			game.spawn(type, base.pos, owner, base.rotation - Math.PI/2);
 		}
+		
+		public function handlePositions(posString:String):void {
+			trace("Syncing positions now");
+			game.updateUnitsFromMovementString(posString);
+		}
 	}
 
 }

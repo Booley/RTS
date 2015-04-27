@@ -67,6 +67,8 @@ package {
 		public var multiplayer:Multiplayer;
 		public var dictionary:Dictionary;
 		
+		private var currentPlayer:int = 1;
+		
 		public function Game() {
 			super();
 			
@@ -181,7 +183,7 @@ package {
 			// TESTING UNIT MOVEMENT AND STUFF {{{{{{{{{{{{{{{{
 			// TEAM 1
 			var unitVector:Vector.<Unit> = new Vector.<Unit>();
-			for (var i:int = 0; i < 1; i++) {
+			for (var i:int = 0; i < 10; i++) {
 				var x:Number = Math.random() * 100 + 30;
 				var y:Number = Math.random() * 100 + 300;
 				var unit:Unit = new Infantry(new Point(x, y));
@@ -245,6 +247,11 @@ package {
 		
 		public function tick(dt:Number):void {
 			if (pause) return;
+			
+			if (multiplayer.isConnected) {
+				multiplayer.sendAllPositions(getUnitMovementString(currentPlayer));
+			}
+			
 			for each (var turret:TurretPoint in capturePoints) {
 				turret.tick(dt);
 				
@@ -583,6 +590,7 @@ package {
 				}
 			}
 			s = s.substr(0, s.length - 1); // don't include final ";" to parse correctly
+			return s;
 		}
 		
 		// given the string with id + position data, update the units' positions
