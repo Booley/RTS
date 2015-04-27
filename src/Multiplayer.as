@@ -39,7 +39,7 @@ package
 		
 		//necessary for reco1
 		public function Multiplayer() {
-			Logger.LEVEL = Logger.ALL;
+			//Logger.LEVEL = Logger.ALL;
 			initialize(); //T
 			signals = new SignalHandler();
 		}

@@ -68,10 +68,12 @@ package {
 		public var dictionary:Dictionary;
 		
 		public var currentPlayer:int = 1;
-		private static var tickCounter = 0;
+		private var waitingRoom:WaitingRoom;
+		private static var tickCounter:int = 0;
 		
 		public function Game() {
 			super();
+			waitingRoom = new WaitingRoom();
 			
 			flocks = new Vector.<Flock>();
 			bases = new Vector.<Base>();
@@ -248,6 +250,8 @@ package {
 		
 		public function tick(dt:Number):void {
 			if (pause) return;
+			
+			if (PlayScreen.isMultiplayer && !waitingRoom.foundPlayer) return;
 			
 			tickCounter++;
 			if (multiplayer.isConnected && tickCounter >= 60) {
