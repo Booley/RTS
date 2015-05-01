@@ -14,9 +14,11 @@ package unitstuff {
 		public static const ROF:Number = 5;
 		public static const ATTACK_RANGE:Number = 200;
 		public static const BUILD_TIME:Number = 1;
+		public static const COST:Number = 40;
 		
 		public function Sniper(startPos:Point, owner:int = 1, rotation:Number = 0) {
 			super(startPos, owner, rotation);
+			this.cost = COST;
 			this.unitType = UNIT_TYPE;
 			this.textureName = TEXTURE_NAME;
 			this.maxSpeed = MAX_SPEED;
