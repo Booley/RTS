@@ -111,6 +111,7 @@ package {
 			scoreBtn.x = 200;
 			addChild(scoreBtn);
 			
+			/*
 			delayedCall = new DelayedCall(incrementResources, 1.0);
 			messageRefresh = new DelayedCall(refreshMessage, 5.0);
 			delayedCall.repeatCount = int.MAX_VALUE;
@@ -118,6 +119,7 @@ package {
 			
 			Starling.juggler.add(delayedCall);
 			Starling.juggler.add(messageRefresh);
+			*/
 			
 			//customize resource display button
 			resources = STARTING_RESOURCES;
@@ -132,7 +134,7 @@ package {
 			addChild(resourceBtn);
 			
 			resourceRate = 1;
-			
+			/*
 			messageBtn = new Button(Assets.getTexture("BlackButtonTexture"), "");
 			messageBtn.textBounds
 			messageBtn.y = 200;
@@ -142,7 +144,7 @@ package {
 			messageBtn.fontSize = 60;
 			messageBtn.fontColor = 0xff0000;
 			addChild(messageBtn);
-			
+			*/
 			testMap();
 			
 			test();
@@ -295,12 +297,12 @@ package {
 			base2 = new Base(new Point(Constants.SCREEN_WIDTH / 2, 20), 2, Math.PI);
 			bases.push(base2)
 			addChild(base2);
-			
+			/*
 			var turret:TurretPoint = new TurretPoint(new Point(320 / 4, 80), 2);
 			//turret = new TurretPoint(new Point(320 / 4, 80), 2);
 			capturePoints.push(turret);
 			addChild(turret);
-			addToDictionary(base2);
+			addToDictionary(base2);*/
 		}
 		
 		public function addToDictionary(u:Unit):void {
