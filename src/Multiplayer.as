@@ -162,6 +162,7 @@ package
 					signals.handleUnitDestroyed(theData.id);
 					break;
 				case OP_UNIT_SPAWN:
+					trace("OPPONENT SPAWNING!!!");
 					signals.handleSpawn(theData.type, theData.owner);
 					break;
 				case OP_MOVEMENT:
