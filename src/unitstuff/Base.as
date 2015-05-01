@@ -13,8 +13,8 @@ package unitstuff {
 	public class Base extends Unit {
 		
 		// default constants
-		public static const DEFAULT_TOTAL_RESOURCES:int = 100; // starting resources
-		private static const DEFAULT_RESOURCE_RATE:Number = 1; // resource per second
+		public static const DEFAULT_TOTAL_RESOURCES:Number = 100; // starting resources
+		private static const DEFAULT_RESOURCE_RATE:Number = .01; // resource per second
 		
 		public static const UNIT_TYPE:int = Unit.INFANTRY;
 		public static const TEXTURE_NAME:String = "BaseTexture";
@@ -26,8 +26,9 @@ package unitstuff {
 		public static const ROF:Number = 1;
 		public static const ATTACK_RANGE:Number = 120;
 		
-		public var totalResources:int;
+		public var totalResources:Number;
 		public var resourceRate:Number;
+		public var score:int;
 		
 		private var unitQueue:Vector.<int>;
 		
@@ -40,6 +41,7 @@ package unitstuff {
 		public function Base(startPos:Point, owner:int = 1, rotation:Number = 0) {
 			super(startPos, owner);
 			this.unitType = Unit.BASE;
+			this.score = 0;
 			this.textureName = TEXTURE_NAME;
 			this.maxSpeed = MAX_SPEED;
 			this.maxAccel = MAX_ACCEL;
@@ -76,13 +78,6 @@ package unitstuff {
 			}
 		}
 		
-		public function getResources():int {
-			return totalResources;
-		}
-		
-		public function getResourceRate():int {
-			return resourceRate;
-		}
 		
 		public function peekNextUnit():int {
 			if (unitQueue.length > 0) {
