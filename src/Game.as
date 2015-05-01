@@ -93,7 +93,7 @@ package {
 			
 			// END TESTING UNIT MOVEMENT }}}}}}}}}}}}}}}}}}
 			
-			//multiplayer = new Multiplayer();
+			multiplayer = new Multiplayer();
 		}
 		
 		public function createSignalHandler():void {
