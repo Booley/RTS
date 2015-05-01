@@ -67,8 +67,13 @@ package {
 		public var multiplayer:Multiplayer;
 		public var dictionary:Dictionary;
 		
+		public var currentPlayer:int = 1;
+		private var waitingRoom:WaitingRoom;
+		private static var tickCounter:int = 0;
+		
 		public function Game() {
 			super();
+			waitingRoom = new WaitingRoom();
 			
 			flocks = new Vector.<Flock>();
 			bases = new Vector.<Base>();
@@ -88,12 +93,12 @@ package {
 			
 			// END TESTING UNIT MOVEMENT }}}}}}}}}}}}}}}}}}
 			
-			multiplayer = new Multiplayer();
+			//multiplayer = new Multiplayer();
 		}
 		
 		public function createSignalHandler():void {
-			multiplayer.game = this;
-			multiplayer.signals.game = this;
+			//multiplayer.game = this;
+			//multiplayer.signals.game = this;
 		}
 		
 		public function testMap():void {
@@ -181,7 +186,7 @@ package {
 			// TESTING UNIT MOVEMENT AND STUFF {{{{{{{{{{{{{{{{
 			// TEAM 1
 			var unitVector:Vector.<Unit> = new Vector.<Unit>();
-			for (var i:int = 0; i < 1; i++) {
+			for (var i:int = 0; i < 10; i++) {
 				var x:Number = Math.random() * 100 + 30;
 				var y:Number = Math.random() * 100 + 300;
 				var unit:Unit = new Infantry(new Point(x, y));
@@ -245,6 +250,15 @@ package {
 		
 		public function tick(dt:Number):void {
 			if (pause) return;
+			
+			if (PlayScreen.isMultiplayer && !waitingRoom.foundPlayer) return;
+			
+			tickCounter++;
+			if (multiplayer.isConnected && tickCounter >= 60) {
+				tickCounter = 0;
+				multiplayer.sendAllPositions(getUnitMovementString(currentPlayer));
+			}
+			
 			for each (var turret:TurretPoint in capturePoints) {
 				turret.tick(dt);
 				

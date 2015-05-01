@@ -29,6 +29,8 @@ package screens {
 		private var selectRect:Quad;
 		private var lastTime:int;
 		
+		private var waitingRoom:WaitingRoom;
+		
 		public static var isMultiplayer:Boolean;
 		
 		// handle events and user input and pass data to the game
@@ -67,10 +69,10 @@ package screens {
 			game.start();
 			
 			addChildAt(game, 0);
-			
-			game.createSignalHandler();
+				
+			//game.createSignalHandler();
 		}
-		
+	
 		public function endGame():void {
 			game.end();
 			removeChild(game);
