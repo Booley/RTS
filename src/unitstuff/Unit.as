@@ -199,8 +199,10 @@ package unitstuff {
 			healthBar.width = healthBackground.width * health / maxHealth;
 			healthBar.color = getHealthBarColor(health, maxHealth);
 			if (this.health <= 0) {
-				PlayScreen.game.removeUnit(this);
-				PlayScreen.game.multiplayer.sendUnitDestroy(this.id);
+				if (this.unitType != RESOURCE_POINT) {
+					PlayScreen.game.removeUnit(this);
+					PlayScreen.game.multiplayer.sendUnitDestroy(this.id);
+				}
 			}
 		}
 		

@@ -240,9 +240,9 @@ package {
 			if (PlayScreen.isMultiplayer && !multiplayer.isConnected) return;
 			
 			tickCounter++;
-			if (multiplayer.isConnected && tickCounter >= 60) {
+			if (multiplayer.isConnected && tickCounter >= 10) {
 				tickCounter = 0;
-				//multiplayer.sendAllPositions(getUnitMovementString(currentPlayer));
+				multiplayer.sendAllPositions(getUnitMovementString(currentPlayer));
 			}
 			
 			for each (var flock:Flock in flocks) {
@@ -284,6 +284,7 @@ package {
 			if (contains(queueMenu)) {
 				removeChild(queueMenu);
 			}
+			if (pause) return;
 			// if units were selected from a previous tap or drag
 			if (selectedUnits) {
 				var newFlock:Flock = new Flock();
@@ -346,6 +347,7 @@ package {
 			if (contains(queueMenu)) {
 				removeChild(queueMenu);
 			}
+			if (pause) return;
 			// deselect any currently selected units
 			if (selectedUnits) {
 				for each (unit in selectedUnits) {
@@ -589,7 +591,10 @@ package {
 				var unit:Unit = dictionary[int(unitData[0])];
 				if (unit != null) {
 					var pos:Point = new Point(int(unitData[1]), int(unitData[2]));
-					unit.pos = pos;
+					var diff:Point = pos.subtract(unit.pos);
+					var DECAY_RATE:Number = 0.5;
+					diff.normalize(diff.length * DECAY_RATE);
+					unit.pos = unit.pos.add(diff);
 				}
 			}
 		}
