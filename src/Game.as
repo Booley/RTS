@@ -42,6 +42,7 @@ package {
 		
 		private static const DISTANCE_TO_TAP_UNIT:Number = 30; // max distance from a unit you can tap for it to select its flock
 		private static const DISTANCE_TO_TAP_BASE:Number = 40; // max distance from a base you can tap for it to be selected
+		private static const RESOURCE_CHANGE:Number = 1; //change in resource rate when you gain/lose a resource point
 		
 		public var flocks:Vector.<Flock>;
 		public var bases:Vector.<Base>;
@@ -56,7 +57,6 @@ package {
 		private var gameOverMenu:GameOverMenu;
 		public var base1:Base;
 		public var base2:Base;
-		public var userBase:Base;
 		
 		public var map : Map;
 		public var mapData:Vector.<Vector.<Tile>>;
@@ -71,12 +71,11 @@ package {
 		public var multiplayer:Multiplayer;
 		public var dictionary:Dictionary;
 		
-		public var currentPlayer:int = 1;
+		public var currentPlayer:int = 2;
 		private var waitingRoom:WaitingRoom;
 		private static var tickCounter:int = 0;
 		
 		private var scoreText:TextField;
-		private var score:int;
 		
 		
 		private var resourceText:TextField;
@@ -102,22 +101,19 @@ package {
 			
 			test();
 			
-			score = 0;
-			scoreText = new TextField(100, 30, "Score: " + score, "Verdana", 16, 0xffffff, true);
+			scoreText = new TextField(100, 30, "Score: " + 0, "Verdana", 12, 0xffffff, true);
 			scoreText.y = 0;
 			scoreText.x = 200;
 			
 		
 			
 			//customize resource display button
-			resourceText = new TextField(100, 30, Base.DEFAULT_TOTAL_RESOURCES + "", "Verdana", 16, 0xffffff, true);
+			resourceText = new TextField(100, 30, Base.DEFAULT_TOTAL_RESOURCES + "", "Verdana", 12, 0xffffff, true);
 			resourceText.y = 40;
 			resourceText.x = 200;
 			
 			addChild(scoreText);
 			addChild(resourceText);
-			userBase = base1;
-			
 			//var glow:BlurFilter = BlurFilter.createGlow(0xaaffff, 0.5, 0.5, 0.5);
 			//this.filter = glow;
 			
@@ -200,15 +196,24 @@ package {
 			}
 		}
 		
+		public function getUserBase(player:int):Base {
+			if (player == 1) {
+				return base1;
+			}
+			else {
+				return base2;
+			}
+		}
+		
 		public function onGameOverLose(event:NavEvent):void {
 			pause = true;
-			gameOverMenu = new GameOverMenu(2, score);
+			gameOverMenu = new GameOverMenu(2, getUserBase(currentPlayer).score);
 			addChild(gameOverMenu);
 		}
 		
 		public function onGameOverWin(event:NavEvent):void {
 			pause = true;
-			gameOverMenu = new GameOverMenu(1, score);
+			gameOverMenu = new GameOverMenu(1, getUserBase(currentPlayer).score);
 			addChild(gameOverMenu);
 		}
 		
@@ -242,20 +247,21 @@ package {
 			getGoals(flock, new Point(200, 100));
 			flocks.push(flock);
 			
-			flock = new Flock(unitVector);
-			flocks.push(flock);
-			
 			//TEAM 3 neutral resource points
 			unitVector = new Vector.<Unit>();
-			/*unit = new ResourcePoint(new Point(50, 250), 3);
+			unit = new ResourcePoint(new Point(50, 250), 3);
 			unitVector.push(unit);
 			addChild(unit);
 			unit = new ResourcePoint(new Point(150, 250), 3);
 			unitVector.push(unit);
 			addChild(unit);
-			unit = new ResourcePoint(new Point(250, 250), 3);*/
+			unit = new ResourcePoint(new Point(250, 250), 3);
 			unitVector.push(unit);
 			addChild(unit);
+			
+			flock = new Flock(unitVector);
+			getGoals(flock, new Point(200, 100));
+			flocks.push(flock);
 			
 			base1 = new Base(new Point(Constants.SCREEN_WIDTH / 2, Constants.SCREEN_HEIGHT - 20));
 			bases.push(base1);
@@ -306,8 +312,9 @@ package {
 			
 			for each (var base:Base in bases) {
 				base.tick(dt);
-				if (base == userBase) {
-					resourceText.text = "Gold: " + userBase.totalResources; 
+				if (base.owner == this.currentPlayer) {
+					resourceText.text = "Gold: " + int(base.totalResources); 
+					scoreText.text = "Score: " + base.score;
 				}
 			}
 			for each (var bullet:Bullet in bullets) {
@@ -533,14 +540,24 @@ package {
 			removeFromDictionary(unit);
 			var flock:Flock = unit.flock;
 			if (unit.flock != null) {
-				if (unit.firstPlayerDmg > unit.secondPlayerDmg) {
-					score += unit.damage;
-					scoreText.text = "Score: " + score;
-					if (Unit.RESOURCE == unit.unitType && unit.secondPlayerDmg < unit.firstPlayerDmg) {
-						userBase.resourceRate += 100;
+				if (Unit.RESOURCE == unit.unitType) {
+					if (unit.firstPlayerLastHit) {
+						base1.resourceRate += RESOURCE_CHANGE;
 					}
+					else if (unit.secondPlayerLastHit) {
+						base2.resourceRate += RESOURCE_CHANGE;
+					}
+					
 				}
-				// remove unit from its flock
+				if (unit.firstPlayerLastHit) {
+					base1.score += unit.cost;
+				}
+				
+				if (unit.secondPlayerLastHit) {
+					base2.score += unit.cost;
+				}
+				
+					// remove unit from its flock
 				flock.removeUnit(unit);
 				if (flock.units.length == 0) {
 					flocks.splice(flocks.indexOf(flock), 1);
@@ -551,13 +568,23 @@ package {
 				var x:int = unit.x;
 				var y:int = unit.y;
 				var owner:int = 1;
-				if (unit.firstPlayerDmg < unit.secondPlayerDmg) {
+				if (unit.firstPlayerLastHit) {
+					owner = 1;
+				}
+				else if (unit.secondPlayerLastHit) {
 					owner = 2;
 				}
+				else {
+					owner = 3;
+				}
 				if (unit.owner == 1) {
-					userBase.resourceRate -= 100;
+					base1.resourceRate -= RESOURCE_CHANGE;
+				}
+				if (unit.owner == 2) {
+					base2.resourceRate -= RESOURCE_CHANGE;
 				}
 				var captured:Unit = new ResourcePoint(new Point(x, y), owner);
+				captured.health = 1;
 				unitVector.push(captured);
 				addChild(captured);
 				flock = new Flock(unitVector);

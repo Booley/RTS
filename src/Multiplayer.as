@@ -36,8 +36,8 @@ package
 		public var signals:SignalHandler;
 		public var isConnected:Boolean;
 		
-		private var id1:String;
-		private var id2:String;
+		private var currentId:String;
+		private var opponentId:String;
 		/*
 		//necessary for reco1
 		public function Multiplayer(id1:String, id2:String) {
@@ -56,7 +56,7 @@ package
 		
 		//establish connection
 		protected function initialize():void {
-			mConnection = new MultiUserSession(SERV_KEY, "multiuser/test/bo2"); 		// create a new instance of MultiUserSession
+			mConnection = new MultiUserSession(SERV_KEY, "multiuser/test/bo1"); 		// create a new instance of MultiUserSession
 			
 			mConnection.onConnect 		= handleConnect;						// set the method to be executed when connected
 			mConnection.onUserAdded 	= handleUserAdded;						// set the method to be executed once a user has connected
@@ -73,8 +73,8 @@ package
 		//maybe display waiting screen?
 		protected function handleConnect(theUser:UserObject) :void {
 			trace("I'm connected: " + theUser.name + ", total: " + mConnection.userCount); 
+			currentId = theUser.id;
 			isConnected = true;
-			PlayScreen.game.currentPlayer = mConnection.userCount;
 			trace(PlayScreen.game.currentPlayer);
 		}
 		
@@ -82,6 +82,12 @@ package
 		protected function handleUserAdded(theUser:UserObject) :void {
 			trace("FOUND USER");
 			trace("User has joined: " + theUser.name + ", total: " + mConnection.userCount + ", " + theUser.id);
+			opponentId = theUser.id;
+			
+			if (currentId < opponentId)
+				PlayScreen.game.currentPlayer = 1;
+			else
+				PlayScreen.game.currentPlayer = 2;
 		}
 		
 		//stop the PlayScreen.game if a user disconnects?
