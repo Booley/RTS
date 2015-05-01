@@ -56,7 +56,7 @@ package
 		
 		//establish connection
 		protected function initialize():void {
-			mConnection = new MultiUserSession(SERV_KEY, "multiuser/test/BO"); 		// create a new instance of MultiUserSession
+			mConnection = new MultiUserSession(SERV_KEY, "multiuser/test/bo_current"); 		// create a new instance of MultiUserSession
 			
 			mConnection.onConnect 		= handleConnect;						// set the method to be executed when connected
 			mConnection.onUserAdded 	= handleUserAdded;						// set the method to be executed once a user has connected
@@ -74,7 +74,7 @@ package
 		protected function handleConnect(theUser:UserObject) :void {
 			trace("I'm connected: " + theUser.name + ", total: " + mConnection.userCount); 
 			isConnected = true;
-			PlayScreen.game.currentPlayer = 2;//mConnection.userCount;
+			PlayScreen.game.currentPlayer = mConnection.userCount;
 			trace(PlayScreen.game.currentPlayer);
 		}
 		
@@ -90,7 +90,7 @@ package
 		}
 		
 		public function sendUnitShoot(mUnit:Unit, mTarget:Unit):void {
-			if(PlayScreen.isMultiplayer) {
+			if(PlayScreen.isMultiplayer && !mUnit && !mTarget) {
 				mConnection.sendObject( { op: OP_UNIT_SHOOT, unitId: mUnit.id, targetId: mTarget.id, 
 				posX: mUnit.pos.x, posY: mUnit.pos.y, targetX: mTarget.pos.x, targetY: mTarget.pos.y } );
 			}
@@ -104,23 +104,19 @@ package
 		
 		//warning: what about moving unit before it spawns?
 		public function sendUnitSpawn(mUnit:Unit):void {
-			if(PlayScreen.isMultiplayer) {
+			if(PlayScreen.isMultiplayer && !mUnit) {
 				mConnection.sendObject( { op: OP_UNIT_SPAWN, type: mUnit.unitType, owner: mUnit.owner } );
 			}
 		}
 		
 		public function sendUnitPosition(mUnit:Unit):void {
-			if(PlayScreen.isMultiplayer) {
+			if(PlayScreen.isMultiplayer && !mUnit) {
 				mConnection.sendObject( { op: OP_UNIT_POSITION, unit: mUnit } );
 			}
 		}
-		
-		public function sendPlayerTapped(startTap:Point, endTap:Point):void {
-			mConnection.sendObject( { op: OP_PLAYER_TAPPED , startX: startTap.x, startY: startTap.y, endX: endTap.x, endY: endTap.y } );
-		}
-		
+
 		public function sendMovement(units:String, goal:Point):void {
-			if(PlayScreen.isMultiplayer) {
+			if(PlayScreen.isMultiplayer && !goal) {
 				mConnection.sendObject( { op: OP_MOVEMENT, ids: units, x: goal.x, y: goal.y } );
 			}
 		}

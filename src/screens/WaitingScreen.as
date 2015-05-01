@@ -36,8 +36,12 @@ package screens {
 			addChild(text);
 			
 			this.addEventListener(Event.ADDED_TO_STAGE, onAddToStage);
-			
-			waitingRoom = new WaitingRoom();
+			waitingRoom = new WaitingRoom(this);
+		}
+		
+		public function onMatchFound():void {
+			trace("Now starting game...");
+			dispatchEvent(new NavEvent(NavEvent.WAITING_SCREEN_CONNECT));
 		}
 		
 		public function onAddToStage(event:Event):void {

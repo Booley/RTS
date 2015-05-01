@@ -9,6 +9,7 @@ package
 	import unitstuff.Flock;
 	import unitstuff.Unit;
 	import screens.PlayScreen;
+	import screens.WaitingScreen;
 	
 	public class WaitingRoom
 	{
@@ -16,22 +17,24 @@ package
 		private const DEVKEY		:String   = "e4ece8a816e8d16dabef9b1a-cb286187d4bb"; // TODO: add your Cirrus key here. You can get a key from here : http://labs.adobe.com/technologies/cirrus/
 		private const SERV_KEY		:String = SERVER + DEVKEY;
 		
-		private var mConnection		:MultiUserSession;
+		public var mConnection		:MultiUserSession;
 		private var mMyID:int;
 		public var foundPlayer:Boolean;
 		
 		public var isConnected:Boolean;
+		public var screen:WaitingScreen;
 		
 		//necessary for reco1
-		public function WaitingRoom() {
-			Logger.LEVEL = Logger.ALL;
+		public function WaitingRoom(ws:WaitingScreen) {
+			//Logger.LEVEL = Logger.ALL;
 			initialize(); //T
+			this.screen = ws;
 		}
 		
 		//establish connection
 		protected function initialize():void {
 			foundPlayer = false;
-			mConnection = new MultiUserSession(SERV_KEY, "multiuser/test/waitingroom"); 		// create a new instance of MultiUserSession
+			mConnection = new MultiUserSession(SERV_KEY, "multiuser/test/waitingroom/bo"); 		// create a new instance of MultiUserSession
 			
 			mConnection.onConnect 		= handleConnect;						// set the method to be executed when connected
 			mConnection.onUserAdded 	= handleUserAdded;						// set the method to be executed once a user has connected
@@ -47,25 +50,36 @@ package
 		
 		//enter as the second player, then you know opponent is there
 		protected function handleConnect(theUser:UserObject) :void {
-			trace("I'm waiting: " + theUser.name + ", total: " + mConnection.userCount); 
+			//trace("I'm waiting: " + theUser.name + ", total: " + mConnection.userCount); 
 			isConnected = true;
+			screen.onMatchFound();
+			/*
 			if (mConnection.userCount == 2) {
 				foundPlayer = true;
-				//mConnection.close();
+				if(isConnected)
+					mConnection.close();
+				screen.onMatchFound();
 			}
+			*/
 		}
 		
 		//called when 2nd player joins
 		protected function handleUserAdded(theUser:UserObject) :void {
 			trace("FOUND USER");
-			trace("User has joined: " + theUser.name + ", total: " + mConnection.userCount + ", " + theUser.id);
-			//mConnection.close();
+			//trace("User has joined: " + theUser.name + ", total: " + mConnection.userCount + ", " + theUser.id);
+			/*
+			if(isConnected)
+				mConnection.close();
 			foundPlayer = true;
+			screen.onatchFound();
+			*/
+			
+			//mConnection.close();
 		}
 		
 		//stop the game if a user disconnects?
 		protected function handleUserRemoved(theUser:UserObject) :void {
-			trace("User disconnected: " + theUser.name + ", total users: " + mConnection.userCount); 
+			//trace("User disconnected: " + theUser.name + ", total users: " + mConnection.userCount); 
 		}
 
 		protected function handleGetObject(theUserId :String, theData :Object) :void {

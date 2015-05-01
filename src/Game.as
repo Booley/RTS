@@ -292,7 +292,7 @@ package {
 		public function tick(dt:Number):void {
 			if (pause) return;
 			
-			if (PlayScreen.isMultiplayer && !waitingRoom.foundPlayer) return;
+			if (PlayScreen.isMultiplayer && !multiplayer.isConnected) return;
 			
 			tickCounter++;
 			if (multiplayer.isConnected && tickCounter >= 60) {
