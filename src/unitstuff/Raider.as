@@ -14,9 +14,11 @@ package unitstuff {
 		public static const ROF:Number = 1;
 		public static const ATTACK_RANGE:Number = 80;
 		public static const BUILD_TIME:Number = 0.3;
+		public static const COST:Number = 50;
 		
 		public function Raider(startPos:Point, owner:int = 1, rotation:Number = 0) {
 			super(startPos, owner, rotation);
+			this.cost = COST;
 			this.unitType = UNIT_TYPE;
 			this.textureName = TEXTURE_NAME;
 			this.maxSpeed = MAX_SPEED;

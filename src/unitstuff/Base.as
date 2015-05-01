@@ -2,6 +2,7 @@ package unitstuff {
 	//Models the base where units spawn and should attack
 	
 	import flash.geom.Point;
+	import starling.display.Button;
 		
 	import starling.events.Event;
 	import starling.display.Image;
@@ -12,7 +13,7 @@ package unitstuff {
 	public class Base extends Unit {
 		
 		// default constants
-		private static const DEFAULT_TOTAL_RESOURCES:int = 100; // starting resources
+		public static const DEFAULT_TOTAL_RESOURCES:int = 100; // starting resources
 		private static const DEFAULT_RESOURCE_RATE:Number = 1; // resource per second
 		
 		public static const UNIT_TYPE:int = Unit.INFANTRY;
@@ -25,8 +26,8 @@ package unitstuff {
 		public static const ROF:Number = 1;
 		public static const ATTACK_RANGE:Number = 120;
 		
-		private var totalResources:int;
-		private var resourceRate:Number;
+		public var totalResources:int;
+		public var resourceRate:Number;
 		
 		private var unitQueue:Vector.<int>;
 		
@@ -73,6 +74,14 @@ package unitstuff {
 					unitBuildCooldown = nextUnitClass.BUILD_TIME;
 				}
 			}
+		}
+		
+		public function getResources():int {
+			return totalResources;
+		}
+		
+		public function getResourceRate():int {
+			return resourceRate;
 		}
 		
 		public function peekNextUnit():int {

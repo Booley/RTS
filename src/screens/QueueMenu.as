@@ -23,6 +23,7 @@ package screens {
 		private var button1:Button;
 		private var button2:Button;
 		private var button3:Button;
+		private var messageBtn:Button;
 		
 		private var butttonheight:int = 75;
 		private var butttonwidth:int = 75;
@@ -61,6 +62,15 @@ package screens {
 			button3.height = butttonheight;
 			addChild(button3);
 			
+			//will update UI
+			messageBtn = new Button(Assets.getTexture("ButtonTexture"), "");
+			messageBtn.y = 400;
+			messageBtn.x = 150;
+			messageBtn.width = 150;
+			messageBtn.height = 100;
+			messageBtn.fontSize = 60;
+			addChild(messageBtn);
+
 			
 			// initializa the text the list of the price of each unit
 			
@@ -114,7 +124,13 @@ package screens {
 			e.stopImmediatePropagation();
 			var touch:Touch = e.getTouch(button1);
 			if (touch) {
-				if(touch.phase == TouchPhase.BEGAN) {
+				if (touch.phase == TouchPhase.BEGAN) {
+					if (portal.totalResources < Infantry.COST) {
+						messageBtn.text = "Not Enough Resources";
+					}
+					else {
+						messageBtn.text = "";
+					}
 					portal.queueUnit(Unit.INFANTRY);
 				}
 			}
@@ -124,7 +140,14 @@ package screens {
 			e.stopImmediatePropagation();
 			var touch:Touch = e.getTouch(button2);
 			if (touch) {
-				if(touch.phase == TouchPhase.BEGAN) {
+				if (touch.phase == TouchPhase.BEGAN) {
+					if (portal.totalResources < Sniper.COST) {
+						messageBtn.text = "Not Enough Resources";
+					}
+					else {
+						messageBtn.text = "";
+						portal.totalResources -= Sniper.COST;
+					}
 					portal.queueUnit(Unit.SNIPER);
 				}
 			}
@@ -134,7 +157,14 @@ package screens {
 			e.stopImmediatePropagation();
 			var touch:Touch = e.getTouch(button3);
 			if (touch) {
-				if(touch.phase == TouchPhase.BEGAN) {
+				if (touch.phase == TouchPhase.BEGAN) {
+					if (portal.totalResources < Raider.COST) {
+						messageBtn.text = "Not Enough Resources";
+					}
+					else {
+						messageBtn.text = "";
+						portal.totalResources -= Raider.COST;
+					}
 					portal.queueUnit(Unit.RAIDER);
 				}
 			}
