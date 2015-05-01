@@ -93,12 +93,12 @@ package {
 			
 			// END TESTING UNIT MOVEMENT }}}}}}}}}}}}}}}}}}
 			
-			multiplayer = new Multiplayer();
+			//multiplayer = new Multiplayer();
 		}
 		
 		public function createSignalHandler():void {
-			multiplayer.game = this;
-			multiplayer.signals.game = this;
+			//multiplayer.game = this;
+			//multiplayer.signals.game = this;
 		}
 		
 		public function testMap():void {

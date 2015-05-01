@@ -10,21 +10,19 @@ package
 	
 	public class SignalHandler {
 		
-		public var game:Game;
-		
 		public function SignalHandler() {
 			
 		}
 		
 		public function handleUnitDestroyed(id:int):void {
-			var unit:Unit = game.dictionary[id];
+			var unit:Unit = PlayScreen.game.dictionary[id];
 			if (!unit) {
-				game.removeUnit(unit);
+				PlayScreen.game.removeUnit(unit);
 			}
 		}
 		
 		public function handleMovement(ids:String, goal:Point):void {
-			var units:Vector.<Unit> = game.idStringToUnitVector(ids);
+			var units:Vector.<Unit> = PlayScreen.game.idStringToUnitVector(ids);
 			for each (var unit:Unit in units) {
 				if (!unit) {
 					return;
@@ -34,29 +32,29 @@ package
 				if (oldFlock) {
 					oldFlock.removeUnit(unit);
 					if (oldFlock.units.length == 0) {
-						game.flocks.splice(game.flocks.indexOf(oldFlock), 1);
+						PlayScreen.game.flocks.splice(PlayScreen.game.flocks.indexOf(oldFlock), 1);
 					}
 				}
 			}
 			var newFlock:Flock = new Flock(units);
 			PlayScreen.game.getGoals(newFlock, goal);
-			game.flocks.push(newFlock);
+			PlayScreen.game.flocks.push(newFlock);
 		}
 		
 		public function handleSpawn(type:int, owner:int):void {
 			var base:Base;
 			if (owner == 1) {
-				base = game.base1;
+				base = PlayScreen.game.base1;
 			}
 			else {
-				base = game.base2;
+				base = PlayScreen.game.base2;
 			}
-			game.spawn(type, base.pos, owner, base.rotation - Math.PI/2);
+			PlayScreen.game.spawn(type, base.pos, owner, base.rotation - Math.PI/2);
 		}
 		
 		public function handlePositions(posString:String):void {
 			trace("Syncing positions now");
-			game.updateUnitsFromMovementString(posString);
+			PlayScreen.game.updateUnitsFromMovementString(posString);
 		}
 	}
 
