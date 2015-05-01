@@ -14,10 +14,12 @@ package pathfinding {
 		public static const WALL:uint = 0xff0000;
 		public static const CAUTION:uint = 0xffff00;
 		public static const FLOOR:uint = 0x000000;
+		public static const NEUTRAL_CAPTURE_POINT:uint = 0x080808;
+		public static const BLUE_CAPTURE_POINT:uint = 0x4800ff;
+		public static const RED_CAPTURE_POINT:uint = 0x00ffff;
 		
 		[Embed(source="../../assets/images/maps/map1/obstacles.png")]
 		public static const Map1Obstacles:Class;
-		
 		
 		// read in the correct map as a png and convert it to a vector of tiles
 		public static function getMapObstacles(mapObstacles:Class):Vector.<Vector.<Tile>> {
@@ -33,11 +35,11 @@ package pathfinding {
 					var color:uint = image.bitmapData.getPixel(i, j);
 					if (color == WALL) {
 						tileType = Tile.WALL;
-					} else if (color == FLOOR) {
-						tileType = Tile.FLOOR;
 					} else if (color == CAUTION) {
 						tileType = Tile.CAUTION;
-					}
+					} else if (color == FLOOR) {
+						tileType = Tile.FLOOR;
+					} 
 					v.push(new Tile(i, j, tileType));
 				}
 				map.push(v);

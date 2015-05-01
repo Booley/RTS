@@ -11,6 +11,8 @@ package {
 	import unitstuff.Infantry;
 	import unitstuff.Unit;
 	
+	import starling.core.Starling;
+	import starling.animation.DelayedCall;
 	import starling.display.Image;
 	import starling.display.Button;
 	import starling.display.Sprite;
@@ -40,6 +42,7 @@ package {
 		
 		private static const DISTANCE_TO_TAP_UNIT:Number = 30; // max distance from a unit you can tap for it to select its flock
 		private static const DISTANCE_TO_TAP_BASE:Number = 40; // max distance from a base you can tap for it to be selected
+		private static const STARTING_RESOURCES:Number = 100; //resource amount each player starts with
 		
 		public var flocks:Vector.<Flock>;
 		public var bases:Vector.<Base>;
@@ -71,9 +74,23 @@ package {
 		private var waitingRoom:WaitingRoom;
 		private static var tickCounter:int = 0;
 		
+		private var scoreBtn:Button;
+		private var score:int;
+		
+		//timer to increment resources every second
+		private var delayedCall:DelayedCall;
+		private var messageRefresh:DelayedCall;
+		
+		private var resourceBtn:Button;
+		public var resources:int;
+		private var resourceRate:int;
+		
+		public var messageBtn:Button;
+		
+		
 		public function Game() {
 			super();
-			waitingRoom = new WaitingRoom();
+			//waitingRoom = new WaitingRoom();
 			
 			flocks = new Vector.<Flock>();
 			bases = new Vector.<Base>();
@@ -84,6 +101,50 @@ package {
 			this.addEventListener(NavEvent.GAME_OVER_LOSE, onGameOverLose);
 			this.addEventListener(NavEvent.GAME_OVER_WIN, onGameOverWin);
 			
+			//customize score display button
+			score = 0;
+			scoreBtn = new Button(Assets.getTexture("ButtonTexture"), "Score: " + score);
+			scoreBtn.fontSize = 60;
+			scoreBtn.y = 0;
+			scoreBtn.width = 100;
+			scoreBtn.height = 40;
+			scoreBtn.x = 200;
+			addChild(scoreBtn);
+			
+			/*
+			delayedCall = new DelayedCall(incrementResources, 1.0);
+			messageRefresh = new DelayedCall(refreshMessage, 5.0);
+			delayedCall.repeatCount = int.MAX_VALUE;
+			messageRefresh.repeatCount = int.MAX_VALUE;
+			
+			Starling.juggler.add(delayedCall);
+			Starling.juggler.add(messageRefresh);
+			*/
+			
+			//customize resource display button
+			resources = STARTING_RESOURCES;
+			resourceBtn = new Button(Assets.getTexture("ButtonTexture"), "Gold: " + resources);
+			resourceBtn.y = 40;
+			resourceBtn.x = 200;
+			resourceBtn.width = 100;
+			resourceBtn.height = 40;
+			resourceBtn.fontSize = 60;
+			
+			
+			addChild(resourceBtn);
+			
+			resourceRate = 1;
+			/*
+			messageBtn = new Button(Assets.getTexture("BlackButtonTexture"), "");
+			messageBtn.textBounds
+			messageBtn.y = 200;
+			messageBtn.x = 150;
+			messageBtn.width = 100;
+			messageBtn.height = 40;
+			messageBtn.fontSize = 60;
+			messageBtn.fontColor = 0xff0000;
+			addChild(messageBtn);
+			*/
 			testMap();
 			
 			test();
@@ -172,13 +233,13 @@ package {
 		
 		public function onGameOverLose(event:NavEvent):void {
 			pause = true;
-			gameOverMenu = new GameOverMenu(2);
+			gameOverMenu = new GameOverMenu(2, score);
 			addChild(gameOverMenu);
 		}
 		
 		public function onGameOverWin(event:NavEvent):void {
 			pause = true;
-			gameOverMenu = new GameOverMenu(1);
+			gameOverMenu = new GameOverMenu(1, score);
 			addChild(gameOverMenu);
 		}
 		
@@ -215,6 +276,18 @@ package {
 			flock = new Flock(unitVector);
 			flocks.push(flock);
 			
+			//TEAM 3 neutral resource points
+			unitVector = new Vector.<Unit>();
+			unit = new ResourcePoint(new Point(50, 250), 3);
+			unitVector.push(unit);
+			addChild(unit);
+			unit = new ResourcePoint(new Point(150, 250), 3);
+			unitVector.push(unit);
+			addChild(unit);
+			unit = new ResourcePoint(new Point(250, 250), 3);
+			unitVector.push(unit);
+			addChild(unit);
+			
 			base1 = new Base(new Point(Constants.SCREEN_WIDTH / 2, Constants.SCREEN_HEIGHT - 20));
 			bases.push(base1);
 			addChild(base1);
@@ -224,12 +297,12 @@ package {
 			base2 = new Base(new Point(Constants.SCREEN_WIDTH / 2, 20), 2, Math.PI);
 			bases.push(base2)
 			addChild(base2);
-			
+			/*
 			var turret:TurretPoint = new TurretPoint(new Point(320 / 4, 80), 2);
 			//turret = new TurretPoint(new Point(320 / 4, 80), 2);
 			capturePoints.push(turret);
 			addChild(turret);
-			addToDictionary(base2);
+			addToDictionary(base2);*/
 		}
 		
 		public function addToDictionary(u:Unit):void {
@@ -538,11 +611,35 @@ package {
 			removeFromDictionary(unit);
 			var flock:Flock = unit.flock;
 			if (unit.flock != null) {
+				if (unit.firstPlayerDmg > unit.secondPlayerDmg) {
+					score += unit.damage;
+					scoreBtn.text = "Score: " + score;
+					if (Unit.RESOURCE == unit.unitType && unit.secondPlayerDmg < unit.firstPlayerDmg) {
+						resourceRate += 100;
+					}
+				}
 				// remove unit from its flock
 				flock.removeUnit(unit);
 				if (flock.units.length == 0) {
 					flocks.splice(flocks.indexOf(flock), 1);
 				}
+			}
+			if (Unit.RESOURCE == unit.unitType) {
+				var unitVector:Vector.<Unit> = new Vector.<Unit>();
+				var x:int = unit.x;
+				var y:int = unit.y;
+				var owner:int = 1;
+				if (unit.firstPlayerDmg < unit.secondPlayerDmg) {
+					owner = 2;
+				}
+				if (unit.owner == 1) {
+					resourceRate -= 100;
+				}
+				var captured:Unit = new ResourcePoint(new Point(x, y), owner);
+				unitVector.push(captured);
+				addChild(captured);
+				flock = new Flock(unitVector);
+				flocks.push(flock);
 			}
 			if (contains(unit)) {
 				removeChild(unit);
@@ -563,13 +660,13 @@ package {
 			}
 			
 			// if unit is a base
-			if (unit.owner == 1) {
+			/*
+			if (unit instanceof Base ) {
 				dispatchEvent(new NavEvent(NavEvent.GAME_OVER_LOSE));
 			} else {
 				dispatchEvent(new NavEvent(NavEvent.GAME_OVER_WIN));
 			}
-			
-			
+			*/
 		}
 
 		public function addBullet(bullet:Bullet):void {
@@ -582,6 +679,14 @@ package {
 			removeChild(bullet);
 		}
 		
+		private function incrementResources():void {
+			resources += resourceRate;
+			resourceBtn.text = "Gold: " + resources; 
+		}
+		
+		private function refreshMessage():void {
+			messageBtn.text = "";
+		}
 				
 		// given an owner, return a string encoded with all of their units' ids + positions
 		public function getUnitMovementString(owner:int):String {

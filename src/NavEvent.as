@@ -33,6 +33,10 @@ package {
 		public static const LOGIN_SCREEN_BACK:String = "loginScreenBack";
 		public static const LOGIN_SCREEN_SUBMIT:String = "loginScreenSubmit";
 		
+		// events for the waiting screen
+		public static const WAITING_SCREEN_BACK:String = "waitingScreenBack";
+		public static const WAITING_SCREEN_CONNECT:String = "waitingScreenConnect";
+		
 		//events for the signup screen
 		public static const SIGNUP_SCREEN_BACK:String = "signupScreenBack";
 		public static const SIGNUP_SCREEN_SUBMIT:String = "signupScreenSubmit";
@@ -40,7 +44,7 @@ package {
 		// event for Game
 		public static const GAME_OVER_WIN:String = "gameOverWin";
 		public static const GAME_OVER_LOSE:String = "gameOverLose";
-		public static const GAME_QUIT:String = "gameQuit";
+		public static const GAME_QUIT:String = "gameQuit"; ''
 		
 		// constructor
 		public function NavEvent(string:String, bubbles:Boolean = false, data:Object = null) {

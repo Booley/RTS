@@ -10,7 +10,7 @@ package unitstuff
 	public class CapturePoint extends Unit
 	{
 		public static const UNIT_TYPE:int = Unit.TURRET;
-		public static const TEXTURE_NAME:String = "NeutralCaptureTexture";
+		public static const TEXTURE_NAME:String = "CapturePointTexture";
 		public static const MAX_SPEED:Number = 0.0;
 		public static const MAX_ACCEL:Number = 0.0;
 		public static const MAX_HEALTH:Number = 50; 
@@ -34,7 +34,7 @@ package unitstuff
 		}
 		
 		override public function createArt(rotation:Number = 0):void {
-			image = new Image(Assets.getTexture(textureName));
+			image = new Image(Assets.getTexture(textureName + owner));
 			image.scaleX *= 0.2;
 			image.scaleY *= 0.2; // TEMPORARY
 			image.alignPivot();

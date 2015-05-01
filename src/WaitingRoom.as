@@ -47,11 +47,11 @@ package
 		
 		//enter as the second player, then you know opponent is there
 		protected function handleConnect(theUser:UserObject) :void {
-			trace("I'm connected: " + theUser.name + ", total: " + mConnection.userCount); 
+			trace("I'm waiting: " + theUser.name + ", total: " + mConnection.userCount); 
 			isConnected = true;
 			if (mConnection.userCount == 2) {
 				foundPlayer = true;
-				mConnection.close();
+				//mConnection.close();
 			}
 		}
 		
@@ -59,7 +59,7 @@ package
 		protected function handleUserAdded(theUser:UserObject) :void {
 			trace("FOUND USER");
 			trace("User has joined: " + theUser.name + ", total: " + mConnection.userCount + ", " + theUser.id);
-			mConnection.close();
+			//mConnection.close();
 			foundPlayer = true;
 		}
 		

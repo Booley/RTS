@@ -36,7 +36,18 @@ package
 		public var signals:SignalHandler;
 		public var isConnected:Boolean;
 		
+		private var id1:String;
+		private var id2:String;
+		/*
 		//necessary for reco1
+		public function Multiplayer(id1:String, id2:String) {
+			//Logger.LEVEL = Logger.ALL;
+			initialize(); //T
+			signals = new SignalHandler();
+			this.id1 = id1;
+			this.id2 = id2;
+		}
+		*/
 		public function Multiplayer() {
 			//Logger.LEVEL = Logger.ALL;
 			initialize(); //T
