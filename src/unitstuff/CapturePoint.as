@@ -34,12 +34,14 @@ package unitstuff
 		}
 		
 		override public function createArt(rotation:Number = 0):void {
+			if (image && contains(image)) removeChild(image);
 			image = new Image(Assets.getTexture(textureName + owner));
 			image.scaleX *= 0.2;
 			image.scaleY *= 0.2; // TEMPORARY
 			image.alignPivot();
 			addChild(image);
 			
+			if (highlightImage && contains(highlightImage)) removeChild(highlightImage);
 			highlightImage = new Image(Assets.getTexture(highlightTextureName));
 			highlightImage.scaleX *= 0.3;
 			highlightImage.scaleY *= 0.3; // TEMPORARY
@@ -47,12 +49,14 @@ package unitstuff
 			addChild(highlightImage);
 			highlightImage.visible = false;
 			
+			if (healthBackground && contains(healthBackground)) removeChild(healthBackground);
 			healthBackground = new Quad(30, 6, 0x000000);
 			healthBackground.x = -healthBackground.width / 2;
 			healthBackground.y = -10 - healthBackground.height / 2;
 			healthBackground.alpha = 0.5;
 			addChild(healthBackground);
 			
+			if (healthBar && contains(healthBar)) removeChild(healthBar);
 			healthBar = new Quad(30, 4, 0x00ff00);
 			healthBar.x = -healthBar.width / 2;
 			healthBar.y = -10 - healthBar.height / 2;

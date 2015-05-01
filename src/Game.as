@@ -49,7 +49,7 @@ package {
 		public var selectedUnits:Vector.<Unit>;
 		public var bullets:Vector.<Bullet>;
 		public var capturePoints:Vector.<TurretPoint>;
-		
+		public var resourcePoints:Vector.<ResourcePoint>;
 		
 		private var pause:Boolean = true;
 		
@@ -91,6 +91,7 @@ package {
 			bases = new Vector.<Base>();
 			bullets = new Vector.<Bullet>();
 			capturePoints = new Vector.<TurretPoint>();
+			resourcePoints = new Vector.<ResourcePoint>();
 			dictionary = new Dictionary();
 			
 			
@@ -251,12 +252,15 @@ package {
 			unitVector = new Vector.<Unit>();
 			unit = new ResourcePoint(new Point(50, 250), 3);
 			unitVector.push(unit);
+			addToDictionary(unit);
 			addChild(unit);
 			unit = new ResourcePoint(new Point(150, 250), 3);
 			unitVector.push(unit);
+			addToDictionary(unit);
 			addChild(unit);
 			unit = new ResourcePoint(new Point(250, 250), 3);
 			unitVector.push(unit);
+			addToDictionary(unit);
 			addChild(unit);
 			
 			flock = new Flock(unitVector);
@@ -557,7 +561,7 @@ package {
 					base2.score += unit.cost;
 				}
 				
-					// remove unit from its flock
+				// remove unit from its flock
 				flock.removeUnit(unit);
 				if (flock.units.length == 0) {
 					flocks.splice(flocks.indexOf(flock), 1);
@@ -583,12 +587,14 @@ package {
 				if (unit.owner == 2) {
 					base2.resourceRate -= RESOURCE_CHANGE;
 				}
-				var captured:Unit = new ResourcePoint(new Point(x, y), owner);
-				captured.health = 1;
+				
+				var captured:ResourcePoint = new ResourcePoint(new Point(x, y), owner);
+				captured.health = 1;			
+				addResourcePoint(captured);
 				unitVector.push(captured);
-				addChild(captured);
 				flock = new Flock(unitVector);
 				flocks.push(flock);
+				multiplayer.sendResourceCapture(captured);
 			}
 			if (contains(unit)) {
 				removeChild(unit);
@@ -623,11 +629,20 @@ package {
 			addChild(bullet);
 		}
 		
+		public function addResourcePoint(p:ResourcePoint):void {
+			resourcePoints.push(p);
+			addChild(p);
+		}
+		
 		public function removeBullet(bullet:Bullet):void {
 			bullets.splice(bullets.indexOf(bullet), 1)
 			removeChild(bullet);
 		}
 		
+		public function removeResourcePoint(p:ResourcePoint):void {
+			resourcePoints.splice(resourcePoints.indexOf(p), 1);
+			removeChild(p);
+		}
 				
 		// given an owner, return a string encoded with all of their units' ids + positions
 		public function getUnitMovementString(owner:int):String {

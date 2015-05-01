@@ -57,12 +57,15 @@ package
 			PlayScreen.game.updateUnitsFromMovementString(posString);
 		}
 		
-		public function handleResourceCapture(id:int, owner:int):void {
+		public function handleResourceCapture(x:Number, y:Number, owner:int):void {
 			trace("Syncing positions now");
-			var unit:Unit = PlayScreen.game.dictionary[id];
-			if (unit) {
-				unit.owner = owner;
-			}
+			var unitVector:Vector.<Unit> = new Vector.<Unit>();
+			var captured:ResourcePoint = new ResourcePoint(new Point(x, y), owner);
+			captured.health = 1;			
+			PlayScreen.game.addResourcePoint(captured);
+			unitVector.push(captured);
+			var flock:Flock = new Flock(unitVector);
+			PlayScreen.game.flocks.push(flock);
 		}
 	}
 
