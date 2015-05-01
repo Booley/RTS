@@ -24,7 +24,6 @@ package screens {
 		public static var game:Game;
 		
 		private var backBtn:Button;
-		
 		private var startTap:Point;
 		private var selectRect:Quad;
 		private var lastTime:int;

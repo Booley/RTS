@@ -1,5 +1,6 @@
 package screens {
 	
+	import starling.text.TextField;
 	import starling.textures.Texture;
 	import starling.display.Sprite;
 	import starling.events.Event;
@@ -7,18 +8,32 @@ package screens {
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
 	import starling.events.Touch;
+	import starling.display.Image;
 	
 	public class WaitingScreen extends Sprite {
+		
 		private var waitingRoom:WaitingRoom;
 		private var backBtn:Button;
 		
 		public function WaitingScreen() {
 			super();
 			
-			// initialize and add buttons
+			// add background
+			var background:Image = new Image(Assets.getTexture("MenuBackground"));
+			background.width = Constants.SCREEN_WIDTH;
+			background.height = Constants.SCREEN_HEIGHT;
+			addChild(background);
+			
 			backBtn = new Button(Assets.getTexture("ButtonTexture"), "Back");
-			backBtn.y = 0;
+			backBtn.fontSize = 50;
+			backBtn.width = Constants.SCREEN_WIDTH;
+			backBtn.height = Constants.SCREEN_HEIGHT/5
 			addChild(backBtn);
+			
+			var text:TextField = new TextField(300, 300, "Waiting to connect...", "Verdana", 30, 0xffffff);
+			text.x = Constants.SCREEN_WIDTH / 2;
+			text.y = Constants.SCREEN_HEIGHT / 2;
+			addChild(text);
 			
 			this.addEventListener(Event.ADDED_TO_STAGE, onAddToStage);
 			
@@ -58,4 +73,5 @@ package screens {
 		}
 		
 	}
+	
 }
