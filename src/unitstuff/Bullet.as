@@ -14,7 +14,7 @@ package unitstuff {
 		// bullet types
 		public static const MAIN_BULLET:int = 0;
 		
-		public static const MAX_SPEED:Number = 200; // REPLACE THIS WHEN CREATING SUBCLASSES
+		public static const MAX_SPEED:Number = 300; // REPLACE THIS WHEN CREATING SUBCLASSES
 		
 		public var damage:int; 
 		public var bulletType:int;

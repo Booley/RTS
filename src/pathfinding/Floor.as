@@ -6,7 +6,7 @@ package pathfinding {
 	public class Floor extends BasicTile {
 		
 		public function Floor(x:int, y:int) {
-			super(0, new Point(x, y), true);
+			super(Tile.FLOOR, new Point(x, y), true);
 		}
 		
 	}

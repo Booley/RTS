@@ -13,11 +13,11 @@ package unitstuff {
 		public static const DAMAGE:Number = 10;
 		public static const ROF:Number = 2;
 		public static const ATTACK_RANGE:Number = 100;
-		public static const BUILD_TIME:Number = 2;
+		public static const BUILD_TIME:Number = 0.5;
 		
 		public function Infantry(startPos:Point, owner:int = 1, rotation:Number = 0) {
 			super(startPos, owner, rotation);
-			this.unitType = Unit.SNIPER;
+			this.unitType = UNIT_TYPE;
 			this.textureName = TEXTURE_NAME;
 			this.maxSpeed = MAX_SPEED;
 			this.maxAccel = MAX_ACCEL;

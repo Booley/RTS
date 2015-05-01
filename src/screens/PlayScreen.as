@@ -29,12 +29,18 @@ package screens {
 		private var selectRect:Quad;
 		private var lastTime:int;
 		
+		private var waitingRoom:WaitingRoom;
+		
+		public static var isMultiplayer:Boolean;
+		
 		// handle events and user input and pass data to the game
 		// the "PlayScreen" abstraction will pass data to Game.  Game will 
 		// not know whether the data comes from user input, an AI opponent,
 		// or an opponent on another device.  
-		public function PlayScreen() {
+		public function PlayScreen(ism:Boolean) {
 			super();
+			
+			isMultiplayer = ism;
 			
 			// initialize and add buttons
 			backBtn = new Button(Assets.getTexture("ButtonTexture"), "X");
@@ -45,10 +51,10 @@ package screens {
 			
 			// fake invisible rectangle so touch events don't fall through
 			// will be removed when a background is added
-			var bg:Quad = new Quad(1000, 2000);
+			/*var bg:Quad = new Quad(1000, 2000);
 			bg.color = 0x000000;
 			//bg.alpha = 0;
-			addChildAt(bg, 0);
+			addChildAt(bg, 0);*/
 			
 			selectRect = new Quad(1, 1, 0x00ffff);
 			selectRect.alpha = 0.2;
@@ -61,10 +67,12 @@ package screens {
 		public function newGame():void {
 			game = new Game();
 			game.start();
-			addChild(game);
+			
+			addChildAt(game, 0);
+				
 			game.createSignalHandler();
 		}
-		
+	
 		public function endGame():void {
 			game.end();
 			removeChild(game);
@@ -112,7 +120,6 @@ package screens {
 			}
 			lastTime = getTimer();
 		}
-		
 		
 		// screen touches
 		public function onTouch(e:TouchEvent):void {

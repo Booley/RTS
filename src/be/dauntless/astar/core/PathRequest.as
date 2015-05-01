@@ -73,7 +73,6 @@ package be.dauntless.astar.core
 			
 			//initialize Analyzer list
 			_analyzer = new Analyzer();
-			
 		}
 		
 		/**

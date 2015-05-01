@@ -4,32 +4,19 @@ package pathfinding {
 	import starling.display.Image;
 	import starling.display.Sprite;
 	
-	public class Tile extends Sprite {
+	public class Tile {
 		
-		public static const WALL:int = 0;
+		// step cost of each tile type
+		public static const WALL:int = 1000;
 		public static const FLOOR:int = 1;
+		public static const CAUTION:int = 3;
 		
-		public static const textureName:String = "default";
-		
-		public var image:Image;
 		public var basicTile:BasicTile;
 		
 		public function Tile(x:int, y:int, tileType:int) {
-			var theClass:Class = getClass(tileType);
-			if (theClass) {
-				basicTile = new theClass(x, y);
-			}
+			var theTileClass:Class = getClass(tileType);
+			basicTile = new theTileClass(x, y);
 		}
-		
-		// Idk about this method.. might remove it
-		public function createArt(rotation:Number = 0):void {
-			image = new Image(Assets.getTexture(textureName));
-			//image.blendMode = BlendMode.NORMAL;
-			image.scaleX *= 0.2;
-			image.scaleY *= 0.2;
-			image.alignPivot();
-			addChild(image);
-		}	
 
 		public function getClass(tileType:int):Class {
 			switch(tileType) {
@@ -38,6 +25,9 @@ package pathfinding {
 					break;
 				case FLOOR:
 					return Floor;
+					break;
+				case CAUTION:
+					return Caution;
 					break;
 				default:
 					return null;

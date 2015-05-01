@@ -40,8 +40,6 @@ package
 			leaderboardMenu = new LeaderboardMenu();
 			optsMenu = new OptsMenu();
 			
-			playScreen = new PlayScreen();
-			
 			loginScreen = new LoginScreen();
 			loginButtonScreen = new LoginButtonScreen();
 			signupScreen = new SignupScreen();
@@ -53,7 +51,6 @@ package
 			addMPMenuEventListeners();
 			addLeaderboardMenuEventListeners();
 			addOptsMenuEventListeners();
-			addPlayScreenEventListeners();
 			addLoginScreenEventListeners();
 			addSignupScreenEventListeners();
 		}
@@ -88,10 +85,12 @@ package
 		
 		private function addMPMenuEventListeners():void {
 			mpMenu.addEventListener(NavEvent.MP_MENU_BACK, onMPBackBtnPress);
+			mpMenu.addEventListener(NavEvent.MP_MENU_PLAY, onMPPlayBtnPress);
 		}
 		
 		private function removeMPMenuEventListeners():void {
 			mpMenu.removeEventListener(NavEvent.MP_MENU_BACK, onMPBackBtnPress);
+			mpMenu.addEventListener(NavEvent.MP_MENU_PLAY, onMPPlayBtnPress);
 		}
 		
 		private function addLeaderboardMenuEventListeners():void {
@@ -169,7 +168,6 @@ package
 			removeChild(mainMenu);
 			addChild(loginButtonScreen);
 			Starling.current.nativeOverlay.addChild(loginScreen);
-			
 		}
 		
 		//handle signupScreen button press
@@ -189,6 +187,8 @@ package
 		// handle SPMenu's play button press
 		private function onSPPlayBtnPress(e:Event):void {
 			removeChild(spMenu);
+			playScreen = new PlayScreen(false);
+			addPlayScreenEventListeners();
 			addChild(playScreen);
 		}
 		
@@ -196,6 +196,14 @@ package
 		private function onMPBackBtnPress(e:Event):void {
 			removeChild(mpMenu);
 			addChild(mainMenu);
+		}
+		
+		// handle SPMenu's play button press
+		private function onMPPlayBtnPress(e:Event):void {
+			removeChild(spMenu);
+			playScreen = new PlayScreen(true);
+			addPlayScreenEventListeners();
+			addChild(playScreen);
 		}
 		
 		// handle LeaderboardMenu's back button press

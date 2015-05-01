@@ -1,5 +1,7 @@
 package unitstuff {
 	
+	import be.dauntless.astar.core.Astar;
+	import be.dauntless.astar.core.PathRequest;
 	import starling.display.Sprite;
 	import starling.events.Event;
 	
@@ -11,7 +13,6 @@ package unitstuff {
 		private static var counter:int = 0;
 		
 		public var units:Vector.<Unit>;
-		public var goal:Point;
 		public var id:String;
 		
 		public function Flock(units:Vector.<Unit> = null) {
@@ -41,8 +42,37 @@ package unitstuff {
 		
 		public function tick(dt:Number):void {
 			for each (var unit:Unit in units) {
-				unit.tick(dt, units, goal);
+				unit.tick(dt, units);
 			}
+		}
+		
+		public function setGoals(newGoals:Vector.<Point>):void {
+			for each (var unit:Unit in this.units) {
+				var goals:Vector.<Point> = new Vector.<Point>();
+				for (var i:int = 0; i < newGoals.length; i++) {
+					goals.push(newGoals[i].clone());
+				}
+				unit.goals = goals;
+				// don't require first few goals in the path to smooth transition
+				if (unit.goals.length > 1) {
+					unit.goals.pop();
+				}
+				if (unit.goals.length > 1) {
+					unit.goals.pop();
+				}
+				unit.goal = null;
+			}
+		}	
+		
+		public function getAvgPos():Point {
+			// compute average flock position
+			var avgPos:Point = new Point();
+			for each (var unit:Unit in units) {
+				avgPos = avgPos.add(unit.pos);
+			}
+			// divide by number of neighbors to get average position of flock
+			avgPos.normalize(avgPos.length / units.length);
+			return avgPos;
 		}
 		
 	}
