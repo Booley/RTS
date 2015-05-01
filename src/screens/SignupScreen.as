@@ -63,9 +63,9 @@ package screens {
 			passwordField.background = true;
 			emailField.background = true;
 			
-			userField.backgroundColor = 0xFF9966;
-			passwordField.backgroundColor = 0xFF9966;
-			emailField.backgroundColor = 0xFF9966;
+			userField.backgroundColor = 0x00FFFF;
+			passwordField.backgroundColor = 0x00FFFF;
+			emailField.backgroundColor = 0x00FFFF;
 			
 			userField.y = 0;
 			userText.y = 0;
@@ -89,6 +89,10 @@ package screens {
 			userText.text = "Username";
 			passwordText.text = "Password";
 			emailText.text = "Email";
+			
+			userText.textColor = 0x0000FF;
+			passwordText.textColor = 0x0000FF;
+			emailText.textColor = 0x0000FF;
 			
 			userField.maxChars = 15;
 			passwordField.maxChars = 15;

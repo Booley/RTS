@@ -46,8 +46,13 @@ package screens {
 			userField.background = true;
 			passwordField.background = true;
 			
-			userField.backgroundColor = 0xFF9966;
-			passwordField.backgroundColor = 0xFF9966;
+			userField.backgroundColor = 0x00FFFF;
+			passwordField.backgroundColor = 0x00FFFF;
+			
+			
+			userText.textColor = 0x0000FF;
+			passwordText.textColor = 0x0000FF;
+
 			
 			userText.text = "Username";
 			passwordText.text = "Password";

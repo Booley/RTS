@@ -252,7 +252,7 @@ package unitstuff {
 				if (attackCooldown < 0) {
 					attackCooldown = rateOfFire;
 					shoot();
-					PlayScreen.game.multiplayer.sendUnitShoot(this, this.target);
+					//PlayScreen.game.multiplayer.sendUnitShoot(this, this.target);
 				}
 			}
 		}
