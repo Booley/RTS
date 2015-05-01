@@ -43,7 +43,6 @@ package {
 			loginButtonScreen = new LoginButtonScreen();
 			signupScreen = new SignupScreen();
 			signupButtonScreen = new SignupButtonScreen();
-			waitingScreen = new WaitingScreen();
 				
 			// register event listeners
 			addMainMenuEventListeners();
@@ -52,7 +51,6 @@ package {
 			addLeaderboardMenuEventListeners();
 			addOptsMenuEventListeners();
 			addLoginScreenEventListeners();
-			addWaitingScreenEventListeners();
 			addSignupScreenEventListeners();
 		}
 		
@@ -210,10 +208,8 @@ package {
 		// handle SPMenu's play button press
 		private function onMPPlayBtnPress(e:Event):void {
 			removeChild(mpMenu);
-			
 			waitingScreen = new WaitingScreen();
 			addWaitingScreenEventListeners();
-
 			addChild(waitingScreen);
 		}
 		

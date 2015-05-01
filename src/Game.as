@@ -90,7 +90,7 @@ package {
 		
 		public function Game() {
 			super();
-			waitingRoom = new WaitingRoom();
+			//waitingRoom = new WaitingRoom();
 			
 			flocks = new Vector.<Flock>();
 			bases = new Vector.<Base>();
