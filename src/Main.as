@@ -1,5 +1,5 @@
-package
-{
+package {
+	
 	import screens.*;
 	import starling.events.Event;
 	import starling.text.TextField;
@@ -11,7 +11,6 @@ package
 	public class Main extends Sprite {
 		
 		private var mainMenu:MainMenu;
-		
 		private var spMenu:SPMenu;
 		private var mpMenu:MPMenu;
 		private var leaderboardMenu:LeaderboardMenu;
@@ -20,7 +19,7 @@ package
 		private var loginButtonScreen:LoginButtonScreen;
 		private var signupScreen:SignupScreen;
 		private var signupButtonScreen:SignupButtonScreen;
-		
+		private var waitingScreen:WaitingScreen;
 		private var playScreen:PlayScreen;
 		
 		public function Main() {
@@ -44,6 +43,7 @@ package
 			loginButtonScreen = new LoginButtonScreen();
 			signupScreen = new SignupScreen();
 			signupButtonScreen = new SignupButtonScreen();
+			waitingScreen = new WaitingScreen();
 				
 			// register event listeners
 			addMainMenuEventListeners();
@@ -52,6 +52,7 @@ package
 			addLeaderboardMenuEventListeners();
 			addOptsMenuEventListeners();
 			addLoginScreenEventListeners();
+			addWaitingScreenEventListeners();
 			addSignupScreenEventListeners();
 		}
 		
@@ -90,7 +91,7 @@ package
 		
 		private function removeMPMenuEventListeners():void {
 			mpMenu.removeEventListener(NavEvent.MP_MENU_BACK, onMPBackBtnPress);
-			mpMenu.addEventListener(NavEvent.MP_MENU_PLAY, onMPPlayBtnPress);
+			mpMenu.removeEventListener(NavEvent.MP_MENU_PLAY, onMPPlayBtnPress);
 		}
 		
 		private function addLeaderboardMenuEventListeners():void {
@@ -137,6 +138,14 @@ package
 		private function removeSignupScreenEventListeners():void {
 			signupButtonScreen.removeEventListener(NavEvent.SIGNUP_SCREEN_BACK, onSignupScreenBackBtnPress);
 			signupButtonScreen.removeEventListener(NavEvent.SIGNUP_SCREEN_SUBMIT, onSignupScreenSubmitBtnPress);
+		}
+		
+		private function addWaitingScreenEventListeners():void {
+			waitingScreen.addEventListener(NavEvent.WAITING_SCREEN_BACK, onWaitingScreenBackBtnPress);
+		}
+		
+		private function removeWaitingScreenEventListeners():void {
+			waitingScreen.removeEventListener(NavEvent.WAITING_SCREEN_BACK, onWaitingScreenBackBtnPress);
 		}
 		
 		// handle spMenu button press
@@ -200,7 +209,12 @@ package
 		
 		// handle SPMenu's play button press
 		private function onMPPlayBtnPress(e:Event):void {
-			removeChild(spMenu);
+			removeChild(mpMenu);
+			addChild(waitingScreen);
+		}
+		
+		private function onMPWaitingScreenConnect(e:Event):void {
+			removeChild(waitingScreen);
 			playScreen = new PlayScreen(true);
 			addPlayScreenEventListeners();
 			addChild(playScreen);
@@ -221,6 +235,12 @@ package
 		// handle OptsMenu's back button press
 		private function onPlayScreenBackBtnPress(e:Event):void {
 			removeChild(playScreen);
+			addChild(mainMenu);
+		}
+		
+		// handle Waiting Screen's back button press
+		private function onWaitingScreenBackBtnPress(e:Event):void {
+			removeChild(waitingScreen);
 			addChild(mainMenu);
 		}
 		
