@@ -34,7 +34,7 @@ package
 		//establish connection
 		protected function initialize():void {
 			foundPlayer = false;
-			mConnection = new MultiUserSession(SERV_KEY, "multiuser/test/waitingroom/bo"); 		// create a new instance of MultiUserSession
+			mConnection = new MultiUserSession(SERV_KEY, "multiuser/test/waitingroom"); 		// create a new instance of MultiUserSession
 			
 			mConnection.onConnect 		= handleConnect;						// set the method to be executed when connected
 			mConnection.onUserAdded 	= handleUserAdded;						// set the method to be executed once a user has connected
@@ -52,8 +52,8 @@ package
 		protected function handleConnect(theUser:UserObject) :void {
 			trace("I'm waiting: " + theUser.name + ", total: " + mConnection.userCount); 
 			isConnected = true;
-			mConnection.close()
-			screen.onMatchFound();
+			//mConnection.close()
+			//screen.onMatchFound();
 			/*
 			if (mConnection.userCount == 2) {
 				foundPlayer = true;

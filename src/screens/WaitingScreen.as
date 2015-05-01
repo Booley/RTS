@@ -22,6 +22,7 @@ package screens {
 			
 			this.addEventListener(Event.ADDED_TO_STAGE, onAddToStage);
 			waitingRoom = new WaitingRoom(this);
+			//waitingRoom.mConnection.close();
 		}
 		
 		public function onMatchFound():void {

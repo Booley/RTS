@@ -214,7 +214,7 @@ package {
 			addWaitingScreenEventListeners();
 			addChild(waitingScreen);
 			
-			//waitingScreen.onMatchFound();
+			waitingScreen.onMatchFound();
 		}
 		
 		private function onWaitingScreenConnect(e:Event):void {
