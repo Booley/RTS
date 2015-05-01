@@ -9,7 +9,7 @@ package screens {
 	import starling.events.Touch;
 	
 	public class WaitingScreen extends Sprite {
-		
+		private var waitingRoom:WaitingRoom;
 		private var backBtn:Button;
 		
 		public function WaitingScreen() {
@@ -21,6 +21,8 @@ package screens {
 			addChild(backBtn);
 			
 			this.addEventListener(Event.ADDED_TO_STAGE, onAddToStage);
+			
+			waitingRoom = new WaitingRoom();
 		}
 		
 		public function onAddToStage(event:Event):void {

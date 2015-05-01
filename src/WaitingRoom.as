@@ -47,7 +47,7 @@ package
 		
 		//enter as the second player, then you know opponent is there
 		protected function handleConnect(theUser:UserObject) :void {
-			trace("I'm connected: " + theUser.name + ", total: " + mConnection.userCount); 
+			trace("I'm waiting: " + theUser.name + ", total: " + mConnection.userCount); 
 			isConnected = true;
 			if (mConnection.userCount == 2) {
 				foundPlayer = true;
