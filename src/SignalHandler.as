@@ -56,6 +56,14 @@ package
 			trace("Syncing positions now");
 			PlayScreen.game.updateUnitsFromMovementString(posString);
 		}
+		
+		public function handleResourceCapture(id:int, owner:int):void {
+			trace("Syncing positions now");
+			var unit:Unit = PlayScreen.game.dictionary[id];
+			if (unit) {
+				unit.owner = owner;
+			}
+		}
 	}
 
 }

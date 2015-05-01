@@ -7,6 +7,7 @@ package
 	import mx.core.FlexApplicationBootstrap;
 	import unitstuff.Base;
 	import unitstuff.Flock;
+	import unitstuff.ResourcePoint;
 	import unitstuff.Unit;
 	import screens.PlayScreen;
 	
@@ -25,6 +26,8 @@ package
 		private const OP_BASE_SHOOT:String = "BS";
 		private const OP_BASE_DAMAGE:String = "BDA";
 		private const OP_BASE_DESTROY:String = "BDE";
+		
+		private const OP_RESOURCE_CAPTURE:String = "ORC";
 		
 		private const OP_PLAYER_TAPPED:String = "PT";
 		private const OP_MOVEMENT:String = "MO";
@@ -133,6 +136,12 @@ package
 			}
 		}
 		
+		public function sendResourceCapture(resourcePoint:ResourcePoint):void {
+			if(PlayScreen.isMultiplayer) {
+				mConnection.sendObject( { op: OP_RESOURCE_CAPTURE, id: resourcePoint.id, owner: resourcePoint.owner } );
+			}
+		}
+		
 		protected function handleGetObject(theUserId :String, theData :Object) :void {
 			var aOpCode :String = theData.op;
 			
@@ -171,6 +180,9 @@ package
 					break;
 				case OP_ALL_POSITIONS:
 					signals.handlePositions(theData.posString);
+					break;
+				case OP_RESOURCE_CAPTURE:
+					signals.handleResourceCapture(theData.id, theData.owner);
 					break;
 			}
 		}
