@@ -1,6 +1,7 @@
 package screens {
 	
 	import starling.textures.Texture;
+	import starling.display.Image;
 	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.display.Button;
@@ -12,18 +13,32 @@ package screens {
 		
 		private var backBtn:Button;
 		private var playBtn:Button;
+		private var background:Image;
+
 		
 		public function MPMenu() {
 			super();
 			
-			// initialize and add buttons
-			backBtn = new Button(Assets.getTexture("ButtonTexture"), "Back");
-			backBtn.y = 0;
-			addChild(backBtn);
+			// add background
+			background = new Image(Assets.getTexture("MenuBackground"));
+			background.width = Constants.SCREEN_WIDTH;
+			background.height = Constants.SCREEN_HEIGHT;
+			addChild(background);
 			
+			// initialize and add buttons
 			playBtn = new Button(Assets.getTexture("ButtonTexture"), "Play");
-			playBtn.y = 100;
+			playBtn.fontSize = 50;
+			playBtn.y = 0;
+			playBtn.width = Constants.SCREEN_WIDTH;
+			playBtn.height = Constants.SCREEN_HEIGHT/5
 			addChild(playBtn);
+			
+			backBtn = new Button(Assets.getTexture("ButtonTexture"), "Back");
+			backBtn.fontSize = 50;
+			backBtn.y = Constants.SCREEN_HEIGHT/5;
+			backBtn.width = Constants.SCREEN_WIDTH;
+			backBtn.height = Constants.SCREEN_HEIGHT/5
+			addChild(backBtn);
 			
 			this.addEventListener(Event.ADDED_TO_STAGE, onAddToStage);
 		}

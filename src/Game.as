@@ -247,7 +247,7 @@ package {
 			// TESTING UNIT MOVEMENT AND STUFF {{{{{{{{{{{{{{{{
 			// TEAM 1
 			var unitVector:Vector.<Unit> = new Vector.<Unit>();
-			for (var i:int = 0; i < 10; i++) {
+			for (var i:int = 0; i < 2; i++) {
 				var x:Number = Math.random() * 100 + 30;
 				var y:Number = Math.random() * 100 + 300;
 				var unit:Unit = new Infantry(new Point(x, y));
@@ -261,7 +261,7 @@ package {
 			
 			// TEAM 2
 			unitVector = new Vector.<Unit>();
-			for (i = 0; i < 20; i++) {
+			for (i = 0; i < 2; i++) {
 				x = Math.random() * 70 + 30;
 				y = Math.random() * 70 + 30;
 				unit = new Infantry(new Point(x, y), 2);
@@ -292,7 +292,6 @@ package {
 			bases.push(base1);
 			addChild(base1);
 			addToDictionary(base1);
-			queueMenu = new QueueMenu(base1);
 			
 			base2 = new Base(new Point(Constants.SCREEN_WIDTH / 2, 20), 2, Math.PI);
 			bases.push(base2)
@@ -360,65 +359,8 @@ package {
 			
 		}
 		
-		public function handleTap(startX:int, startY:int, endX:int, endY:int):void {
-			var startTap:Point = new Point(startX, startY);
-			var endTap:Point = new Point(endX, endY);
-			
-			if (contains(queueMenu)) {
-				removeChild(queueMenu);
-			}
-			// if units were selected from a previous tap or drag
-			if (selectedUnits && selectedUnits.length > 0) {
-				var newFlock:Flock = new Flock();
-				for each (var unit:Unit in selectedUnits) {		
-					// remove unit from old flock
-					var oldFlock:Flock = unit.flock;
-					if (oldFlock) {
-						oldFlock.removeUnit(unit);
-						if (oldFlock.units.length == 0) {
-							flocks.splice(flocks.indexOf(oldFlock), 1);
-						}
-					}
-					newFlock.addUnit(unit);
-					unit.unHighlight();
-				}
-				if (newFlock.units.length > 0) {
-					getGoals(newFlock, startTap)
-					flocks.push(newFlock); 
-				} else {
-					trace("Empty flock error");
-				}
-				
-				selectedUnits = null;
-				return;
-			}
-			// if no units are currently selected,
-			// check if the base was clicked
-			if (base1.pos.subtract(startTap).length < DISTANCE_TO_TAP_BASE) {
-				addChild(queueMenu);
-				return;
-			} 
-			//select the nearest flock
-			var bestDist:int = DISTANCE_TO_TAP_UNIT;
-			var closestFlock:Flock;
-			for each (var flock:Flock in flocks) {
-				for each (unit in flock.units) {
-					var thisDist:int = unit.pos.subtract(startTap).length;
-					if (thisDist < bestDist) {
-						bestDist = thisDist;
-						closestFlock = unit.flock;
-					}
-				}
-			}
-			if (closestFlock) {
-				selectUnits(closestFlock.units);
-			}
-		}
-		
 		// tap to select A FLOCK. Return true if a flock was selected.
 		public function tap(startTap:Point, endTap:Point):void {
-			//multiplayer.sendPlayerTapped(startTap, endTap);
-			
 			if (contains(queueMenu)) {
 				removeChild(queueMenu);
 			}
@@ -450,7 +392,14 @@ package {
 			}
 			// if no units are currently selected,
 			// check if the base was clicked
-			if (base1.pos.subtract(startTap).length < DISTANCE_TO_TAP_BASE) {
+			var yourBase:Base;
+			if (this.currentPlayer == 1) {
+				yourBase = base1;
+			} else {
+				yourBase = base2;
+			}
+			if (yourBase.pos.subtract(startTap).length < DISTANCE_TO_TAP_BASE) {
+				queueMenu = new QueueMenu(yourBase);
 				addChild(queueMenu);
 				return;
 			} 
@@ -459,6 +408,7 @@ package {
 			var closestFlock:Flock;
 			for each (var flock:Flock in flocks) {
 				for each (unit in flock.units) {
+					if (this.currentPlayer != unit.owner) break;
 					var thisDist:int = unit.pos.subtract(startTap).length;
 					if (thisDist < bestDist) {
 						bestDist = thisDist;
@@ -488,7 +438,7 @@ package {
 			for each (var flock:Flock in flocks) {
 				for each (var unit:Unit in flock.units) {
 					if (containsPoint(startTap, endTap, unit.pos)) {
-						if (unit.owner == 1) {
+						if (unit.owner == this.currentPlayer) {
 							unitVector.push(unit);
 						}
 					}

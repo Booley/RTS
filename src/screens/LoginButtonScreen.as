@@ -1,6 +1,7 @@
 package screens 
 {
 	import starling.display.Sprite;
+	import starling.display.Image;
 	import starling.display.Button;
 	import starling.events.TouchEvent;
 	import starling.events.Event;
@@ -11,16 +12,29 @@ package screens
 	public class LoginButtonScreen extends Sprite {
 		private var backBtn:Button;
 		private var submitBtn:Button;
+		private var background:Image;
 		
 		public function LoginButtonScreen() {
-			backBtn = new Button(Assets.getTexture("ButtonTexture"), "Back");
-			submitBtn = new Button(Assets.getTexture("ButtonTexture"), "Submit");
+			// add background
+			background = new Image(Assets.getTexture("MenuBackground"));
+			background.width = Constants.SCREEN_WIDTH;
+			background.height = Constants.SCREEN_HEIGHT;
+			addChild(background);
 			
-			backBtn.y = 300;
-			submitBtn.y = 400;
-			
-			addChild(backBtn);
+			// initialize and add buttons
+			submitBtn = new Button(Assets.getTexture("ButtonTexture"), "Register");
+			submitBtn.fontSize = 50;
+			submitBtn.y = 3 * Constants.SCREEN_HEIGHT/5;
+			submitBtn.width = Constants.SCREEN_WIDTH;
+			submitBtn.height = Constants.SCREEN_HEIGHT/5
 			addChild(submitBtn);
+			
+			backBtn = new Button(Assets.getTexture("ButtonTexture"), "Back");
+			backBtn.fontSize = 50;
+			backBtn.y = 4 * Constants.SCREEN_HEIGHT/5;
+			backBtn.width = Constants.SCREEN_WIDTH;
+			backBtn.height = Constants.SCREEN_HEIGHT/5
+			addChild(backBtn);
 			
 			this.addEventListener(Event.ADDED_TO_STAGE, onAddToStage);	
 		}
