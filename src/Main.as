@@ -210,12 +210,12 @@ package {
 		// handle SPMenu's play button press
 		private function onMPPlayBtnPress(e:Event):void {
 			removeChild(mpMenu);
-			addWaitingScreenEventListeners();
 			waitingScreen = new WaitingScreen();
+			addWaitingScreenEventListeners();
 			addChild(waitingScreen);
 		}
 		
-		private function onMPWaitingScreenConnect(e:Event):void {
+		private function onWaitingScreenConnect(e:Event):void {
 			removeChild(waitingScreen);
 			playScreen = new PlayScreen(true);
 			addPlayScreenEventListeners();

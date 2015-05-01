@@ -51,7 +51,7 @@ package
 			isConnected = true;
 			if (mConnection.userCount == 2) {
 				foundPlayer = true;
-				mConnection.close();
+				//mConnection.close();
 			}
 		}
 		
@@ -59,7 +59,7 @@ package
 		protected function handleUserAdded(theUser:UserObject) :void {
 			trace("FOUND USER");
 			trace("User has joined: " + theUser.name + ", total: " + mConnection.userCount + ", " + theUser.id);
-			mConnection.close();
+			//mConnection.close();
 			foundPlayer = true;
 		}
 		
