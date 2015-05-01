@@ -56,6 +56,8 @@ package unitstuff {
 		public var attackRange:int = DEFAULT_ATTACK_RANGE;
 		public var attackCooldown:Number = 0;
 		public var buildTime:Number = DEFAULT_ATTACK_RANGE;
+		public var firstPlayerDmg:Number;
+		public var secondPlayerDmg:Number;
 		
 		public var pos:Point;
 		public var vel:Point;
@@ -96,6 +98,8 @@ package unitstuff {
 
 		// a constructor for a unit
 		public function Unit(startPos:Point, owner:int = 1, rotation:Number = 0) {
+			this.firstPlayerDmg = 0;
+			this.secondPlayerDmg = 0;
 			this.id = counter++;			
 			this.pos = startPos.clone();
 			this.x = pos.x;

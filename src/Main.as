@@ -43,7 +43,6 @@ package {
 			loginButtonScreen = new LoginButtonScreen();
 			signupScreen = new SignupScreen();
 			signupButtonScreen = new SignupButtonScreen();
-			waitingScreen = new WaitingScreen();
 				
 			// register event listeners
 			addMainMenuEventListeners();
@@ -52,7 +51,6 @@ package {
 			addLeaderboardMenuEventListeners();
 			addOptsMenuEventListeners();
 			addLoginScreenEventListeners();
-			addWaitingScreenEventListeners();
 			addSignupScreenEventListeners();
 		}
 		
@@ -142,10 +140,12 @@ package {
 		
 		private function addWaitingScreenEventListeners():void {
 			waitingScreen.addEventListener(NavEvent.WAITING_SCREEN_BACK, onWaitingScreenBackBtnPress);
+			waitingScreen.addEventListener(NavEvent.WAITING_SCREEN_CONNECT, onWaitingScreenConnect);
 		}
 		
 		private function removeWaitingScreenEventListeners():void {
 			waitingScreen.removeEventListener(NavEvent.WAITING_SCREEN_BACK, onWaitingScreenBackBtnPress);
+			waitingScreen.removeEventListener(NavEvent.WAITING_SCREEN_CONNECT, onWaitingScreenConnect);
 		}
 		
 		// handle spMenu button press
@@ -210,6 +210,8 @@ package {
 		// handle SPMenu's play button press
 		private function onMPPlayBtnPress(e:Event):void {
 			removeChild(mpMenu);
+			addWaitingScreenEventListeners();
+			waitingScreen = new WaitingScreen();
 			addChild(waitingScreen);
 		}
 		
