@@ -14,7 +14,7 @@ package unitstuff {
 		
 		// default constants
 		public static const DEFAULT_TOTAL_RESOURCES:Number = 100; // starting resources
-		private static const DEFAULT_RESOURCE_RATE:Number = .05; // resource per second
+		private static const DEFAULT_RESOURCE_RATE:Number = .03; // resource per second
 		
 		public static const UNIT_TYPE:int = Unit.INFANTRY;
 		public static const TEXTURE_NAME:String = "BaseTexture";
@@ -96,10 +96,10 @@ package unitstuff {
 			return unit;
 		}
 		
-		override public function tick(dt:Number, neighbors:Vector.<Unit> = null):void {
-			super.tick(dt, neighbors);
+		public function tick2(dt:Number, resourcePoints:Vector.<ResourcePoint> = null):void {
+			this.tick(dt, null);
 			
-			updateResources();
+			updateResources(resourcePoints);
 			if (unitQueue.length > 0) {
 				unitBuildCooldown -= dt;
 			}
@@ -115,8 +115,13 @@ package unitstuff {
 			}
 		}
 		
-		private function updateResources():void {
+		private function updateResources(resourcePoints:Vector.<ResourcePoint>):void {
 			totalResources += resourceRate;
+			for each (var resourcePoint:ResourcePoint in resourcePoints) {
+				if (resourcePoint.owner == this.owner) {
+					totalResources += ResourcePoint.RESOURCE_RATE;
+				}
+			}
 		}
 	
 	}

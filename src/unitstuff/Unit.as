@@ -3,6 +3,7 @@ package unitstuff {
 	 * Models all "units" in game: infantry, sniper, raider.
 	 */
 	import flash.geom.Point;
+	import pathfinding.Tile;
 	import starling.display.Image;
 	import starling.display.Quad;
 	import starling.events.Event;
@@ -18,7 +19,7 @@ package unitstuff {
 		public static const INFANTRY:int = 1;
 		public static const RAIDER:int = 2;
 		public static const SNIPER:int = 3;
-		public static const RESOURCE:int = 4;
+		public static const RESOURCE_POINT:int = 4;
 		public static const TURRET:int = 5;
 		public static const OBSTACLE:int = 6;
 		
@@ -122,26 +123,6 @@ package unitstuff {
 			//createShootingAnimation();
 		}
 		
-		public function highlight():void {
-			highlightImage.visible = true;
-		}
-		
-		public function unHighlight():void {
-			highlightImage.visible = false;
-		}
-		
-		public function takeDamage(dmg:Number):void {
-			this.health -= dmg;
-		}
-		
-		public function shoot():void {
-			//create a bullet object
-			var bullet:Bullet = new Bullet(this.pos, target, this.damage, 0, owner); //need to change bullet type
-			
-			//add to list of bullets
-			PlayScreen.game.addBullet(bullet); //how to access PlayScreen?
-		}
-		
 		// Idk about this method.. might remove it
 		public function createArt(rotation:Number = 0):void {
 			image = new Image(Assets.getTexture(textureName + owner));
@@ -173,13 +154,38 @@ package unitstuff {
 			addChild(healthBar);
 		}	
 		
+		public function highlight():void {
+			highlightImage.visible = true;
+		}
+		
+		public function unHighlight():void {
+			highlightImage.visible = false;
+		}
+		
+		public function takeDamage(dmg:Number, owner:int):void {
+			this.health -= dmg;
+			if (this.unitType == Unit.RESOURCE_POINT && this.health < 0) {
+				this.health = 0;
+				this.owner = owner;
+				ResourcePoint(this).updateImage();
+				PlayScreen.game.multiplayer.sendResourceCapture(ResourcePoint(this));
+			}
+		}
+		
+		public function shoot():void {
+			//create a bullet object
+			var bullet:Bullet = new Bullet(this.pos, target, this.damage, 0, owner); //need to change bullet type
+			
+			//add to list of bullets
+			PlayScreen.game.addBullet(bullet); //how to access PlayScreen?
+		}
+		
 		public function tick(dt:Number, neighbors:Vector.<Unit> = null):void {
 			updateHealth(dt);
 			findTarget(); // if necessary
 			attackTarget(dt);
-			
 			// only move mobile units
-			if (!(this.unitType == Unit.BASE || this.unitType == Unit.RESOURCE || this.unitType == Unit.TURRET)) { 
+			if (!(this.unitType == Unit.BASE || this.unitType == Unit.RESOURCE_POINT || this.unitType == Unit.TURRET)) { 
 				updateGoal(dt);
 				updateMovement(dt, neighbors);
 			}
@@ -212,14 +218,17 @@ package unitstuff {
 		// attempt to find a target if one doesn't exist
 		// make sure target is within attack range
 		private function findTarget():void {
-			if (target) {
-				// make sure target is within attack range
-				if (target.pos.subtract(pos).length > attackRange) {
-					target = null;
-				}
+			// make sure target is within attack range
+			if (target && target.pos.subtract(pos).length > attackRange) {
+				target = null;
 			}
+			// make sure target has not changed alliances
+			if (target && target.owner == this.owner) {
+				target = null;
+			}
+			// make sure target is not removed from screen
 			if (target && target.parent == null) {
-				 target = null;
+				target = null;
 			}
 			// target can become null in previous if statement
 			if (target == null) {
@@ -233,10 +242,12 @@ package unitstuff {
 			var bestDist:int = attackRange;
 			var closestTarget:Unit;
 			for each (var unit:Unit in unitVector) {
-				var thisDist:int = unit.pos.subtract(this.pos).length;
-				if (thisDist < bestDist) {
-					bestDist = thisDist;
-					closestTarget = unit;
+				if (canReachTarget(unit)) {
+					var thisDist:int = unit.pos.subtract(this.pos).length;
+					if (thisDist < bestDist) {
+						bestDist = thisDist;
+						closestTarget = unit;
+					}
 				}
 			}
 			if (closestTarget) {
@@ -244,17 +255,39 @@ package unitstuff {
 			}
 		}
 		
-		
 		// update attack cooldown and shoot
 		private function attackTarget(dt:Number):void {
 			attackCooldown -= dt;
 			if (target != null) {
 				if (attackCooldown < 0) {
-					attackCooldown = rateOfFire;
-					shoot();
-					//PlayScreen.game.multiplayer.sendUnitShoot(this, this.target);
+					if (canReachTarget(target)) {
+						attackCooldown = rateOfFire;
+						shoot();
+						//PlayScreen.game.multiplayer.sendUnitShoot(this, this.target);
+					} else {
+						target = null;
+					}
 				}
 			}
+		}
+		
+		// raycast to target to see if it is reachable
+		private function canReachTarget(target:Unit):Boolean {
+			var p:Point = this.pos;
+			var NUM_TESTS:int = 40;
+			var update:Point = target.pos.subtract(this.pos);
+			update.normalize(update.length / NUM_TESTS);
+			for (var i:int = 0; i < NUM_TESTS; i++) {
+				p = p.add(update);
+				var indexPoint:Point = PlayScreen.game.posToIndex(p);
+				var mapData:Vector.<Vector.<Tile>> = PlayScreen.game.mapData;
+				if (indexPoint.x >= 0 && indexPoint.x < mapData[0].length && indexPoint.y >= 0 && indexPoint.y < mapData.length) {
+					if (mapData[indexPoint.y][indexPoint.x].basicTile.getCost() == Tile.WALL) {
+						return false;
+					}
+				}
+			}
+			return true;
 		}
 		
 		private function updateGoal(dt:Number):void {

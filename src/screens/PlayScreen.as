@@ -29,7 +29,6 @@ package screens {
 		private var lastTime:int;
 		
 		private var waitingRoom:WaitingRoom;
-		
 		public static var isMultiplayer:Boolean;
 		
 		// handle events and user input and pass data to the game
@@ -65,7 +64,9 @@ package screens {
 		
 		public function newGame():void {
 			game = new Game();
-			game.start();
+			if (!isMultiplayer) {
+				game.start();
+			}
 			
 			addChildAt(game, 0);
 				

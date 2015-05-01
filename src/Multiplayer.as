@@ -91,6 +91,10 @@ package
 				PlayScreen.game.currentPlayer = 1;
 			else
 				PlayScreen.game.currentPlayer = 2;
+				
+			if (mConnection.userCount == 2) {
+				PlayScreen.game.start();
+			}
 		}
 		
 		//stop the PlayScreen.game if a user disconnects?
@@ -138,7 +142,7 @@ package
 		
 		public function sendResourceCapture(resourcePoint:ResourcePoint):void {
 			if(PlayScreen.isMultiplayer) {
-				mConnection.sendObject( { op: OP_RESOURCE_CAPTURE, x: resourcePoint.x, y:resourcePoint.y, owner: resourcePoint.owner } );
+				mConnection.sendObject( { op: OP_RESOURCE_CAPTURE, id:resourcePoint.id, owner: resourcePoint.owner } );
 			}
 		}
 		
@@ -182,7 +186,7 @@ package
 					signals.handlePositions(theData.posString);
 					break;
 				case OP_RESOURCE_CAPTURE:
-					signals.handleResourceCapture(theData.x, theData.y, theData.owner);
+					signals.handleResourceCapture(theData.id, theData.owner);
 					break;
 			}
 		}

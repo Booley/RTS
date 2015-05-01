@@ -23,7 +23,7 @@ package screens {
 		private var button1:Button;
 		private var button2:Button;
 		private var button3:Button;
-		private var messageBtn:Button;
+		private var messageText:TextField;
 		
 		private var butttonheight:int = 75;
 		private var butttonwidth:int = 75;
@@ -63,13 +63,10 @@ package screens {
 			addChild(button3);
 			
 			//will update UI
-			messageBtn = new Button(Assets.getTexture("ButtonTexture"), "");
-			messageBtn.y = 400;
-			messageBtn.x = 150;
-			messageBtn.width = 150;
-			messageBtn.height = 100;
-			messageBtn.fontSize = 60;
-			addChild(messageBtn);
+			messageText = new TextField(300, 200, "", "Verdana", 15, 0xffffff);
+			messageText.y = 350;
+			messageText.x = 120;
+			addChild(messageText);
 
 			
 			// initializa the text the list of the price of each unit
@@ -126,10 +123,10 @@ package screens {
 			if (touch) {
 				if (touch.phase == TouchPhase.BEGAN) {
 					if (portal.totalResources < Infantry.COST) {
-						messageBtn.text = "Not Enough Resources";
+						messageText.text = "Not Enough\nResources";
 					}
 					else {
-						messageBtn.text = "";
+						messageText.text = "";
 						portal.totalResources -= Infantry.COST;
 						portal.queueUnit(Unit.INFANTRY);
 					}
@@ -144,10 +141,10 @@ package screens {
 			if (touch) {
 				if (touch.phase == TouchPhase.BEGAN) {
 					if (portal.totalResources < Sniper.COST) {
-						messageBtn.text = "Not Enough Resources";
+						messageText.text = "Not Enough\nResources";
 					}
 					else {
-						messageBtn.text = "";
+						messageText.text = "";
 						portal.totalResources -= Sniper.COST;
 						portal.queueUnit(Unit.SNIPER);
 					}
@@ -162,10 +159,10 @@ package screens {
 			if (touch) {
 				if (touch.phase == TouchPhase.BEGAN) {
 					if (portal.totalResources < Raider.COST) {
-						messageBtn.text = "Not Enough Resources";
+						messageText.text = "Not Enough\nResources";
 					}
 					else {
-						messageBtn.text = "";
+						messageText.text = "";
 						portal.totalResources -= Raider.COST;
 						portal.queueUnit(Unit.RAIDER);
 					}

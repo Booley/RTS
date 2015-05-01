@@ -16,7 +16,7 @@ package
 		
 		public function handleUnitDestroyed(id:int):void {
 			var unit:Unit = PlayScreen.game.dictionary[id];
-			if (!unit) {
+			if (unit) {
 				PlayScreen.game.removeUnit(unit);
 			}
 		}
@@ -57,15 +57,13 @@ package
 			PlayScreen.game.updateUnitsFromMovementString(posString);
 		}
 		
-		public function handleResourceCapture(x:Number, y:Number, owner:int):void {
-			trace("Syncing positions now");
-			var unitVector:Vector.<Unit> = new Vector.<Unit>();
-			var captured:ResourcePoint = new ResourcePoint(new Point(x, y), owner);
-			captured.health = 1;			
-			PlayScreen.game.addResourcePoint(captured);
-			unitVector.push(captured);
-			var flock:Flock = new Flock(unitVector);
-			PlayScreen.game.flocks.push(flock);
+		public function handleResourceCapture(id:int, owner:int):void {
+			var captured:ResourcePoint = ResourcePoint(PlayScreen.game.dictionary[id]);
+			if (captured) {
+				captured.health = 0;
+				captured.owner = owner;
+				captured.updateImage();
+			}
 		}
 	}
 
