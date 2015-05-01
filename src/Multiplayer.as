@@ -104,7 +104,8 @@ package
 		
 		//maybe send mTarget's position as well?
 		public function sendUnitShoot(mUnit:Unit, mTarget:Unit):void {
-			mConnection.sendObject( { op: OP_UNIT_SHOOT, unitId: mUnit.id, targetId: mTarget.id, posX: mUnit.pos.x, posY: mUnit.pos.y } );
+			mConnection.sendObject( { op: OP_UNIT_SHOOT, unitId: mUnit.id, targetId: mTarget.id, 
+			posX: mUnit.pos.x, posY: mUnit.pos.y, targetX: mTarget.pos.x, targetY: mTarget.pos.y } );
 		}
 		
 		public function sendUnitDamage(mUnit:Unit, dmg:int):void {
@@ -149,6 +150,7 @@ package
 				case OP_UNIT_SHOOT:
 					trace("UNIT SHOOTS");
 					syncUnitPosition(theData.unitId, theData.posX, theData.posY);
+					syncUnitPosition(theData.targetId, theData.targetX, theData.targetY);
 					theData.unit.target = theData.target;
 					theData.unit.shoot();
 					break;
