@@ -138,7 +138,7 @@ package
 		
 		public function sendResourceCapture(resourcePoint:ResourcePoint):void {
 			if(PlayScreen.isMultiplayer) {
-				mConnection.sendObject( { op: OP_RESOURCE_CAPTURE, id: resourcePoint.id, owner: resourcePoint.owner } );
+				mConnection.sendObject( { op: OP_RESOURCE_CAPTURE, x: resourcePoint.x, y:resourcePoint.y, owner: resourcePoint.owner } );
 			}
 		}
 		
@@ -182,7 +182,7 @@ package
 					signals.handlePositions(theData.posString);
 					break;
 				case OP_RESOURCE_CAPTURE:
-					signals.handleResourceCapture(theData.id, theData.owner);
+					signals.handleResourceCapture(theData.x, theData.y, theData.owner);
 					break;
 			}
 		}
