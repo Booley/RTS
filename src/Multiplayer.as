@@ -56,7 +56,7 @@ package
 		
 		//establish connection
 		protected function initialize():void {
-			mConnection = new MultiUserSession(SERV_KEY, "multiuser/test/bo_current"); 		// create a new instance of MultiUserSession
+			mConnection = new MultiUserSession(SERV_KEY, "multiuser/test/bo2"); 		// create a new instance of MultiUserSession
 			
 			mConnection.onConnect 		= handleConnect;						// set the method to be executed when connected
 			mConnection.onUserAdded 	= handleUserAdded;						// set the method to be executed once a user has connected
@@ -90,7 +90,7 @@ package
 		}
 		
 		public function sendUnitShoot(mUnit:Unit, mTarget:Unit):void {
-			if(PlayScreen.isMultiplayer && !mUnit && !mTarget) {
+			if(PlayScreen.isMultiplayer) {
 				mConnection.sendObject( { op: OP_UNIT_SHOOT, unitId: mUnit.id, targetId: mTarget.id, 
 				posX: mUnit.pos.x, posY: mUnit.pos.y, targetX: mTarget.pos.x, targetY: mTarget.pos.y } );
 			}
@@ -104,19 +104,19 @@ package
 		
 		//warning: what about moving unit before it spawns?
 		public function sendUnitSpawn(mUnit:Unit):void {
-			if(PlayScreen.isMultiplayer && !mUnit) {
+			if(PlayScreen.isMultiplayer) {
 				mConnection.sendObject( { op: OP_UNIT_SPAWN, type: mUnit.unitType, owner: mUnit.owner } );
 			}
 		}
 		
 		public function sendUnitPosition(mUnit:Unit):void {
-			if(PlayScreen.isMultiplayer && !mUnit) {
+			if(PlayScreen.isMultiplayer) {
 				mConnection.sendObject( { op: OP_UNIT_POSITION, unit: mUnit } );
 			}
 		}
 
 		public function sendMovement(units:String, goal:Point):void {
-			if(PlayScreen.isMultiplayer && !goal) {
+			if (PlayScreen.isMultiplayer) {
 				mConnection.sendObject( { op: OP_MOVEMENT, ids: units, x: goal.x, y: goal.y } );
 			}
 		}
