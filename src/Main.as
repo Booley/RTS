@@ -140,12 +140,10 @@ package {
 		
 		private function addWaitingScreenEventListeners():void {
 			waitingScreen.addEventListener(NavEvent.WAITING_SCREEN_BACK, onWaitingScreenBackBtnPress);
-			waitingScreen.addEventListener(NavEvent.WAITING_SCREEN_CONNECT, onWaitingScreenConnect);
 		}
 		
 		private function removeWaitingScreenEventListeners():void {
 			waitingScreen.removeEventListener(NavEvent.WAITING_SCREEN_BACK, onWaitingScreenBackBtnPress);
-			waitingScreen.removeEventListener(NavEvent.WAITING_SCREEN_CONNECT, onWaitingScreenConnect);
 		}
 		
 		// handle spMenu button press
