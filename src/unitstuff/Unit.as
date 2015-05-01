@@ -26,6 +26,7 @@ package unitstuff {
 		public static const DAMPENING:Number = 0.9; // dampening time constant to help smooth movement.  applied to vel each tick
 		public static const ROTATION_DAMPENING:Number = 0.1; // time constant for rotation adjustment based on velocity direction
 		public static const GOAL_DISTANCE_CUTOFF:Number = 35; // distance from goal before unit chooses the next goal in the pathfinding path
+		public static const COST:Number = 100;
 		
 		// constants to override
 		public static var DEFAULT_MAX_SPEED:Number = 20; // REPLACE THIS WHEN CREATING SUBCLASSES
@@ -66,6 +67,7 @@ package unitstuff {
 		public var owner:int; // ID of player which owns the unit
 		public var goal:Point;
 		public var goals:Vector.<Point>;
+		public var cost:Number;
 		
 		// image variables
 		public var image:Image;

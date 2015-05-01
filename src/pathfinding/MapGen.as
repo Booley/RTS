@@ -1,9 +1,11 @@
 package pathfinding {
 	
 	import be.dauntless.astar.basic2d.BasicTile;
+	import flash.geom.Point;
 	import pathfinding.Wall;
 	import pathfinding.Floor;
 	import starling.display.Image;
+	import unitstuff.ResourcePoint;
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -19,12 +21,14 @@ package pathfinding {
 		public static const Map1Obstacles:Class;
 		
 		
+		
 		// read in the correct map as a png and convert it to a vector of tiles
-		public static function getMapObstacles(mapObstacles:Class):Vector.<Vector.<Tile>> {
+		public static function getMapObstacles(mapObstacles:Class, game:Game):Vector.<Vector.<Tile>> {
 			var image:Bitmap = new mapObstacles() as Bitmap;
 			const MAP_WIDTH:int = image.width;
 			const MAP_HEIGHT:int = image.height;
 			
+			var resources:Vector.<ResourcePoint> = new Vector.<ResourcePoint>();
 			var map:Vector.<Vector.<Tile>> = new Vector.<Vector.<Tile>>();
 			for (var j:int = 0; j < MAP_HEIGHT; j++) {
 				var v:Vector.<Tile> = new Vector.<Tile>();

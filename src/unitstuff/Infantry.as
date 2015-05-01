@@ -14,9 +14,11 @@ package unitstuff {
 		public static const ROF:Number = 2;
 		public static const ATTACK_RANGE:Number = 100;
 		public static const BUILD_TIME:Number = 0.5;
+		public static const COST:Number = 60;
 		
 		public function Infantry(startPos:Point, owner:int = 1, rotation:Number = 0) {
 			super(startPos, owner, rotation);
+			this.cost = COST;
 			this.unitType = UNIT_TYPE;
 			this.textureName = TEXTURE_NAME;
 			this.maxSpeed = MAX_SPEED;

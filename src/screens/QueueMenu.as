@@ -22,6 +22,7 @@ package screens {
 		private var button1:Button;
 		private var button2:Button;
 		private var button3:Button;
+		private var messageBtn:Button;
 		
 		private var portal:Base;
 		private var queuePreview:Sprite;
@@ -51,6 +52,16 @@ package screens {
 			button3.width = 100;
 			button3.height = 100;
 			addChild(button3);
+			
+			//will update UI
+			messageBtn = new Button(Assets.getTexture("ButtonTexture"), "");
+			messageBtn.y = 400;
+			messageBtn.x = 150;
+			messageBtn.width = 150;
+			messageBtn.height = 100;
+			messageBtn.fontSize = 60;
+			addChild(messageBtn);
+			
 			
 			queuePreview = new Sprite();
 			queuePreview.y = 440;
@@ -89,7 +100,13 @@ package screens {
 			e.stopImmediatePropagation();
 			var touch:Touch = e.getTouch(button1);
 			if (touch) {
-				if(touch.phase == TouchPhase.BEGAN) {
+				if (touch.phase == TouchPhase.BEGAN) {
+					if (portal.totalResources < Infantry.COST) {
+						messageBtn.text = "Not Enough Resources";
+					}
+					else {
+						messageBtn.text = "";
+					}
 					portal.queueUnit(Unit.INFANTRY);
 				}
 			}
@@ -99,7 +116,14 @@ package screens {
 			e.stopImmediatePropagation();
 			var touch:Touch = e.getTouch(button2);
 			if (touch) {
-				if(touch.phase == TouchPhase.BEGAN) {
+				if (touch.phase == TouchPhase.BEGAN) {
+					if (portal.totalResources < Sniper.COST) {
+						messageBtn.text = "Not Enough Resources";
+					}
+					else {
+						messageBtn.text = "";
+						portal.totalResources -= Sniper.COST;
+					}
 					portal.queueUnit(Unit.SNIPER);
 				}
 			}
@@ -109,7 +133,14 @@ package screens {
 			e.stopImmediatePropagation();
 			var touch:Touch = e.getTouch(button3);
 			if (touch) {
-				if(touch.phase == TouchPhase.BEGAN) {
+				if (touch.phase == TouchPhase.BEGAN) {
+					if (portal.totalResources < Raider.COST) {
+						messageBtn.text = "Not Enough Resources";
+					}
+					else {
+						messageBtn.text = "";
+						portal.totalResources -= Raider.COST;
+					}
 					portal.queueUnit(Unit.RAIDER);
 				}
 			}
