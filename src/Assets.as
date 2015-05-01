@@ -42,7 +42,7 @@ package
 
 		[Embed(source = "../assets/images/units/bullet.png")]
 		private static const BulletTexture:Class;
-/*	
+
 		[Embed(source = "/../assets/images/units/neutral_point1.png")]
 		private static const ResourcePointTexture1:Class;
 		
@@ -51,7 +51,7 @@ package
 		
 		[Embed(source = "/../assets/images/units/neutral_point3.png")]
 		private static const ResourcePointTexture3:Class;
-		*/
+		
 		// MAPSSSSSSSSSS
 		[Embed(source="../assets/images/maps/map1/background.png")]
 		public static const Map1Background:Class;
