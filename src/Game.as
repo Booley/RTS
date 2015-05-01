@@ -297,7 +297,7 @@ package {
 			tickCounter++;
 			if (multiplayer.isConnected && tickCounter >= 60) {
 				tickCounter = 0;
-				multiplayer.sendAllPositions(getUnitMovementString(currentPlayer));
+				//multiplayer.sendAllPositions(getUnitMovementString(currentPlayer));
 			}
 			
 			for each (var turret:TurretPoint in capturePoints) {
