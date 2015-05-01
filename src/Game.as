@@ -292,7 +292,6 @@ package {
 			bases.push(base1);
 			addChild(base1);
 			addToDictionary(base1);
-			queueMenu = new QueueMenu(base1);
 			
 			base2 = new Base(new Point(Constants.SCREEN_WIDTH / 2, 20), 2, Math.PI);
 			bases.push(base2)
@@ -400,6 +399,7 @@ package {
 				yourBase = base2;
 			}
 			if (yourBase.pos.subtract(startTap).length < DISTANCE_TO_TAP_BASE) {
+				queueMenu = new QueueMenu(yourBase);
 				addChild(queueMenu);
 				return;
 			} 

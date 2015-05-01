@@ -11,7 +11,6 @@ package screens {
 	import starling.events.Touch;
 	import starling.text.TextField;
 	
-	
 	import unitstuff.Base;
 	import unitstuff.Infantry;
 	import unitstuff.Raider;
@@ -32,8 +31,6 @@ package screens {
 		private var infpriceText:TextField;
 		private var snipriceText:TextField;
 		private var raipriceText:TextField;
-
-		
 		
 		private var portal:Base;
 		private var queuePreview:Sprite;
@@ -46,19 +43,19 @@ package screens {
 			this.portal = base;
 			
 			// initialize and add buttons
-			button1 = new Button(Assets.getTexture(Infantry.TEXTURE_NAME + "1"));
+			button1 = new Button(Assets.getTexture(Infantry.TEXTURE_NAME + base.owner));
 			button1.y = Constants.SCREEN_HEIGHT - butttonheight + priceheight;
 			button1.width = butttonwidth;
 			button1.height = butttonheight;
 			addChild(button1);
 			
-			button2 = new Button(Assets.getTexture(Sniper.TEXTURE_NAME + "1"));
+			button2 = new Button(Assets.getTexture(Sniper.TEXTURE_NAME + base.owner));
 			button2.y = Constants.SCREEN_HEIGHT - 2 * butttonheight + priceheight;
 			button2.width = butttonwidth;
 			button2.height = butttonheight;
 			addChild(button2);
 			
-			button3 = new Button(Assets.getTexture(Raider.TEXTURE_NAME + "1"));
+			button3 = new Button(Assets.getTexture(Raider.TEXTURE_NAME + base.owner));
 			button3.y = Constants.SCREEN_HEIGHT - 3 * butttonheight + priceheight;
 			button3.width = butttonwidth;
 			button3.height = butttonheight;
