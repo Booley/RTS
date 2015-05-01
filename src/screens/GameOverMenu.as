@@ -1,5 +1,6 @@
 package screens {
 	
+	import starling.filters.BlurFilter;
 	import starling.text.TextField;
 	import starling.textures.Texture;
 	import starling.display.Sprite;
@@ -21,13 +22,20 @@ package screens {
 			
 			// initialize and add buttons
 			backButton = new Button(Assets.getTexture("ButtonTexture"), "Back");
+			backButton.fontSize = 50;
 			backButton.y = 0;
+			backButton.width = Constants.SCREEN_WIDTH;
+			backButton.height = Constants.SCREEN_HEIGHT/5;
 			addChild(backButton);
 			
 			if (winner == 1) {
 				text = new TextField(100, 100, "You win.");
+				text.color = 0x00ffff;
+				text.filter = new BlurFilter(0.1, 0.1, 1);
 			} else {
 				text = new TextField(100, 100, "You suck.");
+				text.color = 0x00ffff;
+				text.filter = new BlurFilter(0.1, 0.1, 1);
 			}
 			text.y = 100;
 			addChild(text);

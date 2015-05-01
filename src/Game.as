@@ -550,9 +550,9 @@ package {
 			}
 			
 			// if unit is a base
-			if (unit === base1) {
+			if (unit.owner == 1) {
 				dispatchEvent(new NavEvent(NavEvent.GAME_OVER_LOSE));
-			} else if (unit === base2) {
+			} else {
 				dispatchEvent(new NavEvent(NavEvent.GAME_OVER_WIN));
 			}
 		}
@@ -583,6 +583,7 @@ package {
 				}
 			}
 			s = s.substr(0, s.length - 1); // don't include final ";" to parse correctly
+			return s;
 		}
 		
 		// given the string with id + position data, update the units' positions
