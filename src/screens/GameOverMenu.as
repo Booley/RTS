@@ -17,7 +17,7 @@ package screens {
 		private var backButton:Button;
 		private var text:TextField;
 		
-		public function GameOverMenu(winner:int) {
+		public function GameOverMenu(winner:int, score:int) {
 			super();
 			
 			// initialize and add buttons
@@ -29,11 +29,11 @@ package screens {
 			addChild(backButton);
 			
 			if (winner == 1) {
-				text = new TextField(100, 100, "You win.");
+				text = new TextField(100, 100, "You win. " + score);
 				text.color = 0x00ffff;
 				text.filter = new BlurFilter(0.1, 0.1, 1);
 			} else {
-				text = new TextField(100, 100, "You suck.");
+				text = new TextField(100, 100, "You suck. " + score);
 				text.color = 0x00ffff;
 				text.filter = new BlurFilter(0.1, 0.1, 1);
 			}

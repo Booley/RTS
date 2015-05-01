@@ -78,6 +78,12 @@ package unitstuff {
 				PlayScreen.game.removeBullet(this);
 				//if (target.flock != null) {
 					target.takeDamage(damage);
+					if (owner == 1) {
+						target.firstPlayerDmg += damage;
+					}
+					if (owner == 2) {
+						target.secondPlayerDmg += damage;
+					}
 				//}
 				return;
 			}
