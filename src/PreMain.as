@@ -24,7 +24,7 @@ package {
 			Multitouch.inputMode = MultitouchInputMode.GESTURE;
 			
 			starl = new Starling(Main, stage);
-			starl.antiAliasing = 1;
+			starl.antiAliasing = 0;
 			starl.start();
 			
 			Starling.current.showStats = true;

@@ -70,7 +70,7 @@ package screens {
 			
 			addChildAt(game, 0);
 				
-			game.createSignalHandler();
+			//game.createSignalHandler();
 		}
 	
 		public function endGame():void {

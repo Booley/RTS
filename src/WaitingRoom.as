@@ -40,7 +40,7 @@ package
 			
 			var mMyName:String  = "User_" + Math.round(Math.random()*100);
 			mConnection.connect(""+mMyName);
-			
+
 			//need some kind of loading/waiting screen?
 			
 			}

@@ -97,8 +97,8 @@ package {
 		}
 		
 		public function createSignalHandler():void {
-			multiplayer.game = this;
-			multiplayer.signals.game = this;
+			//multiplayer.game = this;
+			//multiplayer.signals.game = this;
 		}
 		
 		public function testMap():void {
@@ -261,7 +261,6 @@ package {
 			
 			for each (var turret:TurretPoint in capturePoints) {
 				turret.tick(dt);
-				
 			}
 			
 			for each (var base:Base in bases) {
@@ -564,9 +563,9 @@ package {
 			}
 			
 			// if unit is a base
-			if (unit === base1) {
+			if (unit.owner == 1) {
 				dispatchEvent(new NavEvent(NavEvent.GAME_OVER_LOSE));
-			} else if (unit === base2) {
+			} else {
 				dispatchEvent(new NavEvent(NavEvent.GAME_OVER_WIN));
 			}
 			

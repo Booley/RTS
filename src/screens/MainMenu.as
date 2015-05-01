@@ -25,36 +25,52 @@ package screens {
 			
 			// add background
 			background = new Image(Assets.getTexture("MenuBackground"));
+			background.width = Constants.SCREEN_WIDTH;
+			background.height = Constants.SCREEN_HEIGHT;
 			addChild(background);
 			
 			// initialize and add buttons
 			mainMenuSPBtn = new Button(Assets.getTexture("ButtonTexture"), "Single-Player");
+			mainMenuSPBtn.fontSize = 50;
 			mainMenuSPBtn.y = 0;
+			mainMenuSPBtn.width = Constants.SCREEN_WIDTH;
+			mainMenuSPBtn.height = Constants.SCREEN_HEIGHT/5;
 			addChild(mainMenuSPBtn);
 			
 			mainMenuMPBtn = new Button(Assets.getTexture("ButtonTexture"), "Multi-Player");
-			mainMenuMPBtn.y = 100;
+			mainMenuMPBtn.fontSize = 50;
+			mainMenuMPBtn.y = Constants.SCREEN_HEIGHT/5;
+			mainMenuMPBtn.width = Constants.SCREEN_WIDTH;
+			mainMenuMPBtn.height = Constants.SCREEN_HEIGHT/5;
 			addChild(mainMenuMPBtn);
 			
 			mainMenuLeaderboardBtn = new Button(Assets.getTexture("ButtonTexture"), "Leaderboard");
-			mainMenuLeaderboardBtn.y = 200;
-			addChild(mainMenuLeaderboardBtn);
+			mainMenuLeaderboardBtn.fontSize = 50;
+			mainMenuLeaderboardBtn.y = 2*Constants.SCREEN_HEIGHT/5;
+			mainMenuLeaderboardBtn.width = Constants.SCREEN_WIDTH;
+			mainMenuLeaderboardBtn.height = Constants.SCREEN_HEIGHT/5;
+			//addChild(mainMenuLeaderboardBtn);
 			
 			mainMenuOptsBtn = new Button(Assets.getTexture("ButtonTexture"), "Options");
-			mainMenuOptsBtn.y = 300;
-			mainMenuOptsBtn.height = 50;
+			mainMenuOptsBtn.fontSize = 50;
+			mainMenuOptsBtn.y = 2*Constants.SCREEN_HEIGHT/5;
+			mainMenuOptsBtn.width = Constants.SCREEN_WIDTH;
+			mainMenuOptsBtn.height = Constants.SCREEN_HEIGHT/5;
 			addChild(mainMenuOptsBtn);
 			
 			mainMenuLoginBtn = new Button(Assets.getTexture("ButtonTexture"), "Login");
-			mainMenuLoginBtn.y = 350;
-			mainMenuLoginBtn.height = 50;
+			mainMenuLoginBtn.fontSize = 50;
+			mainMenuLoginBtn.y = 3*Constants.SCREEN_HEIGHT/5;
+			mainMenuLoginBtn.width = Constants.SCREEN_WIDTH;
+			mainMenuLoginBtn.height = Constants.SCREEN_HEIGHT/5;
 			addChild(mainMenuLoginBtn);
 			
 			mainMenuSignupBtn = new Button(Assets.getTexture("ButtonTexture"), "Signup");
-			mainMenuSignupBtn.y = 400;
-			mainMenuSignupBtn.y = 400;
+			mainMenuSignupBtn.fontSize = 50;
+			mainMenuSignupBtn.y = 4*Constants.SCREEN_HEIGHT/5;
+			mainMenuSignupBtn.width = Constants.SCREEN_WIDTH;
+			mainMenuSignupBtn.height = Constants.SCREEN_HEIGHT/5;
 			addChild(mainMenuSignupBtn);
-			
 			
 			this.addEventListener(Event.ADDED_TO_STAGE, onAddToStage);
 		}
