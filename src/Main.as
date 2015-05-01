@@ -213,6 +213,8 @@ package {
 			waitingScreen = new WaitingScreen();
 			addWaitingScreenEventListeners();
 			addChild(waitingScreen);
+			
+			//waitingScreen.onMatchFound();
 		}
 		
 		private function onWaitingScreenConnect(e:Event):void {

@@ -17,7 +17,7 @@ package
 		private const DEVKEY		:String   = "e4ece8a816e8d16dabef9b1a-cb286187d4bb"; // TODO: add your Cirrus key here. You can get a key from here : http://labs.adobe.com/technologies/cirrus/
 		private const SERV_KEY		:String = SERVER + DEVKEY;
 		
-		private var mConnection		:MultiUserSession;
+		public var mConnection		:MultiUserSession;
 		private var mMyID:int;
 		public var foundPlayer:Boolean;
 		
@@ -27,9 +27,8 @@ package
 		//necessary for reco1
 		public function WaitingRoom(ws:WaitingScreen) {
 			//Logger.LEVEL = Logger.ALL;
-			//initialize(); //T
+			initialize(); //T
 			this.screen = ws;
-			screen.onMatchFound();
 		}
 		
 		//establish connection
@@ -53,25 +52,33 @@ package
 		protected function handleConnect(theUser:UserObject) :void {
 			trace("I'm waiting: " + theUser.name + ", total: " + mConnection.userCount); 
 			isConnected = true;
+			mConnection.close()
+			screen.onMatchFound();
+			/*
 			if (mConnection.userCount == 2) {
 				foundPlayer = true;
-				//mConnection.close();
+				if(isConnected)
+					mConnection.close();
 				screen.onMatchFound();
 			}
+			*/
 		}
 		
 		//called when 2nd player joins
 		protected function handleUserAdded(theUser:UserObject) :void {
 			trace("FOUND USER");
-			trace("User has joined: " + theUser.name + ", total: " + mConnection.userCount + ", " + theUser.id);
-			//mConnection.close();
+			//trace("User has joined: " + theUser.name + ", total: " + mConnection.userCount + ", " + theUser.id);
+			/*
+			if(isConnected)
+				mConnection.close();
 			foundPlayer = true;
 			screen.onMatchFound();
+			*/
 		}
 		
 		//stop the game if a user disconnects?
 		protected function handleUserRemoved(theUser:UserObject) :void {
-			trace("User disconnected: " + theUser.name + ", total users: " + mConnection.userCount); 
+			//trace("User disconnected: " + theUser.name + ", total users: " + mConnection.userCount); 
 		}
 
 		protected function handleGetObject(theUserId :String, theData :Object) :void {

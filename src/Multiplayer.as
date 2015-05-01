@@ -74,7 +74,7 @@ package
 		protected function handleConnect(theUser:UserObject) :void {
 			trace("I'm connected: " + theUser.name + ", total: " + mConnection.userCount); 
 			isConnected = true;
-			PlayScreen.game.currentPlayer = 2;//mConnection.userCount;
+			PlayScreen.game.currentPlayer = mConnection.userCount;
 			trace(PlayScreen.game.currentPlayer);
 		}
 		

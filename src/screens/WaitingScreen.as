@@ -21,7 +21,6 @@ package screens {
 			addChild(backBtn);
 			
 			this.addEventListener(Event.ADDED_TO_STAGE, onAddToStage);
-			
 			waitingRoom = new WaitingRoom(this);
 		}
 		
