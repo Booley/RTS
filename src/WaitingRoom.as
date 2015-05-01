@@ -9,6 +9,7 @@ package
 	import unitstuff.Flock;
 	import unitstuff.Unit;
 	import screens.PlayScreen;
+	import screens.WaitingScreen;
 	
 	public class WaitingRoom
 	{
@@ -21,17 +22,20 @@ package
 		public var foundPlayer:Boolean;
 		
 		public var isConnected:Boolean;
+		public var screen:WaitingScreen;
 		
 		//necessary for reco1
-		public function WaitingRoom() {
-			Logger.LEVEL = Logger.ALL;
-			initialize(); //T
+		public function WaitingRoom(ws:WaitingScreen) {
+			//Logger.LEVEL = Logger.ALL;
+			//initialize(); //T
+			this.screen = ws;
+			screen.onMatchFound();
 		}
 		
 		//establish connection
 		protected function initialize():void {
 			foundPlayer = false;
-			mConnection = new MultiUserSession(SERV_KEY, "multiuser/test/waitingroom"); 		// create a new instance of MultiUserSession
+			mConnection = new MultiUserSession(SERV_KEY, "multiuser/test/waitingroom/bo"); 		// create a new instance of MultiUserSession
 			
 			mConnection.onConnect 		= handleConnect;						// set the method to be executed when connected
 			mConnection.onUserAdded 	= handleUserAdded;						// set the method to be executed once a user has connected
@@ -52,6 +56,7 @@ package
 			if (mConnection.userCount == 2) {
 				foundPlayer = true;
 				//mConnection.close();
+				screen.onMatchFound();
 			}
 		}
 		
@@ -61,6 +66,7 @@ package
 			trace("User has joined: " + theUser.name + ", total: " + mConnection.userCount + ", " + theUser.id);
 			//mConnection.close();
 			foundPlayer = true;
+			screen.onMatchFound();
 		}
 		
 		//stop the game if a user disconnects?
