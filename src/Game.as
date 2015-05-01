@@ -186,7 +186,7 @@ package {
 			// TESTING UNIT MOVEMENT AND STUFF {{{{{{{{{{{{{{{{
 			// TEAM 1
 			var unitVector:Vector.<Unit> = new Vector.<Unit>();
-			for (var i:int = 0; i < 10; i++) {
+			for (var i:int = 0; i < 2; i++) {
 				var x:Number = Math.random() * 100 + 30;
 				var y:Number = Math.random() * 100 + 300;
 				var unit:Unit = new Infantry(new Point(x, y));
@@ -200,7 +200,7 @@ package {
 			
 			// TEAM 2
 			unitVector = new Vector.<Unit>();
-			for (i = 0; i < 20; i++) {
+			for (i = 0; i < 2; i++) {
 				x = Math.random() * 70 + 30;
 				y = Math.random() * 70 + 30;
 				unit = new Infantry(new Point(x, y), 2);
