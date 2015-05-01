@@ -130,8 +130,10 @@ package screens {
 					}
 					else {
 						messageBtn.text = "";
+						portal.totalResources -= Infantry.COST;
+						portal.queueUnit(Unit.INFANTRY);
 					}
-					portal.queueUnit(Unit.INFANTRY);
+				
 				}
 			}
 		}
@@ -147,8 +149,9 @@ package screens {
 					else {
 						messageBtn.text = "";
 						portal.totalResources -= Sniper.COST;
+						portal.queueUnit(Unit.SNIPER);
 					}
-					portal.queueUnit(Unit.SNIPER);
+					
 				}
 			}
 		}
@@ -164,8 +167,9 @@ package screens {
 					else {
 						messageBtn.text = "";
 						portal.totalResources -= Raider.COST;
+						portal.queueUnit(Unit.RAIDER);
 					}
-					portal.queueUnit(Unit.RAIDER);
+					
 				}
 			}
 		}

@@ -42,7 +42,7 @@ package {
 		
 		private static const DISTANCE_TO_TAP_UNIT:Number = 30; // max distance from a unit you can tap for it to select its flock
 		private static const DISTANCE_TO_TAP_BASE:Number = 40; // max distance from a base you can tap for it to be selected
-		private static const RESOURCE_CHANGE:Number = 1; //change in resource rate when you gain/lose a resource point
+		private static const RESOURCE_CHANGE:Number = 0.05; //change in resource rate when you gain/lose a resource point
 		
 		public var flocks:Vector.<Flock>;
 		public var bases:Vector.<Base>;
@@ -254,10 +254,10 @@ package {
 			unitVector.push(unit);
 			addToDictionary(unit);
 			addChild(unit);
-			unit = new ResourcePoint(new Point(150, 250), 3);
+			/*unit = new ResourcePoint(new Point(150, 250), 3);
 			unitVector.push(unit);
 			addToDictionary(unit);
-			addChild(unit);
+			addChild(unit);*/
 			unit = new ResourcePoint(new Point(250, 250), 3);
 			unitVector.push(unit);
 			addToDictionary(unit);
@@ -307,7 +307,7 @@ package {
 			tickCounter++;
 			if (multiplayer.isConnected && tickCounter >= 60) {
 				tickCounter = 0;
-				multiplayer.sendAllPositions(getUnitMovementString(currentPlayer));
+				//multiplayer.sendAllPositions(getUnitMovementString(currentPlayer));
 			}
 			
 			for each (var turret:TurretPoint in capturePoints) {
@@ -364,7 +364,6 @@ package {
 				if (newFlock.units.length > 0) {
 					getGoals(newFlock, startTap);
 					flocks.push(newFlock); 
-					
 					multiplayer.sendMovement(idsToString(newFlock.units), startTap);
 				} else {
 					trace("Empty flock error");
@@ -391,6 +390,7 @@ package {
 			var closestFlock:Flock;
 			for each (var flock:Flock in flocks) {
 				for each (unit in flock.units) {
+					if (unit.unitType == Unit.RESOURCE) break;
 					if (this.currentPlayer != unit.owner) break;
 					var thisDist:int = unit.pos.subtract(startTap).length;
 					if (thisDist < bestDist) {
@@ -421,6 +421,7 @@ package {
 			for each (var flock:Flock in flocks) {
 				for each (var unit:Unit in flock.units) {
 					if (containsPoint(startTap, endTap, unit.pos)) {
+						if (unit.unitType == Unit.RESOURCE) break;
 						if (unit.owner == this.currentPlayer) {
 							unitVector.push(unit);
 						}

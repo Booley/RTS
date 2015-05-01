@@ -8,10 +8,10 @@ package unitstuff {
 		public static const TEXTURE_NAME:String = "ResourcePointTexture";
 		public static const MAX_SPEED:Number = 0; 
 		public static const MAX_ACCEL:Number = 0;
-		public static const MAX_HEALTH:Number = 20; 
+		public static const MAX_HEALTH:Number = 200; 
 		public static const HEALTH_REGEN:Number = 2;
-		public static const DAMAGE:Number = 1;
-		public static const ROF:Number = .1;
+		public static const DAMAGE:Number = 5;
+		public static const ROF:Number = .3;
 		public static const ATTACK_RANGE:Number = 100;
 		public static const BUILD_TIME:Number = 0;
 		public static const COST:Number = 1000;

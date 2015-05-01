@@ -14,13 +14,13 @@ package unitstuff {
 		
 		// default constants
 		public static const DEFAULT_TOTAL_RESOURCES:Number = 100; // starting resources
-		private static const DEFAULT_RESOURCE_RATE:Number = .01; // resource per second
+		private static const DEFAULT_RESOURCE_RATE:Number = .05; // resource per second
 		
 		public static const UNIT_TYPE:int = Unit.INFANTRY;
 		public static const TEXTURE_NAME:String = "BaseTexture";
 		public static const MAX_SPEED:Number = 0;
 		public static const MAX_ACCEL:Number = 0;
-		public static const MAX_HEALTH:Number = 5000; 
+		public static const MAX_HEALTH:Number = 2000; 
 		public static const HEALTH_REGEN:Number = 2;
 		public static const DAMAGE:Number = 50;
 		public static const ROF:Number = 1;
