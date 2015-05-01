@@ -93,7 +93,7 @@ package {
 			
 			// END TESTING UNIT MOVEMENT }}}}}}}}}}}}}}}}}}
 			
-			//multiplayer = new Multiplayer();
+			multiplayer = new Multiplayer();
 		}
 		
 		public function createSignalHandler():void {
@@ -261,7 +261,6 @@ package {
 			
 			for each (var turret:TurretPoint in capturePoints) {
 				turret.tick(dt);
-				
 			}
 			
 			for each (var base:Base in bases) {
