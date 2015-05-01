@@ -658,11 +658,13 @@ package {
 			}
 			
 			// if unit is a base
-			if (unit.owner == 1) {
+			/*
+			if (unit instanceof Base ) {
 				dispatchEvent(new NavEvent(NavEvent.GAME_OVER_LOSE));
 			} else {
 				dispatchEvent(new NavEvent(NavEvent.GAME_OVER_WIN));
 			}
+			*/
 		}
 
 		public function addBullet(bullet:Bullet):void {
