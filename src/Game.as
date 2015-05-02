@@ -4,14 +4,8 @@ package {
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
+	
 	import starling.text.TextField;
-	
-	import unitstuff.Base;
-	import unitstuff.Bullet;
-	import unitstuff.Flock;
-	import unitstuff.Infantry;
-	import unitstuff.Unit;
-	
 	import starling.core.Starling;
 	import starling.display.Image;
 	import starling.display.Button;
@@ -21,7 +15,6 @@ package {
 	import starling.events.TouchPhase;
 	import starling.events.Touch;
 	import starling.textures.Texture;
-	import starling.display.Quad;
 	import starling.filters.BlurFilter;
 	import starling.filters.ColorMatrixFilter;
 	
@@ -37,6 +30,7 @@ package {
 	import unitstuff.*;
 	import screens.*;
 	import pathfinding.*;
+	import ai.AI;
 	
 	public class Game extends Sprite {
 		
@@ -57,9 +51,9 @@ package {
 		public var base1:Base;
 		public var base2:Base;
 		
-		public var map : Map;
+		public var map:Map;
 		public var mapData:Vector.<Vector.<Tile>>;
-		public var astar : Astar;
+		public var astar:Astar;
 		public var mapWidth:int;
 		public var mapHeight:int;
 		private var pathfindingFlock:Flock;
@@ -156,6 +150,7 @@ package {
 			base2 = new Base(new Point(Constants.SCREEN_WIDTH / 2, 20), 2, Math.PI);
 			bases.push(base2)
 			addChild(base2);
+			addToDictionary(base2);
 			
 			//create the Astar instance and add the listeners
 			astar = new Astar();
@@ -234,6 +229,30 @@ package {
 			pause = true;
 		}
 		
+		public function doAI():void {
+			var o:int = 1;
+			var b:Base = base1;
+			var e:Base = base2;
+			if (o == currentPlayer) {
+				o = 2;
+				b = base2;
+				e = base1;
+			}
+			// queue next unit
+			var AIBase:Base = getUserBase(o);
+			if (AIBase.unitBuildCooldown < 0) {
+				var nextUnitType:int = AI.getUnitBuildCommand(o, flocks, mapData);
+				if (AIBase.totalResources >= Unit.getClass(nextUnitType).COST) {
+					AIBase.totalResources -= Unit.getClass(nextUnitType).COST;
+					AIBase.queueUnit(nextUnitType);
+				}
+			}
+			
+			// do unit movement
+			AI.getUnitMovementCommand(o, flocks, mapData, resourcePoints, b, e);
+			
+		}
+		
 		public function tick(dt:Number):void {
 			if (pause) return;
 			
@@ -244,6 +263,10 @@ package {
 				tickCounter = 0;
 				multiplayer.sendAllPositions(getUnitMovementString(currentPlayer));
 			}
+			
+			// try to spawn units if AI
+			//if (!PlayScreen.isMultiplayer) 
+			//doAI();
 			
 			for each (var flock:Flock in flocks) {
 				flock.tick(dt);
@@ -391,13 +414,13 @@ package {
 			selectedUnits = unitVector.slice(0, unitVector.length);
 		}
 		
-		public function getEnemyUnits(owner:int):Vector.<Unit> {
-			// determine which units were inside the box selection
-			var unitVector:Vector.<Unit> = new Vector.<Unit>();
+		public function getEnemyUnitIDs(owner:int):Vector.<int> {
+			var unitVector:Vector.<int> = new Vector.<int>();
+			
 			for each (var flock:Flock in flocks) {
 				for each (var unit:Unit in flock.units) {
 					if (unit.owner != owner) {
-						unitVector.push(unit);
+						unitVector.push(unit.id);
 					} else {
 						break;
 					}
@@ -405,20 +428,19 @@ package {
 			}
 			for each (var base:Base in bases) {
 				if (base.owner != owner) {
-					unitVector.push(base);
+					unitVector.push(base.id);
 				}
 			}
 			
 			for each (var turret:TurretPoint in turretPoints) {
 				if (turret.owner != owner) {
-					unitVector.push(turret);
+					unitVector.push(turret.id);
 				}
-				
 			}
 			
 			for each (var rp:ResourcePoint in resourcePoints) {
 				if (rp.owner != owner) {
-					unitVector.push(rp);
+					unitVector.push(rp.id);
 				}
 			}
 			
@@ -476,11 +498,6 @@ package {
 				if (flock.units.length == 0) {
 					flocks.splice(flocks.indexOf(flock), 1);
 				}
-			}
-			if (Unit.RESOURCE_POINT == unit.unitType) {
-				var unitVector:Vector.<Unit> = new Vector.<Unit>();
-				var x:int = unit.x;
-				var y:int = unit.y;
 			}
 			if (contains(unit)) {
 				removeChild(unit);

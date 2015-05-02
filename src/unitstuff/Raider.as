@@ -14,7 +14,7 @@ package unitstuff {
 		public static const ROF:Number = 1;
 		public static const ATTACK_RANGE:Number = 80;
 		public static const BUILD_TIME:Number = 1;
-		public static const COST:Number = 15;
+		public static const COST:Number = 20;
 		
 		public function Raider(startPos:Point, owner:int = 1, rotation:Number = 0) {
 			super(startPos, owner, rotation);

@@ -64,7 +64,7 @@ package
 			if (gameTextures[name] == undefined)
 			{
 				var bitmap:Bitmap = new Assets[name]();
-				gameTextures[name] = Texture.fromBitmap(bitmap);
+				gameTextures[name] = Texture.fromBitmap(bitmap, false, true);
 			}
 			return gameTextures[name];
 		}

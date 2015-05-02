@@ -23,11 +23,11 @@ package {
 			// touch or gesture?
 			Multitouch.inputMode = MultitouchInputMode.GESTURE;
 			
-			starl = new Starling(Main, stage);
-			starl.antiAliasing = 0;
+			starl = new Starling(Main, stage, null, null, "auto", "auto");
 			starl.start();
 			
 			Starling.current.showStats = true;
+			Starling.current.nativeStage.frameRate = 60;
 		}
 		
 		

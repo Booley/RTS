@@ -6,31 +6,31 @@ package unitstuff {
 	public class Flocking {
 		
 		// flocking behavior constants
-		public static const FRIENDLY_REPULSION_WEIGHT:Number = 10000; // repulsion from neighbors
-		public static const ENEMY_REPULSION_WEIGHT:Number = 80000; // repulsion from enemies
-		public static const OBSTACLE_REPULSION_WEIGHT:Number = 10000000000; // repulsion from obstacles
-		public static const ATTRACTION_WEIGHT:Number = 0.1; // attraction from neighbors 
-		public static const MATCH_VELOCITY_WEIGHT:Number = 0.05; // want to match neighbors' velocity
-		public static const GOAL_WEIGHT:Number = 0.1; // attraction to goal 
-		public static const THRUST_FACTOR:Number = 10; // overall scale factor for thrust strength
-		public static const MAP_BOUNDARY_REPULSION_WEIGHT:Number = 0.1;
+		private static const FRIENDLY_REPULSION_WEIGHT:Number = 10000; // repulsion from neighbors
+		private static const ENEMY_REPULSION_WEIGHT:Number = 80000; // repulsion from enemies
+		private static const OBSTACLE_REPULSION_WEIGHT:Number = 10000000000; // repulsion from obstacles
+		private static const ATTRACTION_WEIGHT:Number = 0.1; // attraction from neighbors 
+		private static const MATCH_VELOCITY_WEIGHT:Number = 0.05; // want to match neighbors' velocity
+		private static const GOAL_WEIGHT:Number = 0.1; // attraction to goal 
+		private static const THRUST_FACTOR:Number = 10; // overall scale factor for thrust strength
+		private static const MAP_BOUNDARY_REPULSION_WEIGHT:Number = 0.1;
 		
 		// get the net acceleration from a unit's neighbors on the unit for flocking behavior
 		public static function getAcceleration(u:Unit, neighbors:Vector.<Unit>, enemies:Vector.<Unit>, obstacles:Vector.<Point>):Point {
 			// compute average flock position
 			var avgPos:Point = new Point();
-			for each (var unit:Unit in neighbors) {
-				avgPos = avgPos.add(unit.pos);
+			for (var i:int=0, l:int=neighbors.length; i<l; ++i) {
+				avgPos = avgPos.add(neighbors[i].pos);
 			}
 			// divide by number of neighbors to get average position of flock
 			avgPos.normalize(avgPos.length/neighbors.length);
 			
 			var accel:Point = new Point();
-			
+		
 			var repulsionVector:Point = getRepulsion(u, neighbors);
 			repulsionVector.normalize(repulsionVector.length * FRIENDLY_REPULSION_WEIGHT);
 			accel = accel.add(repulsionVector);
-			
+		
 			var enemyRepulsionVector:Point = getEnemyRepulsion(u, enemies);
 			enemyRepulsionVector.normalize(enemyRepulsionVector.length * ENEMY_REPULSION_WEIGHT);
 			accel = accel.add(enemyRepulsionVector);
@@ -66,24 +66,24 @@ package unitstuff {
 		// get thrust from repulsive forces from neighbors
 		private static function getRepulsion(u:Unit, neighbors:Vector.<Unit>):Point {
 			var sum:Point = new Point();
-			for each (var unit:Unit in neighbors) {
-				var dif:Point = u.pos.subtract(unit.pos);
-				var dist:Number = dif.length;
-				if (dist == 0) continue;
-				dif.normalize(1 / dist / dist);
+			var dif:Point = new Point();
+			for (var i:int = 0, l:int = neighbors.length; i < l; ++i) {
+				dif.setTo(u.pos.x - neighbors[i].pos.x, u.pos.y - neighbors[i].pos.y);
+				if (dif.length == 0 || dif.length > 50) continue;
+				dif.normalize(1 / dif.length / dif.length);
 				sum = sum.add(dif);
 			}
 			return sum;
 		}
 		
 		// get thrust from repulsive forces from neighbors
-		private static function getEnemyRepulsion(u:Unit, neighbors:Vector.<Unit>):Point {
+		private static function getEnemyRepulsion(u:Unit, enemyUnits:Vector.<Unit>):Point {
 			var sum:Point = new Point();
-			for each (var unit:Unit in neighbors) {
-				var dif:Point = u.pos.subtract(unit.pos);
-				var dist:Number = dif.length;
-				if (dist == 0) continue;
-				dif.normalize(1 / dist / dist / dist);
+			var dif:Point = new Point();
+			for (var i:int = 0, l:int = enemyUnits.length; i < l; ++i) {
+				dif.setTo(u.pos.x - enemyUnits[i].pos.x, u.pos.y - enemyUnits[i].pos.y);
+				if (dif.length == 0 || dif.length > 40) continue;
+				dif.normalize(1 / dif.length / dif.length / dif.length);
 				sum = sum.add(dif);
 			}
 			return sum;
@@ -92,41 +92,41 @@ package unitstuff {
 		// get thrust from repulsive forces from neighbors and map boundary
 		private static function getObstacleRepulsion(u:Unit, obstacles:Vector.<Point>):Point {
 			var sum:Point = new Point();
-			for each (var obstacle:Point in obstacles) {
-				var dif:Point = u.pos.subtract(obstacle);
-				var dist:Number = dif.length;
-				if (dist == 0) continue;
-				dif.normalize(1 / Math.pow(dist, 6));
-				sum = sum.add(dif);
+			var dif:Point = new Point();
+			for (var i:int=0, l:int=obstacles.length; i<l; ++i) {
+				dif.setTo(u.pos.x - obstacles[i].x, u.pos.y - obstacles[i].y);
+				if (dif.length == 0 || dif.length > 30) continue;
+				dif.normalize(1 / Math.pow(dif.length, 6));
+				sum.setTo(sum.x + dif.x, sum.y + dif.y);
 			}
-			dif = u.pos.subtract(new Point(u.pos.x, 0));
-			dist = dif.length;
-			if (dist != 0) {
-				dif.normalize(MAP_BOUNDARY_REPULSION_WEIGHT / Math.pow(dist, 6));
-				sum = sum.add(dif);
+			if (u.pos.y < 30) {
+				dif.setTo(0, u.pos.y);
+				if (dif.length != 0) {
+					dif.normalize(MAP_BOUNDARY_REPULSION_WEIGHT / Math.pow(dif.length, 6));
+					sum.setTo(sum.x + dif.x, sum.y + dif.y);
+				}
 			}
-			
-			dif = u.pos.subtract(new Point(0, u.pos.y));
-			dist = dif.length;
-			if (dist != 0) {
-				dif.normalize(MAP_BOUNDARY_REPULSION_WEIGHT / Math.pow(dist, 6));
-				sum = sum.add(dif);
+			if (u.pos.x < 30) {
+				dif.setTo(u.pos.x, 0);
+				if (dif.length != 0) {
+					dif.normalize(MAP_BOUNDARY_REPULSION_WEIGHT / Math.pow(dif.length, 6));
+					sum.setTo(sum.x + dif.x, sum.y + dif.y);
+				}
 			}
-			
-			dif = u.pos.subtract(new Point(u.pos.x, Constants.SCREEN_HEIGHT));
-			dist = dif.length;
-			if (dist != 0) {
-				dif.normalize(MAP_BOUNDARY_REPULSION_WEIGHT / Math.pow(dist, 6));
-				sum = sum.add(dif);
+			if (u.pos.y > Constants.SCREEN_HEIGHT - 30) {
+				dif.setTo(0, u.pos.y - Constants.SCREEN_HEIGHT);
+				if (dif.length != 0) {
+					dif.normalize(MAP_BOUNDARY_REPULSION_WEIGHT / Math.pow(dif.length, 6));
+					sum.setTo(sum.x + dif.x, sum.y + dif.y);
+				}
 			}
-			
-			dif = u.pos.subtract(new Point(Constants.SCREEN_WIDTH, u.pos.y));
-			dist = dif.length;
-			if (dist != 0) {
-				dif.normalize(MAP_BOUNDARY_REPULSION_WEIGHT / Math.pow(dist, 6));
-				sum = sum.add(dif);
+			if (u.pos.x > Constants.SCREEN_WIDTH - 30) {
+				dif.setTo(u.pos.x - Constants.SCREEN_WIDTH, 0);
+				if (dif.length != 0) {
+					dif.normalize(MAP_BOUNDARY_REPULSION_WEIGHT / Math.pow(dif.length, 6));
+					sum.setTo(sum.x + dif.x, sum.y + dif.y);
+				}
 			}
-			
 			return sum;
 		}
 		
@@ -140,8 +140,8 @@ package unitstuff {
 		// return a normalized difference between the unit's velocity and the avgVel
 		private static function matchVelocity(u:Unit, neighbors:Vector.<Unit>):Point {
 			var sum:Point = new Point();
-			for each (var unit:Unit in neighbors) {
-				sum = sum.add(unit.vel.subtract(u.vel));
+			for (var i:int = 0, l:int = neighbors.length; i < l; ++i) { 
+				sum.setTo(sum.x + neighbors[i].vel.x - u.vel.x, sum.y + neighbors[i].vel.y - u.vel.y);
 			}
 			// should probably normalize by number of neighbors so larger flocks don't "pull" harder than small flocks
 			sum.normalize(sum.length/neighbors.length);
