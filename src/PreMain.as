@@ -10,7 +10,8 @@ package {
 	import flash.ui.MultitouchInputMode;
 	
 	import starling.core.Starling;
-
+	
+	[SWF(backgroundColor="#000000")]
 	public class PreMain extends Sprite {
 		
 		private var starl:Starling;

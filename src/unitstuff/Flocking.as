@@ -7,7 +7,7 @@ package unitstuff {
 		
 		// flocking behavior constants
 		private static const FRIENDLY_REPULSION_WEIGHT:Number = 10000; // repulsion from neighbors
-		private static const ENEMY_REPULSION_WEIGHT:Number = 80000; // repulsion from enemies
+		private static const ENEMY_REPULSION_WEIGHT:Number = 120000; // repulsion from enemies
 		private static const OBSTACLE_REPULSION_WEIGHT:Number = 10000000000; // repulsion from obstacles
 		private static const ATTRACTION_WEIGHT:Number = 0.1; // attraction from neighbors 
 		private static const MATCH_VELOCITY_WEIGHT:Number = 0.05; // want to match neighbors' velocity
@@ -17,45 +17,37 @@ package unitstuff {
 		
 		// get the net acceleration from a unit's neighbors on the unit for flocking behavior
 		public static function getAcceleration(u:Unit, neighbors:Vector.<Unit>, enemies:Vector.<Unit>, obstacles:Vector.<Point>):Point {
-			// compute average flock position
-			var avgPos:Point = new Point();
-			for (var i:int=0, l:int=neighbors.length; i<l; ++i) {
-				avgPos = avgPos.add(neighbors[i].pos);
-			}
-			// divide by number of neighbors to get average position of flock
-			avgPos.normalize(avgPos.length/neighbors.length);
-			
 			var accel:Point = new Point();
 		
 			var repulsionVector:Point = getRepulsion(u, neighbors);
 			repulsionVector.normalize(repulsionVector.length * FRIENDLY_REPULSION_WEIGHT);
-			accel = accel.add(repulsionVector);
+			accel.setTo(accel.x + repulsionVector.x, accel.y + repulsionVector.y);
 		
 			var enemyRepulsionVector:Point = getEnemyRepulsion(u, enemies);
 			enemyRepulsionVector.normalize(enemyRepulsionVector.length * ENEMY_REPULSION_WEIGHT);
-			accel = accel.add(enemyRepulsionVector);
+			accel.setTo(accel.x + enemyRepulsionVector.x, accel.y + enemyRepulsionVector.y);
 			
-			var attractionVector:Point = getAttraction(u, neighbors, avgPos);
+			var attractionVector:Point = getAttraction(u, neighbors);
 			attractionVector.normalize(attractionVector.length*ATTRACTION_WEIGHT);
-			accel = accel.add(attractionVector);
+			accel.setTo(accel.x + attractionVector.x, accel.y + attractionVector.y);
 			
 			var matchingVector:Point = matchVelocity(u, neighbors);
 			matchingVector.normalize(matchingVector.length*MATCH_VELOCITY_WEIGHT);
-			accel = accel.add(matchingVector);
+			accel.setTo(accel.x + matchingVector.x, accel.y + matchingVector.y);
 			
 			var obstacleRepulsionVector:Point = getObstacleRepulsion(u, obstacles);
 			obstacleRepulsionVector.normalize(obstacleRepulsionVector.length*OBSTACLE_REPULSION_WEIGHT);
-			accel = accel.add(obstacleRepulsionVector);
+			accel.setTo(accel.x + obstacleRepulsionVector.x, accel.y + obstacleRepulsionVector.y);
 			
 			if (u.goal != null) {
 				var goalVector:Point = getGoalAttraction(u, neighbors);
 				goalVector.normalize(goalVector.length*GOAL_WEIGHT);
-				accel = accel.add(goalVector);
+				accel.setTo(accel.x + goalVector.x, accel.y + goalVector.y);
 			} else {
 				// NOT ACTUALLY USED EVER
 				// make up for lack of goal weight for correct unit spacing
 				attractionVector.normalize(attractionVector.length * 50);
-				accel = accel.add(attractionVector);
+				accel.setTo(accel.x + attractionVector.x, accel.y + attractionVector.y);
 			}
 			
 			accel.normalize(accel.length * THRUST_FACTOR);
@@ -71,7 +63,7 @@ package unitstuff {
 				dif.setTo(u.pos.x - neighbors[i].pos.x, u.pos.y - neighbors[i].pos.y);
 				if (dif.length == 0 || dif.length > 50) continue;
 				dif.normalize(1 / dif.length / dif.length);
-				sum = sum.add(dif);
+				sum.setTo(sum.x + dif.x, sum.y + dif.y);
 			}
 			return sum;
 		}
@@ -84,7 +76,7 @@ package unitstuff {
 				dif.setTo(u.pos.x - enemyUnits[i].pos.x, u.pos.y - enemyUnits[i].pos.y);
 				if (dif.length == 0 || dif.length > 40) continue;
 				dif.normalize(1 / dif.length / dif.length / dif.length);
-				sum = sum.add(dif);
+				sum.setTo(sum.x + dif.x, sum.y + dif.y);
 			}
 			return sum;
 		}
@@ -132,8 +124,12 @@ package unitstuff {
 		
 		// sum attractive forces from neighbors 
 		// boids move towards center of the entire group
-		private static function getAttraction(u:Unit, neighbors:Vector.<Unit>, avgPos:Point):Point {
-			return avgPos.subtract(u.pos);
+		private static function getAttraction(u:Unit, neighbors:Vector.<Unit>):Point {
+			if (u.flock) {
+				return u.flock.getAvgPos().subtract(u.pos);
+			} else {
+				return new Point();
+			}
 		}
 		
 		// boids should match the average velocity of their neighbors

@@ -42,7 +42,7 @@ package screens {
 		
 		public function onMatchFound():void {
 			trace("Now starting game...");
-			dispatchEvent(new NavEvent(NavEvent.WAITING_SCREEN_CONNECT));
+			dispatchEventWith(NavEvent.WAITING_SCREEN_CONNECT);
 		}
 		
 		public function onAddToStage(event:Event):void {
@@ -72,7 +72,7 @@ package screens {
 			var touch:Touch = e.getTouch(backBtn);
 			if (touch) {
 				if(touch.phase == TouchPhase.BEGAN) {
-					dispatchEvent(new NavEvent(NavEvent.WAITING_SCREEN_BACK));
+					dispatchEventWith(NavEvent.WAITING_SCREEN_BACK);
 				}
 			}
 		}

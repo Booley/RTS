@@ -24,48 +24,48 @@ package screens {
 			super();
 			
 			// add background
-			background = new Image(Assets.getTexture("MenuBackground"));
+			background = new Image(Assets.getAtlas().getTexture(Assets.MenuBackground));
 			background.width = Constants.SCREEN_WIDTH;
 			background.height = Constants.SCREEN_HEIGHT;
 			addChild(background);
 			
 			// initialize and add buttons
-			mainMenuSPBtn = new Button(Assets.getTexture("ButtonTexture"), "Single-Player");
+			mainMenuSPBtn = new Button(Assets.getAtlas().getTexture(Assets.ButtonTexture), "Single-Player");
 			mainMenuSPBtn.fontSize = 50;
 			mainMenuSPBtn.y = 0;
 			mainMenuSPBtn.width = Constants.SCREEN_WIDTH;
 			mainMenuSPBtn.height = Constants.SCREEN_HEIGHT/5;
 			addChild(mainMenuSPBtn);
 			
-			mainMenuMPBtn = new Button(Assets.getTexture("ButtonTexture"), "Multi-Player");
+			mainMenuMPBtn = new Button(Assets.getAtlas().getTexture(Assets.ButtonTexture), "Multi-Player");
 			mainMenuMPBtn.fontSize = 50;
 			mainMenuMPBtn.y = Constants.SCREEN_HEIGHT/5;
 			mainMenuMPBtn.width = Constants.SCREEN_WIDTH;
 			mainMenuMPBtn.height = Constants.SCREEN_HEIGHT/5;
 			addChild(mainMenuMPBtn);
 			
-			mainMenuLeaderboardBtn = new Button(Assets.getTexture("ButtonTexture"), "Leaderboard");
+			mainMenuLeaderboardBtn = new Button(Assets.getAtlas().getTexture(Assets.ButtonTexture), "Leaderboard");
 			mainMenuLeaderboardBtn.fontSize = 50;
 			mainMenuLeaderboardBtn.y = 2*Constants.SCREEN_HEIGHT/5;
 			mainMenuLeaderboardBtn.width = Constants.SCREEN_WIDTH;
 			mainMenuLeaderboardBtn.height = Constants.SCREEN_HEIGHT/5;
 			//addChild(mainMenuLeaderboardBtn);
 			
-			mainMenuOptsBtn = new Button(Assets.getTexture("ButtonTexture"), "Options");
+			mainMenuOptsBtn = new Button(Assets.getAtlas().getTexture(Assets.ButtonTexture), "Options");
 			mainMenuOptsBtn.fontSize = 50;
 			mainMenuOptsBtn.y = 2*Constants.SCREEN_HEIGHT/5;
 			mainMenuOptsBtn.width = Constants.SCREEN_WIDTH;
 			mainMenuOptsBtn.height = Constants.SCREEN_HEIGHT/5;
 			addChild(mainMenuOptsBtn);
 			
-			mainMenuLoginBtn = new Button(Assets.getTexture("ButtonTexture"), "Login");
+			mainMenuLoginBtn = new Button(Assets.getAtlas().getTexture(Assets.ButtonTexture), "Login");
 			mainMenuLoginBtn.fontSize = 50;
 			mainMenuLoginBtn.y = 3*Constants.SCREEN_HEIGHT/5;
 			mainMenuLoginBtn.width = Constants.SCREEN_WIDTH;
 			mainMenuLoginBtn.height = Constants.SCREEN_HEIGHT/5;
 			addChild(mainMenuLoginBtn);
 			
-			mainMenuSignupBtn = new Button(Assets.getTexture("ButtonTexture"), "Signup");
+			mainMenuSignupBtn = new Button(Assets.getAtlas().getTexture(Assets.ButtonTexture), "Signup");
 			mainMenuSignupBtn.fontSize = 50;
 			mainMenuSignupBtn.y = 4*Constants.SCREEN_HEIGHT/5;
 			mainMenuSignupBtn.width = Constants.SCREEN_WIDTH;
@@ -112,7 +112,7 @@ package screens {
 			var touch:Touch = e.getTouch(mainMenuSPBtn);
 			if (touch) {
 				if (touch.phase == TouchPhase.BEGAN) {
-					dispatchEvent(new NavEvent(NavEvent.MAIN_MENU_SP));
+					dispatchEventWith(NavEvent.MAIN_MENU_SP);
 				}
 			}
 		}
@@ -122,7 +122,7 @@ package screens {
 			var touch:Touch = e.getTouch(mainMenuMPBtn);
 			if (touch) {
 				if (touch.phase == TouchPhase.BEGAN)	{
-					dispatchEvent(new NavEvent(NavEvent.MAIN_MENU_MP));
+					dispatchEventWith(NavEvent.MAIN_MENU_MP);
 				}
 			}
 		}
@@ -132,7 +132,7 @@ package screens {
 			var touch:Touch = e.getTouch(mainMenuLeaderboardBtn);
 			if (touch) {
 				if (touch.phase == TouchPhase.BEGAN) {
-					dispatchEvent(new NavEvent(NavEvent.MAIN_MENU_LEADERBOARD));
+					dispatchEventWith(NavEvent.MAIN_MENU_LEADERBOARD);
 				}
 			}
 		}
@@ -142,7 +142,7 @@ package screens {
 			var touch:Touch = e.getTouch(mainMenuOptsBtn);
 			if (touch) {
 				if (touch.phase == TouchPhase.BEGAN){
-					dispatchEvent(new NavEvent(NavEvent.MAIN_MENU_OPTS));
+					dispatchEventWith(NavEvent.MAIN_MENU_OPTS);
 				}
 			}
 		}
@@ -152,7 +152,7 @@ package screens {
 			var touch:Touch = e.getTouch(mainMenuLoginBtn);
 			if (touch) {
 				if (touch.phase == TouchPhase.BEGAN){
-					dispatchEvent(new NavEvent(NavEvent.MAIN_MENU_LOGIN));
+					dispatchEventWith(NavEvent.MAIN_MENU_LOGIN);
 				}
 			}
 		}
@@ -161,7 +161,7 @@ package screens {
 			var touch:Touch = e.getTouch(mainMenuSignupBtn);
 			if (touch) {
 				if (touch.phase == TouchPhase.BEGAN){
-					dispatchEvent(new NavEvent(NavEvent.MAIN_MENU_SIGNUP));
+					dispatchEventWith(NavEvent.MAIN_MENU_SIGNUP);
 				}
 			}
 		}

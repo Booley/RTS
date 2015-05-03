@@ -70,7 +70,7 @@ package screens {
 			var touch:Touch = e.getTouch(backButton);
 			if (touch) {
 				if (touch.phase == TouchPhase.BEGAN) {
-					dispatchEvent(new NavEvent(NavEvent.GAME_QUIT, true));
+					dispatchEventWith(NavEvent.GAME_QUIT, true);
 				}
 			}
 		}

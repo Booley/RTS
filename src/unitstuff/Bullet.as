@@ -27,7 +27,7 @@ package unitstuff {
 		public var owner:int;
 		
 		public var image:Image;
-		public var textureName:String = "BulletTexture"; // fix later.  just to make compiler happy.  don't actually use the Unit() constructor
+		public var textureName:String = Assets.BulletTexture; 
 		
 		public function Bullet(startPos:Point, target:Unit, damage:int, bulletType:int, owner:int) {
 			pos = startPos.clone();
@@ -53,7 +53,7 @@ package unitstuff {
 		
 		// Idk about this method.. might remove it
 		public function createArt():void {
-			image = new Image(Assets.getTexture(textureName));
+			image = new Image(Assets.getAtlas().getTexture(textureName));
 			image.blendMode = BlendMode.ADD;
 			image.scaleX *= 0.1;
 			image.scaleY *= 0.1; // TEMPORARY

@@ -1,8 +1,6 @@
 package {
 	
-	import starling.events.Event;
-	
-	public class NavEvent extends Event {
+	public class NavEvent {
 		
 		// events for the Main Menu
 		public static const MAIN_MENU_SP:String = "mainMenuSP";
@@ -45,11 +43,6 @@ package {
 		public static const GAME_OVER_WIN:String = "gameOverWin";
 		public static const GAME_OVER_LOSE:String = "gameOverLose";
 		public static const GAME_QUIT:String = "gameQuit"; ''
-		
-		// constructor
-		public function NavEvent(string:String, bubbles:Boolean = false, data:Object = null) {
-			super(string, bubbles, data);
-		}
 	}
 
 }

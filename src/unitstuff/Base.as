@@ -12,7 +12,7 @@ package unitstuff {
 		private static const DEFAULT_RESOURCE_RATE:Number = .03; // resource per second
 		
 		public static const UNIT_TYPE:int = Unit.INFANTRY;
-		public static const TEXTURE_NAME:String = "BaseTexture";
+		public static const TEXTURE_NAME:String = Assets.BaseTexture;
 		public static const MAX_SPEED:Number = 0;
 		public static const MAX_ACCEL:Number = 0;
 		public static const MAX_HEALTH:Number = 2000; 

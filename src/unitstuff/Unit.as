@@ -76,7 +76,6 @@ package unitstuff {
 		public var highlightImage:Image;
 		public var healthBackground:Quad;
 		public var healthBar:Quad;
-		public var highlightTextureName:String = "HighlightTexture";
 
 		//id
 		private static var counter:int;
@@ -112,6 +111,8 @@ package unitstuff {
 			this.initialImageRotation = rotation;
 			this.goals = new Vector.<Point>();
 			
+			this.touchable = false;
+			
 			this.addEventListener(Event.ADDED_TO_STAGE, onAddToStage);
 		}
 		
@@ -125,32 +126,32 @@ package unitstuff {
 		
 		// Idk about this method.. might remove it
 		public function createArt(rotation:Number = 0):void {
-			image = new Image(Assets.getTexture(textureName + owner));
-			//image.blendMode = BlendMode.NORMAL;
+			image = new Image(Assets.getAtlas().getTexture(textureName + owner));
 			image.scaleX *= 0.2;
 			image.scaleY *= 0.2; // TEMPORARY
 			image.alignPivot();
 			image.rotation = initialImageRotation;
 			addChild(image);
 			
-			highlightImage = new Image(Assets.getTexture(highlightTextureName));
+			highlightImage = new Image(Assets.getAtlas().getTexture(Assets.HighlightTexture));
 			highlightImage.scaleX *= 0.3;
 			highlightImage.scaleY *= 0.3; // TEMPORARY
 			highlightImage.alignPivot();
-			addChild(highlightImage);
 			highlightImage.visible = false;
+			addChild(highlightImage);
 			
-			healthBackground = new Quad(20, 5, 0x000000);
+			healthBackground = new Image(Assets.getAtlas().getTexture(Assets.HealthBackgroundTexture));
 			healthBackground.x = -healthBackground.width / 2;
-			healthBackground.y = -7 - healthBackground.height / 2;
-			healthBackground.alpha = 0.4;
+			healthBackground.y = -10 - healthBackground.height / 2;
+			healthBackground.width = 20;
+			healthBackground.height = 5;
 			addChild(healthBackground);
 			
-			healthBar = new Quad(20, 3, 0x00ff00);
-			//healthBar.blendMode = BlendMode.NORMAL;
+			healthBar = new Image(Assets.getAtlas().getTexture(Assets.HealthBarTexture));
 			healthBar.x = -healthBar.width / 2;
-			healthBar.y = -7 - healthBar.height / 2;
-			healthBar.alpha = 0.4;
+			healthBar.y = -10 - healthBar.height / 2;
+			healthBar.width = 20;
+			healthBar.height = 3;
 			addChild(healthBar);
 		}	
 		
@@ -305,17 +306,21 @@ package unitstuff {
 				if (distance < GOAL_DISTANCE_CUTOFF) {
 					// attempt to get the next goal
 					if (goals.length > 0) {
-						goal = PlayScreen.game.indexToPos(goals.pop());
+						goal = goals.pop();
 					} 
 				}
 			} else {
 				if (goals.length > 0) {
-					goal = PlayScreen.game.indexToPos(goals.pop());
+					goal = goals.pop();
 				}
 			}
 		}
 		
 		private function updateMovement(dt:Number, neighbors:Vector.<Unit> = null):void {
+			if (unitType == Unit.SNIPER) {
+				trace(goal + " " + goals.length);
+			}
+			
 			//update acceleration
 			var otherFlockUnits:Vector.<Unit> = PlayScreen.game.getOtherFlockUnits(this);
 			var accel:Point = Flocking.getAcceleration(this, neighbors, otherFlockUnits, PlayScreen.game.obstaclePoints);

@@ -5,7 +5,7 @@ package unitstuff {
 	public class Sniper extends Unit {
 		
 		public static const UNIT_TYPE:int = Unit.SNIPER;
-		public static const TEXTURE_NAME:String = "SniperTexture";
+		public static const TEXTURE_NAME:String = Assets.SniperTexture;
 		public static const MAX_SPEED:Number = 15;
 		public static const MAX_ACCEL:Number = 10;
 		public static const MAX_HEALTH:Number = 100; 

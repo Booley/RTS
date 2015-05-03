@@ -20,20 +20,20 @@ package screens {
 			super();
 			
 			// add background
-			background = new Image(Assets.getTexture("MenuBackground"));
+			background = new Image(Assets.getAtlas().getTexture(Assets.MenuBackground));
 			background.width = Constants.SCREEN_WIDTH;
 			background.height = Constants.SCREEN_HEIGHT;
 			addChild(background);
 			
 			// initialize and add buttons
-			playBtn = new Button(Assets.getTexture("ButtonTexture"), "Play");
+			playBtn = new Button(Assets.getAtlas().getTexture(Assets.ButtonTexture), "Play");
 			playBtn.fontSize = 50;
 			playBtn.y = 0;
 			playBtn.width = Constants.SCREEN_WIDTH;
 			playBtn.height = Constants.SCREEN_HEIGHT/5
 			addChild(playBtn);
 			
-			backBtn = new Button(Assets.getTexture("ButtonTexture"), "Back");
+			backBtn = new Button(Assets.getAtlas().getTexture(Assets.ButtonTexture), "Back");
 			backBtn.fontSize = 50;
 			backBtn.y = Constants.SCREEN_HEIGHT/5;
 			backBtn.width = Constants.SCREEN_WIDTH;
@@ -72,7 +72,7 @@ package screens {
 			var touch:Touch = e.getTouch(backBtn);
 			if (touch) {
 				if(touch.phase == TouchPhase.BEGAN) {
-					dispatchEvent(new NavEvent(NavEvent.MP_MENU_BACK));
+					dispatchEventWith(NavEvent.MP_MENU_BACK);
 				}
 			}
 		}
@@ -82,7 +82,7 @@ package screens {
 			var touch:Touch = e.getTouch(playBtn);
 			if (touch) {
 				if(touch.phase == TouchPhase.BEGAN) {
-					dispatchEvent(new NavEvent(NavEvent.MP_MENU_PLAY));
+					dispatchEventWith(NavEvent.MP_MENU_PLAY);
 				}
 			}
 		}

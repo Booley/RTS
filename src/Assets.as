@@ -4,67 +4,49 @@ package
 	import flash.utils.Dictionary;
 	
 	import starling.textures.Texture;
+	import starling.textures.TextureAtlas;
 
 	public class Assets {
 		
-		[Embed(source="/../assets/images/buttons/button.png")]
-		private static const ButtonTexture:Class;
+		public static const ButtonTexture:String = "buttons/button";
+		public static const MenuBackground:String = "backgrounds/menu_background";
+		public static const BaseTexture:String = "units/base";
+		public static const InfantryTexture:String = "units/square";
+		public static const RaiderTexture:String = "units/circle";
+		public static const SniperTexture:String = "units/triangle";
+		public static const HighlightTexture:String = "units/highlight";
+		public static const BulletTexture:String = "units/bullet";
+		public static const ResourcePointTexture:String = "units/neutral_point";
+		public static const HealthBackgroundTexture:String = "units/healthBackground";
+		public static const HealthBarTexture:String = "units/healthBar";
 		
-		[Embed(source="/../assets/images/backgrounds/menu_background.jpg")]
-		private static const MenuBackground:Class;
+		public static const Map1Background:String = "maps/map1/background";
+		public static const Map1Obstacles:String = "maps/map1/obstacles";
 		
-		[Embed(source="/../assets/images/units/base1.png")]
-		private static const BaseTexture1:Class;
-		
-		[Embed(source="/../assets/images/units/base2.png")]
-		private static const BaseTexture2:Class;
-		
-		[Embed(source="/../assets/images/units/square1.png")]
-		private static const InfantryTexture1:Class;
-		
-		[Embed(source="/../assets/images/units/square2.png")]
-		private static const InfantryTexture2:Class;
-		
-		[Embed(source="/../assets/images/units/circle1.png")]
-		private static const RaiderTexture1:Class;
-		
-		[Embed(source="/../assets/images/units/circle2.png")]
-		private static const RaiderTexture2:Class;
-		
-		[Embed(source="/../assets/images/units/triangle1.png")]
-		private static const SniperTexture1:Class;
-		
-		[Embed(source="/../assets/images/units/triangle2.png")]
-		private static const SniperTexture2:Class;
-		
-		[Embed(source="/../assets/images/units/highlight.png")]
-		private static const HighlightTexture:Class;
-
-		[Embed(source = "../assets/images/units/bullet.png")]
-		private static const BulletTexture:Class;
-
-		[Embed(source = "/../assets/images/units/neutral_point1.png")]
-		private static const ResourcePointTexture1:Class;
-		
-		[Embed(source = "/../assets/images/units/neutral_point2.png")]
-		private static const ResourcePointTexture2:Class;
-		
-		[Embed(source = "/../assets/images/units/neutral_point3.png")]
-		private static const ResourcePointTexture3:Class;
-		
-		// MAPSSSSSSSSSS
-		[Embed(source="../assets/images/maps/map1/background.png")]
-		public static const Map1Background:Class;
-
+		private static var gameTextureAtlas:TextureAtlas;
 		private static var gameTextures:Dictionary = new Dictionary();
-
+		
+		// Embed the Atlas XML
+		[Embed(source="../assets/images/resources.xml", mimeType="application/octet-stream")]
+		public static const AtlasXml:Class;
+		 
+		// Embed the Atlas Texture:
+		[Embed(source="../assets/images/resources.png")]
+		public static const AtlasTexture:Class;
+		
+		public static function getAtlas():TextureAtlas {
+			if (gameTextureAtlas == null) {
+				var texture:Texture = getTexture("AtlasTexture");
+				var xml:XML = XML(new AtlasXml());
+				gameTextureAtlas = new TextureAtlas(texture, xml);
+			}
+			return gameTextureAtlas;
+		}
+		
 		// avoid creating a texture from a bitmap more than once for optimization.
-		public static function getTexture(name:String):Texture
-		{
-			if (gameTextures[name] == undefined)
-			{
-				var bitmap:Bitmap = new Assets[name]();
-				gameTextures[name] = Texture.fromBitmap(bitmap, false, true);
+		public static function getTexture(name:String):Texture {
+			if (gameTextures[name] == undefined) {
+				gameTextures[name] = Texture.fromEmbeddedAsset(Assets[name]);
 			}
 			return gameTextures[name];
 		}

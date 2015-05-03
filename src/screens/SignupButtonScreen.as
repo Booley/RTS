@@ -16,20 +16,20 @@ package screens
 		
 		public function SignupButtonScreen() {
 			// add background
-			background = new Image(Assets.getTexture("MenuBackground"));
+			background = new Image(Assets.getAtlas().getTexture(Assets.MenuBackground));
 			background.width = Constants.SCREEN_WIDTH;
 			background.height = Constants.SCREEN_HEIGHT;
 			addChild(background);
 			
 			// initialize and add buttons
-			submitBtn = new Button(Assets.getTexture("ButtonTexture"), "Register");
+			submitBtn = new Button(Assets.getAtlas().getTexture(Assets.ButtonTexture), "Register");
 			submitBtn.fontSize = 50;
 			submitBtn.y = 3*Constants.SCREEN_HEIGHT/5;
 			submitBtn.width = Constants.SCREEN_WIDTH;
 			submitBtn.height = Constants.SCREEN_HEIGHT/5
 			addChild(submitBtn);
 			
-			backBtn = new Button(Assets.getTexture("ButtonTexture"), "Back");
+			backBtn = new Button(Assets.getAtlas().getTexture(Assets.ButtonTexture), "Back");
 			backBtn.fontSize = 50;
 			backBtn.y = 4*Constants.SCREEN_HEIGHT/5;
 			backBtn.width = Constants.SCREEN_WIDTH;
@@ -69,7 +69,7 @@ package screens
 			var touch:Touch = e.getTouch(backBtn);
 			if (touch) {
 				if(touch.phase == TouchPhase.BEGAN) {
-					dispatchEvent(new NavEvent(NavEvent.SIGNUP_SCREEN_BACK));
+					dispatchEventWith(NavEvent.SIGNUP_SCREEN_BACK);
 				}
 			}
 		}
@@ -78,7 +78,7 @@ package screens
 			var touch:Touch = e.getTouch(submitBtn);
 			if (touch) {
 				if(touch.phase == TouchPhase.BEGAN) {
-					dispatchEvent(new NavEvent(NavEvent.SIGNUP_SCREEN_SUBMIT));
+					dispatchEventWith(NavEvent.SIGNUP_SCREEN_SUBMIT);
 				}
 			}
 		}

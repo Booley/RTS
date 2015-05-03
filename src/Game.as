@@ -25,7 +25,6 @@ package {
 	import be.dauntless.astar.core.IAstarTile;
 	import be.dauntless.astar.basic2d.Map;
 	import be.dauntless.astar.basic2d.BasicTile;
-	import be.dauntless.astar.basic2d.analyzers.SmartClippingAnalyzer;
 	
 	import unitstuff.*;
 	import screens.*;
@@ -56,6 +55,8 @@ package {
 		public var astar:Astar;
 		public var mapWidth:int;
 		public var mapHeight:int;
+		private var mapWidthFactor:Number;
+		private var mapHeightFactor:Number;
 		private var pathfindingFlock:Flock;
 		public var obstaclePoints:Vector.<Point>;
 		
@@ -64,7 +65,7 @@ package {
 		public var multiplayer:Multiplayer;
 		public var dictionary:Dictionary;
 		
-		public var currentPlayer:int = 2;
+		public var currentPlayer:int = 1;
 		private var waitingRoom:WaitingRoom;
 		private static var tickCounter:int = 0;
 		
@@ -93,13 +94,12 @@ package {
 			
 			//customize resource display button
 			resourceText = new TextField(100, 30, Base.DEFAULT_TOTAL_RESOURCES + "", "Verdana", 12, 0xffffff, true);
-			resourceText.y = 00;
+			resourceText.y = 0;
 			resourceText.x = 200;
 			
 			//addChild(scoreText);
+			
 			addChild(resourceText);
-			//var glow:BlurFilter = BlurFilter.createGlow(0xaaffff, 0.5, 0.5, 0.5);
-			//this.filter = glow;
 			
 			// END TESTING UNIT MOVEMENT }}}}}}}}}}}}}}}}}}
 			
@@ -113,7 +113,7 @@ package {
 		
 		public function testMap():void {
 			// get map background
-			background = new Image(Assets.getTexture("Map1Background"));
+			background = new Image(Assets.getAtlas().getTexture(Assets.Map1Background));
 			background.width = Constants.SCREEN_WIDTH;
 			background.height =  Constants.SCREEN_HEIGHT;
 			addChildAt(background, 0);
@@ -122,6 +122,8 @@ package {
 			mapData = MapGen.getMapObstacles(MapGen.Map1Obstacles, this);
 			mapWidth = mapData[0].length;
 			mapHeight = mapData.length;
+			mapWidthFactor = Constants.SCREEN_WIDTH / mapWidth;
+			mapHeightFactor = Constants.SCREEN_HEIGHT / mapHeight;
 			map = new Map(mapWidth, mapHeight);
 			for(var y:Number = 0; y < mapData.length; y++) {
 				for(var x:Number = 0; x < mapData[y].length; x++) {
@@ -131,7 +133,6 @@ package {
 					}
 					if (mapData[y][x].type == MapGen.NEUTRAL_CAPTURE_POINT) {
 						addResourcePoint(new ResourcePoint(indexToPos(new Point(x, y)), 3));
-						trace("asdf");
 					}
 					if (mapData[y][x].type == MapGen.RED_CAPTURE_POINT) {
 						addResourcePoint(new ResourcePoint(indexToPos(new Point(x, y)), 2));
@@ -156,9 +157,7 @@ package {
 			astar = new Astar();
 			astar.addEventListener(AstarEvent.PATH_FOUND, onPathFound);
 			astar.addEventListener(AstarEvent.PATH_NOT_FOUND, onPathNotFound);
-			
-			//a general analyzer
-			astar.addAnalyzer(new SmartClippingAnalyzer());
+			//astar.addAnalyzer(new SmartClippingAnalyzer());
 		}
 		
 		// starts pathfinding for the flock towards the endPoint.  onPathFound is called when this successfully finds a path.
@@ -177,12 +176,12 @@ package {
 		
 		// convert position in pixels to map coordinates for pathfinding
 		public function posToIndex(p:Point):Point {
-			return new Point(int(mapWidth * p.x / Constants.SCREEN_WIDTH), int(mapHeight * p.y / Constants.SCREEN_HEIGHT));
+			return new Point(int(p.x / mapWidthFactor), int(p.y / mapHeightFactor));
 		}
 			
 		// convert position in pixels to map coordinates for pathfinding
 		public function indexToPos(p:Point):Point {
-			return new Point((p.x + 0.5)/ mapWidth * Constants.SCREEN_WIDTH, (p.y + 0.5) / mapHeight * Constants.SCREEN_HEIGHT);
+			return new Point((p.x + 0.5) * mapWidthFactor, (p.y + 0.5) * mapHeightFactor);
 		}
  
 		private function onPathNotFound(event:AstarEvent):void {
@@ -191,9 +190,8 @@ package {
  
 		private function onPathFound(event:AstarEvent):void {
 			var path:Vector.<Point> = new Vector.<Point>();
-			for (var i:int = 0; i < event.result.path.length; i++) {
-				path.unshift((event.result.path[i] as BasicTile).getPosition());
-				//trace("x: " + path[0].x + ", y: " + path[0].y);
+			for (var i:int = event.result.path.length - 1; i >= 0; i--) {
+				path.push((event.result.path[i] as BasicTile).getPosition());
 			}
 			if (pathfindingFlock) {
 				pathfindingFlock.setGoals(path);
@@ -230,18 +228,17 @@ package {
 		}
 		
 		public function doAI():void {
-			var o:int = 1;
-			var b:Base = base1;
-			var e:Base = base2;
-			if (o == currentPlayer) {
-				o = 2;
-				b = base2;
-				e = base1;
+			var AIOwner:int = 1;
+			var AIBase:Base = base1;
+			var AIEnemyBase:Base = base2;
+			if (AIOwner == currentPlayer) {
+				AIOwner = 2;
+				AIBase = base2;
+				AIEnemyBase = base1;
 			}
 			// queue next unit
-			var AIBase:Base = getUserBase(o);
 			if (AIBase.unitBuildCooldown < 0) {
-				var nextUnitType:int = AI.getUnitBuildCommand(o, flocks, mapData);
+				var nextUnitType:int = AI.getUnitBuildCommand(AIOwner, flocks, mapData, resourcePoints, AIBase, AIEnemyBase);
 				if (AIBase.totalResources >= Unit.getClass(nextUnitType).COST) {
 					AIBase.totalResources -= Unit.getClass(nextUnitType).COST;
 					AIBase.queueUnit(nextUnitType);
@@ -249,7 +246,7 @@ package {
 			}
 			
 			// do unit movement
-			AI.getUnitMovementCommand(o, flocks, mapData, resourcePoints, b, e);
+			AI.getUnitMovementCommand(AIOwner, flocks, mapData, resourcePoints, AIBase, AIEnemyBase);
 			
 		}
 		
@@ -264,11 +261,18 @@ package {
 				multiplayer.sendAllPositions(getUnitMovementString(currentPlayer));
 			}
 			
-			// try to spawn units if AI
-			//if (!PlayScreen.isMultiplayer) 
-			//doAI();
-			
 			for each (var flock:Flock in flocks) {
+				if (flock.units.length == 0) {
+					flocks.splice(flocks.indexOf(flock), 1);
+				}
+			}
+			
+			// try to spawn units if AI
+			if (!PlayScreen.isMultiplayer) {
+				doAI();
+			}
+			
+			for each (flock in flocks) {
 				flock.tick(dt);
 			}
 			for each (var turret:TurretPoint in turretPoints) {
@@ -473,12 +477,22 @@ package {
 			var unit:Unit;
 			var unitClass:Class = Unit.getClass(unitType);
 			if (unitClass) {
-				unit = new unitClass(pos, owner, rotation);
+				if (rotation != Math.PI/2) {
+					unit = new unitClass(pos.add(new Point(10*(Math.random() - 0.5), -10)), owner, rotation);
+				} else {
+					unit = new unitClass(pos.add(new Point(10*(Math.random() - 0.5), 10)), owner, rotation);
+				}
+				
 				var unitVector:Vector.<Unit> = new Vector.<Unit>();
 				unitVector.push(unit);
 				addChild(unit);
 				var flock:Flock = new Flock(unitVector);
-				getGoals(flock, new Point(200, 200));
+				if (rotation != Math.PI/2) {
+					getGoals(flock, getUserBase(owner).pos.add(new Point(0, -100)));
+				} else {
+					getGoals(flock, getUserBase(owner).pos.add(new Point(0, 100)));
+				}
+				
 				flocks.push(flock);
 				addToDictionary(unit);
 				return unit;
@@ -518,13 +532,14 @@ package {
 			}
 			
 			// if unit is a base
-			/*
-			if (unit instanceof Base ) {
-				dispatchEvent(new NavEvent(NavEvent.GAME_OVER_LOSE));
+			
+			if (unit is Base) {
+				bases.splice(bases.indexOf(Base(unit)), 1);
+				//dispatchEvent(new NavEvent(NavEvent.GAME_OVER_LOSE));
 			} else {
-				dispatchEvent(new NavEvent(NavEvent.GAME_OVER_WIN));
+				//dispatchEvent(new NavEvent(NavEvent.GAME_OVER_WIN));
 			}
-			*/
+			
 		}
 
 		public function addBullet(bullet:Bullet):void {

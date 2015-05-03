@@ -1,5 +1,7 @@
 package ai {
 	
+	import flash.geom.Point;
+	
 	import pathfinding.Tile;
 	import unitstuff.Base;
 	import unitstuff.Flock;
@@ -10,52 +12,84 @@ package ai {
 	
 	public class AI {
 		
+		private static var FLOCK_MERGE_DISTANCE:Number = 100; // max distance for like units to be merged into 1 flock.
+		
 		// get the AI's unit movement order
 		public static function getUnitMovementCommand(owner:int, flocks:Vector.<Flock>, mapData:Vector.<Vector.<Tile>>, resourcePoints:Vector.<ResourcePoint>, friendlyBase:Base, enemyBase:Base):void {
+			var myUnits:Vector.<Unit> = new Vector.<Unit>();
 			for each (var flock:Flock in flocks) {
 				for each (var unit:Unit in flock.units) {
 					if (unit.owner == owner) {
-						// unit-specific preferences?
-						if (unit.unitType == Unit.SNIPER) {
-							// stop moving when it gets into range
-							if (unit.target != null) {
-								unit.goal = null;
-								continue;
-							}
-						}
-						// if near a raider, break for it  NOTE DOES NOT USE PATHFINDING.  CAN GET STUCK ON WALLS
-						if (unit.unitType == Unit.INFANTRY) {
-							var closestRaider:Unit = closestEnemy(unit, Unit.RAIDER, flocks);
-							if (closestRaider && closestRaider.pos.subtract(unit.pos).length < closestRaider.attackRange) {
-								unit.goal = closestRaider.pos;
-								unit.target = closestRaider;
-								continue;
-							}
-							
-						}
-						// if near a sniper, break for it  NOTE DOES NOT USE PATHFINDING.  CAN GET STUCK ON WALLS
-						if (unit.unitType == Unit.RAIDER) {
-							var closestSniper:Unit = closestEnemy(unit, Unit.SNIPER, flocks);
-							if (closestSniper && closestSniper.pos.subtract(unit.pos).length < closestSniper.attackRange) {
-								unit.goal = closestSniper.pos;
-								unit.target = closestSniper;
-								continue;
-							}
-						}
-						// if no special cases have been seen, attack the nearest resource point. 
-						var closestRP:ResourcePoint = closestEnemyResourcePoint(unit, resourcePoints);
-						if (closestRP) {
-							//PlayScreen.game.getGoals(unit.flock, closestRP.pos);
-							unit.goal = closestRP.pos;
-							continue;
-						}
-						// otherwise, charge towards the enemy's base.
-						//PlayScreen.game.getGoals(unit.flock, enemyBase.pos);
-						unit.goal = enemyBase.pos;
-						continue;
-						
-					} 
+						myUnits.push(unit);
+					}
 				}
+			}
+			
+			// merge flocks
+			for each (unit in myUnits) {
+				for each (var otherUnit:Unit in myUnits) {
+					if (unit != otherUnit) {
+						if (unit.goal == otherUnit.goal && unit.unitType == otherUnit.unitType) {
+							if (unit.pos.subtract(otherUnit.pos).length < FLOCK_MERGE_DISTANCE) {
+								unit.flock.removeUnit(unit);
+								otherUnit.flock.addUnit(unit);
+							}
+						}
+					}
+				}
+			}
+				
+				
+				
+			for each (unit in myUnits) {
+				// unit-specific preferences?
+				if (unit.unitType == Unit.SNIPER) {
+					// stop moving when it gets into range
+					if (unit.target != null) {
+						unit.goals = new Vector.<Point>();
+						unit.goal = null;
+						continue;
+					}
+				}
+				
+				// let the unit just chill if it is already attacking a resource point
+				if ((unit.target != null) && unit.target.unitType == Unit.RESOURCE_POINT) {
+					continue;
+				}
+				
+				// if the unit is already doing something, let it continue
+				if (unit.goals.length > 0) continue;
+				
+				if (unit.unitType == Unit.INFANTRY) {
+					// follow raiders
+					var closestRaider:Unit = closestEnemy(unit, Unit.RAIDER, flocks);
+					if (closestRaider && closestRaider.pos.subtract(unit.pos).length < closestRaider.attackRange) {
+						PlayScreen.game.getGoals(unit.flock, closestRaider.pos);
+						continue;
+					}
+					
+				}
+				
+				if (unit.unitType == Unit.RAIDER) {
+					// rush a sniper
+					var closestSniper:Unit = closestEnemy(unit, Unit.SNIPER, flocks);
+					if (closestSniper && closestSniper.pos.subtract(unit.pos).length < closestSniper.attackRange) {
+						PlayScreen.game.getGoals(unit.flock, closestSniper.pos);
+						continue;
+					}
+				}
+				if (unit.target == null) {
+					// if no special cases have been seen, attack the nearest resource point. 
+					var closestRP:ResourcePoint = closestEnemyResourcePoint(unit, resourcePoints);
+					if (closestRP != null) {
+						PlayScreen.game.getGoals(unit.flock, closestRP.pos);
+						continue;
+					}
+				}
+				
+				// otherwise, charge towards the enemy's base.
+				PlayScreen.game.getGoals(unit.flock, enemyBase.pos);
+				continue;
 			}
 		}
 		
@@ -64,8 +98,8 @@ package ai {
 			var closestTarget:Unit;
 			var thisDist:int;
 			var unit:Unit;
-			for (var i:int = 0, l:int = flocks.length; i < l; ++i) {
-				for (var j:int = 0, l2:int = flocks[j].units.length; j < l2; ++j) {
+			for (var i:int = 0, l:int = flocks.length; i < l; i++) {
+				for (var j:int = 0, l2:int = flocks[i].units.length; j < l2; j++) {
 					unit = flocks[i].units[j];
 					if (unit.owner != unit1.owner) {
 						if (unit.unitType == unitType) {
@@ -83,7 +117,7 @@ package ai {
 		
 		private static function closestEnemyResourcePoint(unit:Unit, resourcePoints:Vector.<ResourcePoint>):ResourcePoint {
 			var bestDist:Number = int.MAX_VALUE;
-			var best:ResourcePoint = null;
+			var best:ResourcePoint;
 			for each (var rp:ResourcePoint in resourcePoints) {
 				if (rp.owner != unit.owner) {
 					var dist:Number = rp.pos.subtract(unit.pos).length;
@@ -97,7 +131,27 @@ package ai {
 		}
 		
 		// get the AI's build command
-		public static function getUnitBuildCommand(owner:int, flocks:Vector.<Flock>, mapData:Vector.<Vector.<Tile>>):int {
+		public static function getUnitBuildCommand(owner:int, flocks:Vector.<Flock>, mapData:Vector.<Vector.<Tile>>, resourcePoints:Vector.<ResourcePoint>, friendlyBase:Base, enemyBase:Base):int {
+			var enemyRPs:int = 0;
+			var friendlyRPs:int = 0;
+			for each (var rp:ResourcePoint in resourcePoints) {
+				if (rp.owner == owner) {
+					friendlyRPs++;
+				} else {
+					enemyRPs++;
+				}
+			}
+			// if the bot has TOTAL map control, switch to snipers
+			if (friendlyRPs > enemyRPs * 3) {
+				return Unit.SNIPER;
+			}
+			
+			// if the bot has map control, switch to infantry and snipers
+			if (friendlyRPs > enemyRPs) {
+				if (Math.random() > 0.5) return Unit.INFANTRY;
+				else return Unit.SNIPER;
+			}
+			
 			var numInfantry:Number = 0; // number of infantry the enemy has compared to the user
 			var numRaiders:Number = 0;
 			var numSnipers:Number = 0;
@@ -131,7 +185,6 @@ package ai {
 
 			// default
 			return Unit.INFANTRY;
-			
 		}
 		
 	}

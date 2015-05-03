@@ -44,19 +44,19 @@ package screens {
 			this.portal = base;
 			
 			// initialize and add buttons
-			button1 = new Button(Assets.getTexture(Infantry.TEXTURE_NAME + base.owner));
+			button1 = new Button(Assets.getAtlas().getTexture(Infantry.TEXTURE_NAME + base.owner));
 			button1.y = Constants.SCREEN_HEIGHT - butttonheight + priceheight;
 			button1.width = butttonwidth;
 			button1.height = butttonheight;
 			addChild(button1);
 			
-			button2 = new Button(Assets.getTexture(Sniper.TEXTURE_NAME + base.owner));
+			button2 = new Button(Assets.getAtlas().getTexture(Sniper.TEXTURE_NAME + base.owner));
 			button2.y = Constants.SCREEN_HEIGHT - 2 * butttonheight + priceheight;
 			button2.width = butttonwidth;
 			button2.height = butttonheight;
 			addChild(button2);
 			
-			button3 = new Button(Assets.getTexture(Raider.TEXTURE_NAME + base.owner));
+			button3 = new Button(Assets.getAtlas().getTexture(Raider.TEXTURE_NAME + base.owner));
 			button3.y = Constants.SCREEN_HEIGHT - 3 * butttonheight + priceheight;
 			button3.width = butttonwidth;
 			button3.height = butttonheight;
