@@ -2,6 +2,8 @@ package unitstuff {
 	
 	import flash.geom.Point;
 	import pathfinding.Tile;
+	
+	import screens.PlayScreen;
 
 	public class Flocking {
 		
@@ -14,6 +16,7 @@ package unitstuff {
 		private static const GOAL_WEIGHT:Number = 0.1; // attraction to goal 
 		private static const THRUST_FACTOR:Number = 10; // overall scale factor for thrust strength
 		private static const MAP_BOUNDARY_REPULSION_WEIGHT:Number = 0.1;
+		private static const MAX_ATTRACTION_DISTANCE:Number = 200; // max distance for flock attraction to affect units
 		
 		// get the net acceleration from a unit's neighbors on the unit for flocking behavior
 		public static function getAcceleration(u:Unit, neighbors:Vector.<Unit>, enemies:Vector.<Unit>, obstacles:Vector.<Point>):Point {
@@ -126,7 +129,16 @@ package unitstuff {
 		// boids move towards center of the entire group
 		private static function getAttraction(u:Unit, neighbors:Vector.<Unit>):Point {
 			if (u.flock) {
-				return u.flock.getAvgPos().subtract(u.pos);
+				var point:Point = u.flock.getAvgPos().subtract(u.pos);
+				if (point.length < MAX_ATTRACTION_DISTANCE) {
+					return point;
+				} else {
+					// detach unit from its flock, redo pathfinding.
+					//u.flock.removeUnit(u);
+					PlayScreen.game.getGoals(u.flock, u.flock.getAvgPos());
+					return new Point();
+				}
+				
 			} else {
 				return new Point();
 			}

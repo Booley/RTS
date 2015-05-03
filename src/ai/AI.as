@@ -12,7 +12,7 @@ package ai {
 	
 	public class AI {
 		
-		private static var FLOCK_MERGE_DISTANCE:Number = 100; // max distance for like units to be merged into 1 flock.
+		private static const FLOCK_MERGE_DISTANCE:Number = 150; // max distance for like units to be merged into 1 flock.
 		
 		// get the AI's unit movement order
 		public static function getUnitMovementCommand(owner:int, flocks:Vector.<Flock>, mapData:Vector.<Vector.<Tile>>, resourcePoints:Vector.<ResourcePoint>, friendlyBase:Base, enemyBase:Base):void {
@@ -29,17 +29,17 @@ package ai {
 			for each (unit in myUnits) {
 				for each (var otherUnit:Unit in myUnits) {
 					if (unit != otherUnit) {
-						if (unit.goal == otherUnit.goal && unit.unitType == otherUnit.unitType) {
-							if (unit.pos.subtract(otherUnit.pos).length < FLOCK_MERGE_DISTANCE) {
-								unit.flock.removeUnit(unit);
-								otherUnit.flock.addUnit(unit);
+						//if (unit.goal == otherUnit.goal) {
+							if (unit.unitType == otherUnit.unitType) {
+								if (unit.flock.getAvgPos().subtract(otherUnit.pos).length < FLOCK_MERGE_DISTANCE) {
+									otherUnit.flock.removeUnit(otherUnit);
+									unit.flock.addUnit(otherUnit);
+								}
 							}
-						}
+						//}
 					}
 				}
-			}
-				
-				
+			}	
 				
 			for each (unit in myUnits) {
 				// unit-specific preferences?
@@ -78,17 +78,17 @@ package ai {
 						continue;
 					}
 				}
-				if (unit.target == null) {
-					// if no special cases have been seen, attack the nearest resource point. 
-					var closestRP:ResourcePoint = closestEnemyResourcePoint(unit, resourcePoints);
-					if (closestRP != null) {
-						PlayScreen.game.getGoals(unit.flock, closestRP.pos);
-						continue;
-					}
+				// if no special cases have been seen, attack the nearest resource point. 
+				var closestRP:ResourcePoint = closestEnemyResourcePoint(unit, resourcePoints);
+				if (closestRP != null) {
+					PlayScreen.game.getGoals(unit.flock, closestRP.pos);
+					continue;
 				}
 				
 				// otherwise, charge towards the enemy's base.
-				PlayScreen.game.getGoals(unit.flock, enemyBase.pos);
+				if (unit.target == null) {
+					PlayScreen.game.getGoals(unit.flock, enemyBase.pos);
+				}
 				continue;
 			}
 		}
@@ -163,9 +163,15 @@ package ai {
 						if (unit.unitType == Unit.RAIDER) numRaiders++;
 						if (unit.unitType == Unit.SNIPER) numSnipers++;	
 					} else {
-						if (unit.unitType == Unit.INFANTRY) numRaiders -= 0.3;
-						if (unit.unitType == Unit.RAIDER) numSnipers -= 0.3;
-						if (unit.unitType == Unit.SNIPER) numInfantry -= 0.3;
+						if (unit.unitType == Unit.INFANTRY) {
+							numRaiders -= 0.3;
+						}
+						if (unit.unitType == Unit.RAIDER) {
+							numSnipers -= 0.3;
+						}
+						if (unit.unitType == Unit.SNIPER) {
+							numInfantry -= 0.3;
+						}
 					}
 				}
 			}

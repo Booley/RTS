@@ -309,6 +309,9 @@ package unitstuff {
 						goal = goals.pop();
 					} 
 				}
+				
+				// check whether it is too far from the goal.  probably stuck on an obstacle.
+				
 			} else {
 				if (goals.length > 0) {
 					goal = goals.pop();

@@ -8,7 +8,7 @@ package unitstuff {
 		public static const TEXTURE_NAME:String = Assets.SniperTexture;
 		public static const MAX_SPEED:Number = 15;
 		public static const MAX_ACCEL:Number = 10;
-		public static const MAX_HEALTH:Number = 100; 
+		public static const MAX_HEALTH:Number = 50; 
 		public static const HEALTH_REGEN:Number = 1;
 		public static const DAMAGE:Number = 50;
 		public static const ROF:Number = 3;
