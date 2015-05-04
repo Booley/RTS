@@ -19,12 +19,12 @@ package screens {
 			super();
 			
 			// add background
-			var background:Image = new Image(Assets.getTexture("MenuBackground"));
+			var background:Image = new Image(Assets.getAtlas().getTexture(Assets.MenuBackground));
 			background.width = Constants.SCREEN_WIDTH;
 			background.height = Constants.SCREEN_HEIGHT;
 			addChild(background);
 			
-			backBtn = new Button(Assets.getTexture("ButtonTexture"), "Back");
+			backBtn = new Button(Assets.getAtlas().getTexture(Assets.ButtonTexture), "Back");
 			backBtn.fontSize = 50;
 			backBtn.width = Constants.SCREEN_WIDTH;
 			backBtn.height = Constants.SCREEN_HEIGHT/5

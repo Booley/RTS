@@ -12,7 +12,7 @@ package ai {
 	
 	public class AI {
 		
-		private static const FLOCK_MERGE_DISTANCE:Number = 150; // max distance for like units to be merged into 1 flock.
+		private static const FLOCK_MERGE_DISTANCE:Number = 120; // max distance for like units to be merged into 1 flock.
 		
 		// get the AI's unit movement order
 		public static function getUnitMovementCommand(owner:int, flocks:Vector.<Flock>, mapData:Vector.<Vector.<Tile>>, resourcePoints:Vector.<ResourcePoint>, friendlyBase:Base, enemyBase:Base):void {

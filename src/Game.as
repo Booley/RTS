@@ -93,7 +93,7 @@ package {
 			scoreText.x = 200;
 			
 			//customize resource display button
-			resourceText = new TextField(100, 30, Base.DEFAULT_TOTAL_RESOURCES + "", "Verdana", 12, 0xffffff, true);
+			resourceText = new TextField(100, 30, "Gold: " + Base.DEFAULT_TOTAL_RESOURCES, "Verdana", 12, 0xffffff, true);
 			resourceText.y = 0;
 			resourceText.x = 200;
 			
@@ -119,7 +119,7 @@ package {
 			addChildAt(background, 0);
 			
 			obstaclePoints = new Vector.<Point>();
-			mapData = MapGen.getMapObstacles(MapGen.Map1Obstacles, this);
+			mapData = MapGen.getMapObstacles(Assets.Map1Obstacles, this);
 			mapWidth = mapData[0].length;
 			mapHeight = mapData.length;
 			mapWidthFactor = Constants.SCREEN_WIDTH / mapWidth;
@@ -327,8 +327,29 @@ package {
 					unit.unHighlight();
 				}
 				if (newFlock.units.length > 0) {
-					getGoals(newFlock, startTap);
 					flocks.push(newFlock); 
+					
+					var bestDist:int = DISTANCE_TO_TAP_UNIT;
+					var closestUnit:Unit;
+					// test for force-targeting on a unit
+					var unitList:Vector.<Unit> = getOtherFlockUnits(newFlock.units[0]);
+					for each (unit in unitList) {
+						// target enemy units only
+						if (this.currentPlayer != unit.owner) {
+							var thisDist:int = unit.pos.subtract(startTap).length;
+							if (thisDist < bestDist) {
+								bestDist = thisDist;
+								closestUnit = unit;
+							}
+						}
+					}
+					if (closestUnit) {
+						for each (unit in selectedUnits) {
+							unit.target = closestUnit;
+						}
+					}
+				
+					getGoals(newFlock, startTap);
 					multiplayer.sendMovement(idsToString(newFlock.units), startTap);
 				} else {
 					trace("Empty flock error");
@@ -351,13 +372,13 @@ package {
 				return;
 			} 
 			//select the nearest flock
-			var bestDist:int = DISTANCE_TO_TAP_UNIT;
+			bestDist = DISTANCE_TO_TAP_UNIT;
 			var closestFlock:Flock;
 			for each (var flock:Flock in flocks) {
 				for each (unit in flock.units) {
 					if (unit.unitType == Unit.RESOURCE_POINT) break;
 					if (this.currentPlayer != unit.owner) break;
-					var thisDist:int = unit.pos.subtract(startTap).length;
+					thisDist = unit.pos.subtract(startTap).length;
 					if (thisDist < bestDist) {
 						bestDist = thisDist;
 						closestFlock = unit.flock;

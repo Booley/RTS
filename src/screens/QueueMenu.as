@@ -25,8 +25,8 @@ package screens {
 		private var button3:Button;
 		private var messageText:TextField;
 		
-		private var butttonheight:int = 75;
-		private var butttonwidth:int = 75;
+		private var buttonheight:int = 75;
+		private var buttonwidth:int = 75;
 		private var priceheight:int = 5;
 
 		private var infpriceText:TextField;
@@ -45,22 +45,37 @@ package screens {
 			
 			// initialize and add buttons
 			button1 = new Button(Assets.getAtlas().getTexture(Infantry.TEXTURE_NAME + base.owner));
-			button1.y = Constants.SCREEN_HEIGHT - butttonheight + priceheight;
-			button1.width = butttonwidth;
-			button1.height = butttonheight;
+			button1.y = Constants.SCREEN_HEIGHT - buttonheight + priceheight;
+			button1.width = buttonwidth;
+			button1.height = buttonheight;
 			addChild(button1);
-			
+  			infpriceText = new TextField(100, 50, "" + Infantry.COST, "Verdana", 20, 0xffffff);
+			infpriceText.x = button1.x + 40;
+			infpriceText.y = button1.y + 10;
+			infpriceText.touchable = false;
+			addChild(infpriceText);
+		
 			button2 = new Button(Assets.getAtlas().getTexture(Sniper.TEXTURE_NAME + base.owner));
-			button2.y = Constants.SCREEN_HEIGHT - 2 * butttonheight + priceheight;
-			button2.width = butttonwidth;
-			button2.height = butttonheight;
+			button2.y = Constants.SCREEN_HEIGHT - 2 * buttonheight + priceheight;
+			button2.width = buttonwidth;
+			button2.height = buttonheight;
 			addChild(button2);
+			snipriceText = new TextField(100, 50, "" + Sniper.COST, "Verdana", 20, 0xffffff);
+			snipriceText.x = button2.x + 40;
+			snipriceText.y = button2.y + 10;
+			snipriceText.touchable = false;
+			addChild(snipriceText);
 			
 			button3 = new Button(Assets.getAtlas().getTexture(Raider.TEXTURE_NAME + base.owner));
-			button3.y = Constants.SCREEN_HEIGHT - 3 * butttonheight + priceheight;
-			button3.width = butttonwidth;
-			button3.height = butttonheight;
+			button3.y = Constants.SCREEN_HEIGHT - 3 * buttonheight + priceheight;
+			button3.width = buttonwidth;
+			button3.height = buttonheight;
 			addChild(button3);
+			raipriceText = new TextField(100, 50, "" + Raider.COST, "Verdana", 20, 0xffffff);
+			raipriceText.x = button3.x + 40;
+			raipriceText.y = button3.y + 10;
+			raipriceText.touchable = false;
+			addChild(raipriceText);
 			
 			//will update UI
 			messageText = new TextField(300, 200, "", "Verdana", 15, 0xffffff);
@@ -73,15 +88,7 @@ package screens {
 			
 			/***************************************/
 			//un comment to get to work again//
-			//infpriceText = new TextField(300, 300, "123","Verdana", 20, 0xffffff);
-			//snipriceText = new TextField(0, 0, "333","Verdana", 200, 0xffffff);
-			//raipriceText = new TextField(0, 2, "123");
-			
-			
-			
-			//addChild(infpriceText);
-			//addChild(snipriceText);
-			//addChild(raipriceText);
+
 			
 			queuePreview = new Sprite();
 			queuePreview.y = 440;
@@ -166,7 +173,6 @@ package screens {
 						portal.totalResources -= Raider.COST;
 						portal.queueUnit(Unit.RAIDER);
 					}
-					
 				}
 			}
 		}

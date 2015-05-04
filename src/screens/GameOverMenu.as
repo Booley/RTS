@@ -21,7 +21,7 @@ package screens {
 			super();
 			
 			// initialize and add buttons
-			backButton = new Button(Assets.getTexture("ButtonTexture"), "Back");
+			backButton = new Button(Assets.getAtlas().getTexture("ButtonTexture"), "Back");
 			backButton.fontSize = 50;
 			backButton.y = 0;
 			backButton.width = Constants.SCREEN_WIDTH;
