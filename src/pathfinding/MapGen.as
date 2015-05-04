@@ -16,9 +16,9 @@ package pathfinding {
 		public static const WALL:uint = 0xff0000;
 		public static const CAUTION:uint = 0xffff00;
 		public static const FLOOR:uint = 0x000000;
-		public static const NEUTRAL_CAPTURE_POINT:uint = 0x080808;
-		public static const BLUE_CAPTURE_POINT:uint = 0x4800ff;
-		public static const RED_CAPTURE_POINT:uint = 0x00ffff;
+		public static const NEUTRAL_CAPTURE_POINT:uint = 0x808080;
+		public static const RED_CAPTURE_POINT:uint = 0x4800ff;
+		public static const BLUE_CAPTURE_POINT:uint = 0x00ffff;
 		
 		[Embed(source="../../assets/images/maps/map1/obstacles.png")]
 		public static const Map1Obstacles:Class;
@@ -42,8 +42,14 @@ package pathfinding {
 						tileType = Tile.CAUTION;
 					} else if (color == FLOOR) {
 						tileType = Tile.FLOOR;
+					} else if (color == NEUTRAL_CAPTURE_POINT) {
+						tileType = Tile.CAUTION;
+					} else if (color == RED_CAPTURE_POINT) {
+						tileType = Tile.CAUTION;
+					} else if (color == BLUE_CAPTURE_POINT) {
+						tileType = Tile.CAUTION;
 					} 
-					v.push(new Tile(i, j, tileType));
+					v.push(new Tile(i, j, tileType, color));
 				}
 				map.push(v);
 			}

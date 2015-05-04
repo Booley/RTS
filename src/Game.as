@@ -42,13 +42,12 @@ package {
 		
 		private static const DISTANCE_TO_TAP_UNIT:Number = 30; // max distance from a unit you can tap for it to select its flock
 		private static const DISTANCE_TO_TAP_BASE:Number = 40; // max distance from a base you can tap for it to be selected
-		private static const RESOURCE_CHANGE:Number = 1; //change in resource rate when you gain/lose a resource point
-		
+
 		public var flocks:Vector.<Flock>;
 		public var bases:Vector.<Base>;
 		public var selectedUnits:Vector.<Unit>;
 		public var bullets:Vector.<Bullet>;
-		public var capturePoints:Vector.<TurretPoint>;
+		public var turretPoints:Vector.<TurretPoint>;
 		public var resourcePoints:Vector.<ResourcePoint>;
 		
 		private var pause:Boolean = true;
@@ -76,44 +75,34 @@ package {
 		private static var tickCounter:int = 0;
 		
 		private var scoreText:TextField;
-		
-		
 		private var resourceText:TextField;
-		
-		
 		
 		public function Game() {
 			super();
-			/*waitingRoom = new WaitingRoom();*/
 			//waitingRoom = new WaitingRoom();
 			
 			flocks = new Vector.<Flock>();
 			bases = new Vector.<Base>();
 			bullets = new Vector.<Bullet>();
-			capturePoints = new Vector.<TurretPoint>();
+			turretPoints = new Vector.<TurretPoint>();
 			resourcePoints = new Vector.<ResourcePoint>();
 			dictionary = new Dictionary();
-			
 			
 			this.addEventListener(NavEvent.GAME_OVER_LOSE, onGameOverLose);
 			this.addEventListener(NavEvent.GAME_OVER_WIN, onGameOverWin);
 		
 			testMap();
 			
-			test();
-			
 			scoreText = new TextField(100, 30, "Score: " + 0, "Verdana", 12, 0xffffff, true);
 			scoreText.y = 0;
 			scoreText.x = 200;
 			
-		
-			
 			//customize resource display button
 			resourceText = new TextField(100, 30, Base.DEFAULT_TOTAL_RESOURCES + "", "Verdana", 12, 0xffffff, true);
-			resourceText.y = 40;
+			resourceText.y = 00;
 			resourceText.x = 200;
 			
-			addChild(scoreText);
+			//addChild(scoreText);
 			addChild(resourceText);
 			//var glow:BlurFilter = BlurFilter.createGlow(0xaaffff, 0.5, 0.5, 0.5);
 			//this.filter = glow;
@@ -146,8 +135,27 @@ package {
 					if (mapData[y][x].basicTile.getCost() == Tile.WALL) {
 						obstaclePoints.push(indexToPos(new Point(x, y)));
 					}
+					if (mapData[y][x].type == MapGen.NEUTRAL_CAPTURE_POINT) {
+						addResourcePoint(new ResourcePoint(indexToPos(new Point(x, y)), 3));
+						trace("asdf");
+					}
+					if (mapData[y][x].type == MapGen.RED_CAPTURE_POINT) {
+						addResourcePoint(new ResourcePoint(indexToPos(new Point(x, y)), 2));
+					}
+					if (mapData[y][x].type == MapGen.BLUE_CAPTURE_POINT) {
+						addResourcePoint(new ResourcePoint(indexToPos(new Point(x, y)), 1));
+					}
 				}
 			}
+			
+			base1 = new Base(new Point(Constants.SCREEN_WIDTH / 2, Constants.SCREEN_HEIGHT - 20));
+			bases.push(base1);
+			addChild(base1);
+			addToDictionary(base1);
+			
+			base2 = new Base(new Point(Constants.SCREEN_WIDTH / 2, 20), 2, Math.PI);
+			bases.push(base2)
+			addChild(base2);
 			
 			//create the Astar instance and add the listeners
 			astar = new Astar();
@@ -218,79 +226,6 @@ package {
 			addChild(gameOverMenu);
 		}
 		
-		private function test():void {
-			// TESTING UNIT MOVEMENT AND STUFF {{{{{{{{{{{{{{{{
-			// TEAM 1
-			var unitVector:Vector.<Unit> = new Vector.<Unit>();
-			for (var i:int = 0; i < 2; i++) {
-				var x:Number = Math.random() * 100 + 30;
-				var y:Number = Math.random() * 100 + 300;
-				var unit:Unit = new Infantry(new Point(x, y));
-				unitVector.push(unit);
-				addChild(unit);
-				addToDictionary(unit);
-			}
-			var flock:Flock = new Flock(unitVector)
-			getGoals(flock, new Point(200, 300));
-			flocks.push(flock);
-			
-			// TEAM 2
-			unitVector = new Vector.<Unit>();
-			for (i = 0; i < 2; i++) {
-				x = Math.random() * 70 + 30;
-				y = Math.random() * 70 + 30;
-				unit = new Infantry(new Point(x, y), 2);
-				unitVector.push(unit);
-				addChild(unit);
-				addToDictionary(unit);
-			}
-			flock = new Flock(unitVector);
-			getGoals(flock, new Point(200, 100));
-			flocks.push(flock);
-			
-			//TEAM 3 neutral resource points
-			unitVector = new Vector.<Unit>();
-			unit = new ResourcePoint(new Point(50, 250), 3);
-			unitVector.push(unit);
-			addToDictionary(unit);
-			addChild(unit);
-			unit = new ResourcePoint(new Point(150, 250), 3);
-			unitVector.push(unit);
-			addToDictionary(unit);
-			addChild(unit);
-			unit = new ResourcePoint(new Point(250, 250), 3);
-			unitVector.push(unit);
-			addToDictionary(unit);
-			addChild(unit);
-			
-			flock = new Flock(unitVector);
-			getGoals(flock, new Point(200, 100));
-			flocks.push(flock);
-			
-			base1 = new Base(new Point(Constants.SCREEN_WIDTH / 2, Constants.SCREEN_HEIGHT - 20));
-			bases.push(base1);
-			addChild(base1);
-			addToDictionary(base1);
-			
-			base2 = new Base(new Point(Constants.SCREEN_WIDTH / 2, 20), 2, Math.PI);
-			bases.push(base2)
-			addChild(base2);
-			/*
-			var turret:TurretPoint = new TurretPoint(new Point(320 / 4, 80), 2);
-			//turret = new TurretPoint(new Point(320 / 4, 80), 2);
-			capturePoints.push(turret);
-			addChild(turret);
-			addToDictionary(base2);*/
-		}
-		
-		public function addToDictionary(u:Unit):void {
-			dictionary[u.id] = u;
-		}
-		
-		public function removeFromDictionary(u:Unit):void {
-			delete dictionary[u.id];
-		}
-		
 		public function start():void {
 			pause = false;
 		}
@@ -305,17 +240,22 @@ package {
 			if (PlayScreen.isMultiplayer && !multiplayer.isConnected) return;
 			
 			tickCounter++;
-			if (multiplayer.isConnected && tickCounter >= 60) {
+			if (multiplayer.isConnected && tickCounter >= 10) {
 				tickCounter = 0;
 				//multiplayer.sendAllPositions(getUnitMovementString(currentPlayer));
 			}
 			
-			for each (var turret:TurretPoint in capturePoints) {
+			for each (var flock:Flock in flocks) {
+				flock.tick(dt);
+			}
+			for each (var turret:TurretPoint in turretPoints) {
 				turret.tick(dt);
 			}
-			
+			for each (var rp:ResourcePoint in resourcePoints) {
+				rp.tick(dt);
+			}
 			for each (var base:Base in bases) {
-				base.tick(dt);
+				base.tick2(dt, resourcePoints);
 				if (base.owner == this.currentPlayer) {
 					resourceText.text = "Gold: " + int(base.totalResources); 
 					scoreText.text = "Score: " + base.score;
@@ -323,9 +263,6 @@ package {
 			}
 			for each (var bullet:Bullet in bullets) {
 				bullet.tick(dt);
-			}
-			for each (var flock:Flock in flocks) {
-				flock.tick(dt);
 			}
 			if (this.contains(queueMenu)) {
 				queueMenu.tick(dt);
@@ -347,6 +284,7 @@ package {
 			if (contains(queueMenu)) {
 				removeChild(queueMenu);
 			}
+			if (pause) return;
 			// if units were selected from a previous tap or drag
 			if (selectedUnits) {
 				var newFlock:Flock = new Flock();
@@ -364,7 +302,6 @@ package {
 				if (newFlock.units.length > 0) {
 					getGoals(newFlock, startTap);
 					flocks.push(newFlock); 
-					
 					multiplayer.sendMovement(idsToString(newFlock.units), startTap);
 				} else {
 					trace("Empty flock error");
@@ -391,6 +328,7 @@ package {
 			var closestFlock:Flock;
 			for each (var flock:Flock in flocks) {
 				for each (unit in flock.units) {
+					if (unit.unitType == Unit.RESOURCE_POINT) break;
 					if (this.currentPlayer != unit.owner) break;
 					var thisDist:int = unit.pos.subtract(startTap).length;
 					if (thisDist < bestDist) {
@@ -409,6 +347,7 @@ package {
 			if (contains(queueMenu)) {
 				removeChild(queueMenu);
 			}
+			if (pause) return;
 			// deselect any currently selected units
 			if (selectedUnits) {
 				for each (unit in selectedUnits) {
@@ -421,6 +360,7 @@ package {
 			for each (var flock:Flock in flocks) {
 				for each (var unit:Unit in flock.units) {
 					if (containsPoint(startTap, endTap, unit.pos)) {
+						if (unit.unitType == Unit.RESOURCE_POINT) break;
 						if (unit.owner == this.currentPlayer) {
 							unitVector.push(unit);
 						}
@@ -469,16 +409,23 @@ package {
 				}
 			}
 			
-			for each (var turret:TurretPoint in capturePoints) {
+			for each (var turret:TurretPoint in turretPoints) {
 				if (turret.owner != owner) {
 					unitVector.push(turret);
 				}
 				
 			}
 			
+			for each (var rp:ResourcePoint in resourcePoints) {
+				if (rp.owner != owner) {
+					unitVector.push(rp);
+				}
+			}
+			
 			return unitVector;
 		}
 		
+		// units to be repelled
 		public function getOtherFlockUnits(thisUnit:Unit):Vector.<Unit> {
 			// determine which units were inside the box selection
 			var unitVector:Vector.<Unit> = new Vector.<Unit>();
@@ -493,6 +440,9 @@ package {
 			}
 			for each (var base:Base in bases) {
 				unitVector.push(base);
+			}
+			for each (var rp:ResourcePoint in resourcePoints) {
+				unitVector.push(rp);
 			}
 			return unitVector;
 		}
@@ -514,29 +464,6 @@ package {
 			return null;
 		}
 		
-		// convert unit vector to string array to send in multiplayer game
-		public function idsToString(unitVector:Vector.<Unit>):String {
-			var idString:String = "";
-			for each (var unit:Unit in unitVector) {
-				idString += unit.id + " ";
-			}
-			idString = idString.substr(0, idString.length - 1);
-			return idString;
-		}
-		
-		// conver a string of unit ids into a flock full of units
-		public function idStringToUnitVector(string:String):Vector.<Unit> {
-			var unitVector:Vector.<Unit> = new Vector.<Unit>();
-			for each (var idString:String in string.split(" ")) {
-				var id:int = parseInt(idString);
-				if (id >= 0) {
-					var unit:Unit = dictionary[id];
-					unitVector.push(unit);
-				}
-			}
-			return unitVector;
-		}
-		
 		public function removeUnit(unit:Unit):void {
 			if (unit == null) {
 				return;
@@ -544,57 +471,16 @@ package {
 			removeFromDictionary(unit);
 			var flock:Flock = unit.flock;
 			if (unit.flock != null) {
-				if (Unit.RESOURCE == unit.unitType) {
-					if (unit.firstPlayerLastHit) {
-						base1.resourceRate += RESOURCE_CHANGE;
-					}
-					else if (unit.secondPlayerLastHit) {
-						base2.resourceRate += RESOURCE_CHANGE;
-					}
-					
-				}
-				if (unit.firstPlayerLastHit) {
-					base1.score += unit.cost;
-				}
-				
-				if (unit.secondPlayerLastHit) {
-					base2.score += unit.cost;
-				}
-				
 				// remove unit from its flock
 				flock.removeUnit(unit);
 				if (flock.units.length == 0) {
 					flocks.splice(flocks.indexOf(flock), 1);
 				}
 			}
-			if (Unit.RESOURCE == unit.unitType) {
+			if (Unit.RESOURCE_POINT == unit.unitType) {
 				var unitVector:Vector.<Unit> = new Vector.<Unit>();
 				var x:int = unit.x;
 				var y:int = unit.y;
-				var owner:int = 1;
-				if (unit.firstPlayerLastHit) {
-					owner = 1;
-				}
-				else if (unit.secondPlayerLastHit) {
-					owner = 2;
-				}
-				else {
-					owner = 3;
-				}
-				if (unit.owner == 1) {
-					base1.resourceRate -= RESOURCE_CHANGE;
-				}
-				if (unit.owner == 2) {
-					base2.resourceRate -= RESOURCE_CHANGE;
-				}
-				
-				var captured:ResourcePoint = new ResourcePoint(new Point(x, y), owner);
-				captured.health = 1;			
-				addResourcePoint(captured);
-				unitVector.push(captured);
-				flock = new Flock(unitVector);
-				flocks.push(flock);
-				multiplayer.sendResourceCapture(captured);
 			}
 			if (contains(unit)) {
 				removeChild(unit);
@@ -629,19 +515,54 @@ package {
 			addChild(bullet);
 		}
 		
-		public function addResourcePoint(p:ResourcePoint):void {
-			resourcePoints.push(p);
-			addChild(p);
-		}
-		
 		public function removeBullet(bullet:Bullet):void {
 			bullets.splice(bullets.indexOf(bullet), 1)
 			removeChild(bullet);
 		}
 		
+		public function addResourcePoint(p:ResourcePoint):void {
+			resourcePoints.push(p);
+			addToDictionary(p);
+			addChild(p);
+		}
+		
 		public function removeResourcePoint(p:ResourcePoint):void {
 			resourcePoints.splice(resourcePoints.indexOf(p), 1);
+			removeFromDictionary(p);
 			removeChild(p);
+		}
+			
+		public function addToDictionary(u:Unit):void {
+			dictionary[u.id] = u;
+		}
+		
+		public function removeFromDictionary(u:Unit):void {
+			delete dictionary[u.id];
+		}
+		
+		//////////////////////////// MULTIPLAYER STRING CONVERSION ////////////////////////////////////
+		
+		// convert unit vector to string array to send in multiplayer game
+		public function idsToString(unitVector:Vector.<Unit>):String {
+			var idString:String = "";
+			for each (var unit:Unit in unitVector) {
+				idString += unit.id + " ";
+			}
+			idString = idString.substr(0, idString.length - 1);
+			return idString;
+		}
+		
+		// conver a string of unit ids into a flock full of units
+		public function idStringToUnitVector(string:String):Vector.<Unit> {
+			var unitVector:Vector.<Unit> = new Vector.<Unit>();
+			for each (var idString:String in string.split(" ")) {
+				var id:int = parseInt(idString);
+				if (id >= 0) {
+					var unit:Unit = dictionary[id];
+					unitVector.push(unit);
+				}
+			}
+			return unitVector;
 		}
 				
 		// given an owner, return a string encoded with all of their units' ids + positions
@@ -670,7 +591,10 @@ package {
 				var unit:Unit = dictionary[int(unitData[0])];
 				if (unit != null) {
 					var pos:Point = new Point(int(unitData[1]), int(unitData[2]));
-					unit.pos = pos;
+					var diff:Point = pos.subtract(unit.pos);
+					var DECAY_RATE:Number = 0.5;
+					diff.normalize(diff.length * DECAY_RATE);
+					unit.pos = unit.pos.add(diff);
 				}
 			}
 		}

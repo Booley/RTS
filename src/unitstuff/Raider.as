@@ -6,15 +6,15 @@ package unitstuff {
 
 		public static const UNIT_TYPE:int = Unit.RAIDER;
 		public static const TEXTURE_NAME:String = "RaiderTexture";
-		public static const MAX_SPEED:Number = 70;
+		public static const MAX_SPEED:Number = 40;
 		public static const MAX_ACCEL:Number = 20;
 		public static const MAX_HEALTH:Number = 100; 
 		public static const HEALTH_REGEN:Number = 5;
-		public static const DAMAGE:Number = 10;
+		public static const DAMAGE:Number = 5;
 		public static const ROF:Number = 1;
 		public static const ATTACK_RANGE:Number = 80;
-		public static const BUILD_TIME:Number = 0.3;
-		public static const COST:Number = 50;
+		public static const BUILD_TIME:Number = 1;
+		public static const COST:Number = 15;
 		
 		public function Raider(startPos:Point, owner:int = 1, rotation:Number = 0) {
 			super(startPos, owner, rotation);

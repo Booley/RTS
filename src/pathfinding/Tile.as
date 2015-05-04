@@ -12,10 +12,12 @@ package pathfinding {
 		public static const CAUTION:int = 3;
 		
 		public var basicTile:BasicTile;
+		public var type:uint;
 		
-		public function Tile(x:int, y:int, tileType:int) {
+		public function Tile(x:int, y:int, tileType:int, type:uint) {
 			var theTileClass:Class = getClass(tileType);
 			basicTile = new theTileClass(x, y);
+			this.type = type;
 		}
 
 		public function getClass(tileType:int):Class {

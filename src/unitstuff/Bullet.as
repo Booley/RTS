@@ -76,15 +76,7 @@ package unitstuff {
 			var dist:Number = target.pos.subtract(pos).length;  // CHECK "if (target)" first before accessing target.pos
 			if (dist < v.length) {
 				PlayScreen.game.removeBullet(this);
-				//if (target.flock != null) {
-					target.takeDamage(damage);
-					if (target.health <= 0 && owner == 1) {
-						target.firstPlayerLastHit = true;
-					}
-					else if (target.health <= 0 && owner == 2) {
-						target.secondPlayerLastHit = true;
-					}
-				//}
+				target.takeDamage(damage, this.owner);
 				return;
 			}
 			
