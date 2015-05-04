@@ -40,13 +40,6 @@ package unitstuff
 			image.alignPivot();
 			addChild(image);
 			
-			highlightImage = new Image(Assets.getTexture(highlightTextureName));
-			highlightImage.scaleX *= 0.3;
-			highlightImage.scaleY *= 0.3; // TEMPORARY
-			highlightImage.alignPivot();
-			addChild(highlightImage);
-			highlightImage.visible = false;
-			
 			healthBackground = new Quad(30, 6, 0x000000);
 			healthBackground.x = -healthBackground.width / 2;
 			healthBackground.y = -10 - healthBackground.height / 2;

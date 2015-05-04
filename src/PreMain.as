@@ -10,7 +10,8 @@ package {
 	import flash.ui.MultitouchInputMode;
 	
 	import starling.core.Starling;
-
+	
+	[SWF(backgroundColor="#000000")]
 	public class PreMain extends Sprite {
 		
 		private var starl:Starling;
@@ -23,11 +24,11 @@ package {
 			// touch or gesture?
 			Multitouch.inputMode = MultitouchInputMode.GESTURE;
 			
-			starl = new Starling(Main, stage);
-			starl.antiAliasing = 0;
+			starl = new Starling(Main, stage, null, null, "auto", "auto");
 			starl.start();
 			
 			Starling.current.showStats = true;
+			Starling.current.nativeStage.frameRate = 60;
 		}
 		
 		

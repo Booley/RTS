@@ -24,12 +24,14 @@ package {
 		
 		public function Main() {
 			super();
+			
 			this.addEventListener(Event.ADDED_TO_STAGE, onAddToStage);
 		}
 		
 		private function onAddToStage(e:Event):void {
 			this.removeEventListener(Event.ADDED_TO_STAGE, onAddToStage);
 			
+			Starling.current.root.alpha = 0.999;
 			// initialize all screens
 			mainMenu = new MainMenu();
 			addChild(mainMenu); // start at the menu screen TEMPORARILY

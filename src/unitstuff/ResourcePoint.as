@@ -6,7 +6,7 @@ package unitstuff {
 	public class ResourcePoint extends Unit {
 
 		public static const UNIT_TYPE:int = Unit.RESOURCE_POINT;
-		public static const TEXTURE_NAME:String = "ResourcePointTexture";
+		public static const TEXTURE_NAME:String = Assets.ResourcePointTexture;
 		public static const MAX_SPEED:Number = 0; 
 		public static const MAX_ACCEL:Number = 0;
 		public static const MAX_HEALTH:Number = 100; 
@@ -43,7 +43,7 @@ package unitstuff {
 		
 		public function updateImage():void {
 			if (image && contains(image)) removeChild(image);
-			image = new Image(Assets.getTexture(textureName + owner));
+			image = new Image(Assets.getAtlas().getTexture(textureName + owner));
 			image.scaleX *= 0.15;
 			image.scaleY *= 0.15; // TEMPORARY
 			image.alignPivot();

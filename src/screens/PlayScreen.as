@@ -41,7 +41,7 @@ package screens {
 			isMultiplayer = ism;
 			
 			// initialize and add buttons
-			backBtn = new Button(Assets.getTexture("ButtonTexture"), "X");
+			backBtn = new Button(Assets.getAtlas().getTexture(Assets.ButtonTexture), "X");
 			backBtn.y = 0;
 			backBtn.width = 20; 
 			backBtn.height = 20;
@@ -167,7 +167,7 @@ package screens {
 			var touch:Touch = e.getTouch(backBtn);
 			if (touch) {
 				if (touch.phase == TouchPhase.BEGAN) {
-					dispatchEvent(new NavEvent(NavEvent.PLAY_SCREEN_BACK));
+					dispatchEventWith(NavEvent.PLAY_SCREEN_BACK);
 				}
 			}
 		}

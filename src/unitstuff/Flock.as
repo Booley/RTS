@@ -1,10 +1,5 @@
 package unitstuff {
 	
-	import be.dauntless.astar.core.Astar;
-	import be.dauntless.astar.core.PathRequest;
-	import starling.display.Sprite;
-	import starling.events.Event;
-	
 	import flash.geom.Point;
 	
 	import screens.PlayScreen;
@@ -14,12 +9,12 @@ package unitstuff {
 		
 		public var units:Vector.<Unit>;
 		public var id:String;
+		private var avgPos:Point;
 		
 		public function Flock(units:Vector.<Unit> = null) {
 			//create flock id
-			this.id = "flock-" + counter;
+			id = "flock-" + counter;
 			counter++;
-			
 			if (units == null) {
 				this.units = new Vector.<Unit>();
 			} else {
@@ -28,30 +23,37 @@ package unitstuff {
 					unit.flock = this;
 				}
 			}
+			this.avgPos = new Point();
+			recalculateAvgPos();
 		}
 		
 		public function addUnit(unit:Unit):void {
 			units.push(unit);
 			unit.flock = this;
+			recalculateAvgPos();
 		}
 		
 		public function removeUnit(unit:Unit):void {
 			unit.flock = null;
-			units.splice(units.indexOf(unit),1); // uhh.... does this work?
+			units.splice(units.indexOf(unit), 1); // uhh.... does this work?
+			recalculateAvgPos();
 		}
 		
 		public function tick(dt:Number):void {
 			for each (var unit:Unit in units) {
 				unit.tick(dt, units);
 			}
+			recalculateAvgPos();
 		}
 		
 		public function setGoals(newGoals:Vector.<Point>):void {
+			var goals:Vector.<Point>;
 			for each (var unit:Unit in this.units) {
-				var goals:Vector.<Point> = new Vector.<Point>();
+				goals = new Vector.<Point>();
 				for (var i:int = 0; i < newGoals.length; i++) {
-					goals.push(newGoals[i].clone());
+					goals.push(PlayScreen.game.indexToPos(newGoals[i]));
 				}
+				unit.goals = null;
 				unit.goals = goals;
 				// don't require first few goals in the path to smooth transition
 				if (unit.goals.length > 1) {
@@ -64,14 +66,19 @@ package unitstuff {
 			}
 		}	
 		
-		public function getAvgPos():Point {
+		private function recalculateAvgPos():void {
 			// compute average flock position
-			var avgPos:Point = new Point();
+			avgPos.setTo(0, 0);
 			for each (var unit:Unit in units) {
-				avgPos = avgPos.add(unit.pos);
+				avgPos.setTo(avgPos.x + unit.pos.x, avgPos.y + unit.pos.y);
 			}
 			// divide by number of neighbors to get average position of flock
-			avgPos.normalize(avgPos.length / units.length);
+			if (units.length > 0) {
+				avgPos.normalize(avgPos.length / units.length);
+			}
+		}
+		
+		public function getAvgPos():Point {
 			return avgPos;
 		}
 		

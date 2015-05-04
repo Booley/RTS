@@ -2,11 +2,6 @@ package unitstuff {
 	//Models the base where units spawn and should attack
 	
 	import flash.geom.Point;
-	import starling.display.Button;
-		
-	import starling.events.Event;
-	import starling.display.Image;
-	import starling.display.Sprite;
 	
 	import screens.PlayScreen;
 	
@@ -17,7 +12,7 @@ package unitstuff {
 		private static const DEFAULT_RESOURCE_RATE:Number = .03; // resource per second
 		
 		public static const UNIT_TYPE:int = Unit.INFANTRY;
-		public static const TEXTURE_NAME:String = "BaseTexture";
+		public static const TEXTURE_NAME:String = Assets.BaseTexture;
 		public static const MAX_SPEED:Number = 0;
 		public static const MAX_ACCEL:Number = 0;
 		public static const MAX_HEALTH:Number = 2000; 
@@ -78,7 +73,6 @@ package unitstuff {
 			}
 		}
 		
-		
 		public function peekNextUnit():int {
 			if (unitQueue.length > 0) {
 				return unitQueue[0];
@@ -117,8 +111,8 @@ package unitstuff {
 		
 		private function updateResources(resourcePoints:Vector.<ResourcePoint>):void {
 			totalResources += resourceRate;
-			for each (var resourcePoint:ResourcePoint in resourcePoints) {
-				if (resourcePoint.owner == this.owner) {
+			for (var i:int=0, l:int=resourcePoints.length; i<l; ++i) {
+				if (resourcePoints[i].owner == this.owner) {
 					totalResources += ResourcePoint.RESOURCE_RATE;
 				}
 			}

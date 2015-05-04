@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker http://www.codeandweb.com/texturepacker-->
+<!-- $TexturePacker:SmartUpdate:7bceddf8403e68006adb457f3c63ef44:e77e8f4f33859667330f013d87802499:16f56762a94d573415e189992fe8c31d$ -->
+<TextureAtlas imagePath="resources.png">
+    <SubTexture name="backgrounds/menu_background" x="2" y="257" width="300" height="500"/>
+    <SubTexture name="buttons/button" x="2" y="2" width="681" height="253" frameX="-4" frameY="-2" frameWidth="686" frameHeight="256"/>
+    <SubTexture name="maps/map1/background" x="304" y="257" width="300" height="500"/>
+    <SubTexture name="maps/map1/obstacles" x="606" y="257" width="15" height="25"/>
+    <SubTexture name="units/base1" x="2" y="759" width="446" height="233" frameX="0" frameY="-3" frameWidth="448" frameHeight="236"/>
+    <SubTexture name="units/base2" x="450" y="759" width="446" height="233" frameX="0" frameY="-3" frameWidth="448" frameHeight="236"/>
+    <SubTexture name="units/bullet" x="898" y="850" width="132" height="54" frameX="0" frameY="-1" frameWidth="132" frameHeight="56"/>
+    <SubTexture name="units/circle1" x="741" y="606" width="120" height="120"/>
+    <SubTexture name="units/circle2" x="863" y="606" width="120" height="120"/>
+    <SubTexture name="units/healthBackground" x="1161" y="2" width="20" height="5"/>
+    <SubTexture name="units/healthBar" x="1122" y="180" width="20" height="3"/>
+    <SubTexture name="units/highlight" x="987" y="2" width="172" height="176" frameX="-26" frameY="-24" frameWidth="224" frameHeight="224"/>
+    <SubTexture name="units/neutral_point1" x="685" y="2" width="300" height="300"/>
+    <SubTexture name="units/neutral_point2" x="606" y="304" width="300" height="300"/>
+    <SubTexture name="units/neutral_point3" x="908" y="304" width="300" height="300"/>
+    <SubTexture name="units/square1" x="985" y="606" width="120" height="120"/>
+    <SubTexture name="units/square2" x="898" y="728" width="120" height="120"/>
+    <SubTexture name="units/triangle1" x="606" y="606" width="133" height="120"/>
+    <SubTexture name="units/triangle2" x="987" y="180" width="133" height="120"/>
+</TextureAtlas>
