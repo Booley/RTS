@@ -45,6 +45,11 @@ package {
 		
 		private var pause:Boolean = true;
 		
+		// AI stuff
+		private var nextUnitTypeChosen:Boolean = false;
+		private var nextUnitType:int;
+		public var difficulty:int = AI.HARD;
+		
 		private var queueMenu:QueueMenu;
 		private var gameOverMenu:GameOverMenu;
 		public var base1:Base;
@@ -157,7 +162,6 @@ package {
 			astar = new Astar();
 			astar.addEventListener(AstarEvent.PATH_FOUND, onPathFound);
 			astar.addEventListener(AstarEvent.PATH_NOT_FOUND, onPathNotFound);
-			//astar.addAnalyzer(new SmartClippingAnalyzer());
 		}
 		
 		// starts pathfinding for the flock towards the endPoint.  onPathFound is called when this successfully finds a path.
@@ -237,16 +241,24 @@ package {
 				AIEnemyBase = base1;
 			}
 			// queue next unit
+			
 			if (AIBase.unitBuildCooldown < 0) {
-				var nextUnitType:int = AI.getUnitBuildCommand(AIOwner, flocks, mapData, resourcePoints, AIBase, AIEnemyBase);
-				if (AIBase.totalResources >= Unit.getClass(nextUnitType).COST) {
-					AIBase.totalResources -= Unit.getClass(nextUnitType).COST;
+				if (!nextUnitTypeChosen) {
+					nextUnitType = AI.getUnitBuildCommand(difficulty, AIOwner, flocks, mapData, resourcePoints, AIBase, AIEnemyBase);
+					nextUnitTypeChosen = true;
+				}
+				var penaltyFactor:int = 1;
+				if (difficulty == AI.EASY) penaltyFactor = 1.5;
+				if (difficulty == AI.MEDIUM) penaltyFactor = 1.4;
+				if (AIBase.totalResources >= Unit.getClass(nextUnitType).COST*penaltyFactor) {
+					AIBase.totalResources -= Unit.getClass(nextUnitType).COST*penaltyFactor;
 					AIBase.queueUnit(nextUnitType);
+					nextUnitTypeChosen = false;
 				}
 			}
 			
 			// do unit movement
-			AI.getUnitMovementCommand(AIOwner, flocks, mapData, resourcePoints, AIBase, AIEnemyBase);
+			AI.getUnitMovementCommand(difficulty, AIOwner, flocks, mapData, resourcePoints, AIBase, AIEnemyBase);
 			
 		}
 		

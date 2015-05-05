@@ -321,10 +321,6 @@ package unitstuff {
 		}
 		
 		private function updateMovement(dt:Number, neighbors:Vector.<Unit> = null):void {
-			if (unitType == Unit.SNIPER) {
-				trace(goal + " " + goals.length);
-			}
-			
 			//update acceleration
 			var otherFlockUnits:Vector.<Unit> = PlayScreen.game.getOtherFlockUnits(this);
 			var accel:Point = Flocking.getAcceleration(this, neighbors, otherFlockUnits, PlayScreen.game.obstaclePoints);
