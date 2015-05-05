@@ -48,7 +48,7 @@ package {
 		// AI stuff
 		private var nextUnitTypeChosen:Boolean = false;
 		private var nextUnitType:int;
-		public var difficulty:int = AI.HARD;
+		public var difficulty:int = AI.EASY;
 		
 		private var queueMenu:QueueMenu;
 		private var gameOverMenu:GameOverMenu;
@@ -211,15 +211,15 @@ package {
 			}
 		}
 		
-		public function onGameOverLose(event:NavEvent):void {
+		public function onGameOverLose(event:Event):void {
 			pause = true;
-			gameOverMenu = new GameOverMenu(2, getUserBase(currentPlayer).score);
+			gameOverMenu = new GameOverMenu(false);
 			addChild(gameOverMenu);
 		}
 		
-		public function onGameOverWin(event:NavEvent):void {
+		public function onGameOverWin(event:Event):void {
 			pause = true;
-			gameOverMenu = new GameOverMenu(1, getUserBase(currentPlayer).score);
+			gameOverMenu = new GameOverMenu(true);
 			addChild(gameOverMenu);
 		}
 		
@@ -259,10 +259,10 @@ package {
 			
 			// do unit movement
 			AI.getUnitMovementCommand(difficulty, AIOwner, flocks, mapData, resourcePoints, AIBase, AIEnemyBase);
-			
 		}
 		
 		public function tick(dt:Number):void {
+			dt *= 5;
 			if (pause) return;
 
 			if (PlayScreen.isMultiplayer && !multiplayer.isConnected && !multiplayer.opponentIsConnected) return;
@@ -564,15 +564,15 @@ package {
 				}
 			}
 			
-			// if unit is a base
-			
 			if (unit is Base) {
 				bases.splice(bases.indexOf(Base(unit)), 1);
-				//dispatchEvent(new NavEvent(NavEvent.GAME_OVER_LOSE));
-			} else {
-				//dispatchEvent(new NavEvent(NavEvent.GAME_OVER_WIN));
+				if (unit.owner == currentPlayer) {
+					dispatchEventWith(NavEvent.GAME_OVER_LOSE);
+				} else {
+					dispatchEventWith(NavEvent.GAME_OVER_WIN);
+					
+				}
 			}
-			
 		}
 
 		public function addBullet(bullet:Bullet):void {

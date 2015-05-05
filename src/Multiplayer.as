@@ -155,9 +155,6 @@ package
 			var aOpCode :String = theData.op;
 			
 			switch(aOpCode) {			
-				case OP_BASE_DESTROY:
-					
-					break;
 				case OP_UNIT_SHOOT:
 					trace("UNIT SHOOTS");
 					var unit:Unit = PlayScreen.game.dictionary[theData.unitId];
