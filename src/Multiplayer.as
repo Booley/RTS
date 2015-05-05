@@ -34,7 +34,7 @@ package
 		private const OP_MOVEMENT:String = "MO";
 		private const OP_ALL_POSITIONS:String = "APO";
 		
-		private var mConnection		:MultiUserSession;
+		public var mConnection		:MultiUserSession;
 		private var mMyID:int;
 		
 		public var signals:SignalHandler;
