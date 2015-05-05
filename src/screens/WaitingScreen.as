@@ -9,6 +9,7 @@ package screens {
 	import starling.events.TouchPhase;
 	import starling.events.Touch;
 	import starling.display.Image;
+	import flash.utils.setTimeout;
 	
 	public class WaitingScreen extends Sprite {
 		public static var roomId:String;
@@ -37,7 +38,7 @@ package screens {
 			text.x = Constants.SCREEN_WIDTH / 2;
 			text.y = Constants.SCREEN_HEIGHT / 2;
 			addChild(text);
-			
+		
 			this.addEventListener(Event.ADDED_TO_STAGE, onAddToStage);
 			
 		}
@@ -45,8 +46,10 @@ package screens {
 		public function onMatchFound(room:String):void {
 			trace("Now starting game...");
 			roomId = room;
-			//waitingRoom.mConnection.close();
+
 			dispatchEventWith(NavEvent.WAITING_SCREEN_CONNECT);
+			setTimeout(function():void { waitingRoom.mConnection.close() }, 0);
+			
 		}
 		
 		public function onAddToStage(event:Event):void {
