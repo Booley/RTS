@@ -3,7 +3,7 @@ package screens {
 	
 	import flash.geom.Point;
 	import flash.utils.getTimer;
-	
+	import flash.utils.setTimeout;
 	import flash.ui.Multitouch;
 	
 	import starling.display.Button;
@@ -60,6 +60,7 @@ package screens {
 			addChild(selectRect);
 			
 			addEventListener(Event.ADDED_TO_STAGE, onAddToStage);
+			addEventListener(Event.REMOVED_FROM_STAGE, onRemoveFromStage);
 		}
 		
 		public function newGame():void {
@@ -76,6 +77,7 @@ package screens {
 		public function endGame():void {
 			game.end();
 			removeChild(game);
+			game.multiplayer.mConnection.close();
 		}
 		
 		public function onAddToStage(event:Event):void {
