@@ -53,6 +53,7 @@ package
 		}
 		*/
 		public function Multiplayer() {
+			if (!PlayScreen.isMultiplayer) return;
 			//Logger.LEVEL = Logger.ALL;
 			opponentIsConnected = false;
 			initialize(); //T

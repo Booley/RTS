@@ -37,6 +37,7 @@
     </source-path>
     <library-path append="true">
       <path-element>C:\Users\bomoon\Documents\RTS\lib\starling.swc</path-element>
+      <path-element>C:\Users\bomoon\Documents\RTS\lib\feathers.swc</path-element>
     </library-path>
   </compiler>
   <file-specs>

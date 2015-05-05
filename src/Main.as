@@ -32,6 +32,9 @@ package {
 			this.removeEventListener(Event.ADDED_TO_STAGE, onAddToStage);
 			
 			Starling.current.root.alpha = 0.999;
+			setTheme();
+			
+			
 			// initialize all screens
 			mainMenu = new MainMenu();
 			addChild(mainMenu); // start at the menu screen TEMPORARILY
@@ -54,6 +57,10 @@ package {
 			addOptsMenuEventListeners();
 			addLoginScreenEventListeners();
 			addSignupScreenEventListeners();
+		}
+		
+		private function setTheme():void {
+			new RTSTheme();
 		}
 		
 		private function addMainMenuEventListeners():void {
@@ -192,8 +199,7 @@ package {
 		private function onSPBackBtnPress(e:Event):void {
 			removeChild(spMenu);
 			addChild(mainMenu);
-		}
-				
+		}	
 		
 		// handle SPMenu's play button press
 		private function onSPPlayBtnPress(e:Event):void {
