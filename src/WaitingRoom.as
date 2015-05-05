@@ -23,7 +23,7 @@ package
 		
 		public var isConnected:Boolean;
 		public var screen:WaitingScreen;
-		
+		private var flag:Boolean;
 		//necessary for reco1
 		public function WaitingRoom(ws:WaitingScreen) {
 			//Logger.LEVEL = Logger.ALL;
@@ -34,7 +34,8 @@ package
 		//establish connection
 		protected function initialize():void {
 			foundPlayer = false;
-			mConnection = new MultiUserSession(SERV_KEY, "multiuser/test/waitingroom"); 		// create a new instance of MultiUserSession
+			flag = false;
+			mConnection = new MultiUserSession(SERV_KEY, "multiuser/test/waitingroom/bo"); 		// create a new instance of MultiUserSession
 			
 			mConnection.onConnect 		= handleConnect;						// set the method to be executed when connected
 			mConnection.onUserAdded 	= handleUserAdded;						// set the method to be executed once a user has connected
@@ -66,13 +67,15 @@ package
 		protected function handleUserAdded(theUser:UserObject) :void {
 			trace("FOUND USER in waiting room");
 			trace("User has joined waiting room: " + theUser.name + ", total: " + mConnection.userCount + ", " + theUser.id);
+			if (flag) return;
+			flag = true;
 			/*
 			if(isConnected)
 				mConnection.close();
 			foundPlayer = true;
 			*/
 			//mConnection.close();
-			//screen.onMatchFound();
+			screen.onMatchFound();
 			
 			
 			

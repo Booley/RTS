@@ -222,7 +222,7 @@ package {
 			addChild(waitingScreen);
 			
 			//EDIT THIS TO BYPASS SCREEN
-			waitingScreen.onMatchFound();
+			//waitingScreen.onMatchFound();
 		}
 		
 		private function onWaitingScreenConnect(e:Event):void {

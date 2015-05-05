@@ -43,7 +43,7 @@ package screens {
 		
 		public function onMatchFound():void {
 			trace("Now starting game...");
-			waitingRoom.mConnection.close();
+			//waitingRoom.mConnection.close();
 			dispatchEventWith(NavEvent.WAITING_SCREEN_CONNECT);
 		}
 		
