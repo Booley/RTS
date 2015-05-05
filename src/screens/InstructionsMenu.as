@@ -9,13 +9,12 @@ package screens {
 	import starling.events.TouchPhase;
 	import starling.events.Touch;
 	
-	public class OptsMenu extends Sprite {
+	public class InstructionsMenu extends Sprite {
 		
 		private var backBtn:Button;
 		private var background:Image;
 		
-		
-		public function OptsMenu() {
+		public function InstructionsMenu() {
 			super();
 			
 			// add background
@@ -23,7 +22,6 @@ package screens {
 			background.width = Constants.SCREEN_WIDTH;
 			background.height = Constants.SCREEN_HEIGHT;
 			addChild(background);
-			
 			
 			// initialize and add buttons
 			backBtn = new Button(Assets.getAtlas().getTexture(Assets.ButtonTexture), "Back");
@@ -63,7 +61,7 @@ package screens {
 			var touch:Touch = e.getTouch(backBtn);
 			if (touch) {
 				if (touch.phase == TouchPhase.BEGAN) {
-					dispatchEventWith(NavEvent.OPTS_MENU_BACK);
+					dispatchEventWith(NavEvent.INSTRUCTIONS_MENU_BACK);
 				}
 			}
 		}

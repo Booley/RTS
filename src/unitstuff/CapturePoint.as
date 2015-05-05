@@ -34,7 +34,7 @@ package unitstuff
 		}
 		
 		override public function createArt(rotation:Number = 0):void {
-			image = new Image(Assets.getTexture(textureName + owner));
+			image = new Image(Assets.getAtlas().getTexture(textureName + owner));
 			image.scaleX *= 0.2;
 			image.scaleY *= 0.2; // TEMPORARY
 			image.alignPivot();

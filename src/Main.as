@@ -14,7 +14,7 @@ package {
 		private var spMenu:SPMenu;
 		private var mpMenu:MPMenu;
 		private var leaderboardMenu:LeaderboardMenu;
-		private var optsMenu:OptsMenu;
+		private var instructionsMenu:InstructionsMenu;
 		private var loginScreen:LoginScreen;
 		private var loginButtonScreen:LoginButtonScreen;
 		private var signupScreen:SignupScreen;
@@ -39,7 +39,7 @@ package {
 			spMenu = new SPMenu();
 			mpMenu = new MPMenu();
 			leaderboardMenu = new LeaderboardMenu();
-			optsMenu = new OptsMenu();
+			instructionsMenu = new InstructionsMenu();
 			
 			loginScreen = new LoginScreen();
 			loginButtonScreen = new LoginButtonScreen();
@@ -60,7 +60,7 @@ package {
 			mainMenu.addEventListener(NavEvent.MAIN_MENU_SP, onSPBtnPress);
 			mainMenu.addEventListener(NavEvent.MAIN_MENU_MP, onMPBtnPress);
 			mainMenu.addEventListener(NavEvent.MAIN_MENU_LEADERBOARD, onLeaderboardBtnPress);
-			mainMenu.addEventListener(NavEvent.MAIN_MENU_OPTS, onOptsBtnPress);
+			mainMenu.addEventListener(NavEvent.MAIN_MENU_OPTS, onInstructionsBtnPress);
 			mainMenu.addEventListener(NavEvent.MAIN_MENU_LOGIN, onLoginBtnPress);
 			mainMenu.addEventListener(NavEvent.MAIN_MENU_SIGNUP, onSignupBtnPress);
 		}
@@ -69,7 +69,7 @@ package {
 			mainMenu.removeEventListener(NavEvent.MAIN_MENU_SP, onSPBtnPress);
 			mainMenu.removeEventListener(NavEvent.MAIN_MENU_MP, onMPBtnPress);
 			mainMenu.removeEventListener(NavEvent.MAIN_MENU_LEADERBOARD, onLeaderboardBtnPress);
-			mainMenu.removeEventListener(NavEvent.MAIN_MENU_OPTS, onOptsBtnPress);
+			mainMenu.removeEventListener(NavEvent.MAIN_MENU_OPTS, onInstructionsBtnPress);
 			mainMenu.removeEventListener(NavEvent.MAIN_MENU_LOGIN, onLoginBtnPress);
 			mainMenu.removeEventListener(NavEvent.MAIN_MENU_SIGNUP, onSignupBtnPress);
 		}
@@ -103,11 +103,11 @@ package {
 		}
 		
 		private function addOptsMenuEventListeners():void {
-			optsMenu.addEventListener(NavEvent.OPTS_MENU_BACK, onOptsBackBtnPress);
+			instructionsMenu.addEventListener(NavEvent.INSTRUCTIONS_MENU_BACK, onInstructionsBackBtnPress);
 		}
 		
 		private function removeOptsMenuEventListeners():void {
-			optsMenu.removeEventListener(NavEvent.OPTS_MENU_BACK, onOptsBackBtnPress);
+			instructionsMenu.removeEventListener(NavEvent.INSTRUCTIONS_MENU_BACK, onInstructionsBackBtnPress);
 		}
 		
 		private function addPlayScreenEventListeners():void {
@@ -168,10 +168,10 @@ package {
 			addChild(leaderboardMenu);
 		}
 		
-		// handle optsMenu button press
-		private function onOptsBtnPress(e:Event):void {
+		// handle instructionsMenu button press
+		private function onInstructionsBtnPress(e:Event):void {
 			removeChild(mainMenu);
-			addChild(optsMenu);
+			addChild(instructionsMenu);
 		}
 		
 		//handle loginScreen button press
@@ -216,7 +216,8 @@ package {
 			addWaitingScreenEventListeners();
 			addChild(waitingScreen);
 			
-			waitingScreen.onMatchFound();
+			//EDIT THIS TO BYPASS SCREEN
+			//waitingScreen.onMatchFound();
 		}
 		
 		private function onWaitingScreenConnect(e:Event):void {
@@ -232,13 +233,13 @@ package {
 			addChild(mainMenu);
 		}
 		
-		// handle OptsMenu's back button press
-		private function onOptsBackBtnPress(e:Event):void {
-			removeChild(optsMenu);
+		// handle InstructionsMenu's back button press
+		private function onInstructionsBackBtnPress(e:Event):void {
+			removeChild(instructionsMenu);
 			addChild(mainMenu);
 		}
 		
-		// handle OptsMenu's back button press
+		// handle PlayScreen's back button press
 		private function onPlayScreenBackBtnPress(e:Event):void {
 			removeChild(playScreen);
 			addChild(mainMenu);

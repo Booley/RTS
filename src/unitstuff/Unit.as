@@ -152,6 +152,7 @@ package unitstuff {
 			healthBar.y = -10 - healthBar.height / 2;
 			healthBar.width = 20;
 			healthBar.height = 3;
+			healthBar.color = getHealthBarColor(health, maxHealth);
 			addChild(healthBar);
 		}	
 		

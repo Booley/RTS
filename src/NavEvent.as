@@ -22,7 +22,7 @@ package {
 		public static const LEADERBOARD_MENU_BACK:String = "leaderboardMenuBack";
 		
 		// events for the Options Menu
-		public static const OPTS_MENU_BACK:String = "optsMenuBack";
+		public static const INSTRUCTIONS_MENU_BACK:String = "optsMenuBack";
 		
 		// events for the Play Screen
 		public static const PLAY_SCREEN_BACK:String = "playScreenBack";

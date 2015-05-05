@@ -14,7 +14,7 @@ package screens {
 		private var mainMenuSPBtn:Button;
 		private var mainMenuMPBtn:Button;
 		private var mainMenuLeaderboardBtn:Button;
-		private var mainMenuOptsBtn:Button;
+		private var mainMenuInstructionsBtn:Button;
 		private var mainMenuLoginBtn:Button;
 		private var mainMenuSignupBtn:Button;
 		
@@ -44,23 +44,23 @@ package screens {
 			mainMenuMPBtn.height = Constants.SCREEN_HEIGHT/5;
 			addChild(mainMenuMPBtn);
 			
-			mainMenuLeaderboardBtn = new Button(Assets.getAtlas().getTexture(Assets.ButtonTexture), "Leaderboard");
+			mainMenuLeaderboardBtn = new Button(Assets.getAtlas().getTexture(Assets.ButtonTexture), "Leaderboards");
 			mainMenuLeaderboardBtn.fontSize = 50;
 			mainMenuLeaderboardBtn.y = 2*Constants.SCREEN_HEIGHT/5;
 			mainMenuLeaderboardBtn.width = Constants.SCREEN_WIDTH;
 			mainMenuLeaderboardBtn.height = Constants.SCREEN_HEIGHT/5;
-			//addChild(mainMenuLeaderboardBtn);
+			addChild(mainMenuLeaderboardBtn);
 			
-			mainMenuOptsBtn = new Button(Assets.getAtlas().getTexture(Assets.ButtonTexture), "Options");
-			mainMenuOptsBtn.fontSize = 50;
-			mainMenuOptsBtn.y = 2*Constants.SCREEN_HEIGHT/5;
-			mainMenuOptsBtn.width = Constants.SCREEN_WIDTH;
-			mainMenuOptsBtn.height = Constants.SCREEN_HEIGHT/5;
-			addChild(mainMenuOptsBtn);
+			mainMenuInstructionsBtn = new Button(Assets.getAtlas().getTexture(Assets.ButtonTexture), "Instructions");
+			mainMenuInstructionsBtn.fontSize = 50;
+			mainMenuInstructionsBtn.y = 3*Constants.SCREEN_HEIGHT/5;
+			mainMenuInstructionsBtn.width = Constants.SCREEN_WIDTH;
+			mainMenuInstructionsBtn.height = Constants.SCREEN_HEIGHT/5;
+			addChild(mainMenuInstructionsBtn);
 			
 			mainMenuLoginBtn = new Button(Assets.getAtlas().getTexture(Assets.ButtonTexture), "Login");
 			mainMenuLoginBtn.fontSize = 50;
-			mainMenuLoginBtn.y = 3*Constants.SCREEN_HEIGHT/5;
+			mainMenuLoginBtn.y = 4*Constants.SCREEN_HEIGHT/5;
 			mainMenuLoginBtn.width = Constants.SCREEN_WIDTH;
 			mainMenuLoginBtn.height = Constants.SCREEN_HEIGHT/5;
 			addChild(mainMenuLoginBtn);
@@ -70,7 +70,7 @@ package screens {
 			mainMenuSignupBtn.y = 4*Constants.SCREEN_HEIGHT/5;
 			mainMenuSignupBtn.width = Constants.SCREEN_WIDTH;
 			mainMenuSignupBtn.height = Constants.SCREEN_HEIGHT/5;
-			addChild(mainMenuSignupBtn);
+			//addChild(mainMenuSignupBtn);
 			
 			this.addEventListener(Event.ADDED_TO_STAGE, onAddToStage);
 		}
@@ -93,7 +93,7 @@ package screens {
 			mainMenuSPBtn.addEventListener(TouchEvent.TOUCH, onSPBtnPress);
 			mainMenuMPBtn.addEventListener(TouchEvent.TOUCH, onMPBtnPress);
 			mainMenuLeaderboardBtn.addEventListener(TouchEvent.TOUCH, onLeaderboardBtnPress);
-			mainMenuOptsBtn.addEventListener(TouchEvent.TOUCH, onOptsBtnPress);
+			mainMenuInstructionsBtn.addEventListener(TouchEvent.TOUCH, onInstructionsBtnPress);
 			mainMenuLoginBtn.addEventListener(TouchEvent.TOUCH, onLoginBtnPress);
 			mainMenuSignupBtn.addEventListener(TouchEvent.TOUCH, onSignupBtnPress);
 		}
@@ -102,7 +102,7 @@ package screens {
 			mainMenuSPBtn.removeEventListener(TouchEvent.TOUCH, onSPBtnPress);
 			mainMenuMPBtn.removeEventListener(TouchEvent.TOUCH, onMPBtnPress);
 			mainMenuLeaderboardBtn.removeEventListener(TouchEvent.TOUCH, onLeaderboardBtnPress);
-			mainMenuOptsBtn.removeEventListener(TouchEvent.TOUCH, onOptsBtnPress);
+			mainMenuInstructionsBtn.removeEventListener(TouchEvent.TOUCH, onInstructionsBtnPress);
 			mainMenuLoginBtn.removeEventListener(TouchEvent.TOUCH, onLoginBtnPress);
 			mainMenuSignupBtn.removeEventListener(TouchEvent.TOUCH, onSignupBtnPress);
 		}
@@ -137,9 +137,9 @@ package screens {
 			}
 		}
 		
-		// handle mainMenuOptsBtn press
-		private function onOptsBtnPress(e:TouchEvent):void {
-			var touch:Touch = e.getTouch(mainMenuOptsBtn);
+		// handle mainMenuInstructionsBtn press
+		private function onInstructionsBtnPress(e:TouchEvent):void {
+			var touch:Touch = e.getTouch(mainMenuInstructionsBtn);
 			if (touch) {
 				if (touch.phase == TouchPhase.BEGAN){
 					dispatchEventWith(NavEvent.MAIN_MENU_OPTS);

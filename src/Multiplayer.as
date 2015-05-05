@@ -38,6 +38,7 @@ package
 		
 		public var signals:SignalHandler;
 		public var isConnected:Boolean;
+		public var opponentIsConnected:Boolean;
 		
 		private var currentId:String;
 		private var opponentId:String;
@@ -53,13 +54,14 @@ package
 		*/
 		public function Multiplayer() {
 			//Logger.LEVEL = Logger.ALL;
+			opponentIsConnected = false;
 			initialize(); //T
 			signals = new SignalHandler();
 		}
 		
 		//establish connection
 		protected function initialize():void {
-			mConnection = new MultiUserSession(SERV_KEY, "multiuser/test/bo1"); 		// create a new instance of MultiUserSession
+			mConnection = new MultiUserSession(SERV_KEY, "multiuser/test/b2"); 		// create a new instance of MultiUserSession
 			
 			mConnection.onConnect 		= handleConnect;						// set the method to be executed when connected
 			mConnection.onUserAdded 	= handleUserAdded;						// set the method to be executed once a user has connected
@@ -75,7 +77,7 @@ package
 		
 		//maybe display waiting screen?
 		protected function handleConnect(theUser:UserObject) :void {
-			trace("I'm connected: " + theUser.name + ", total: " + mConnection.userCount); 
+			trace("I'm connected to game: " + theUser.name + ", total: " + mConnection.userCount); 
 			currentId = theUser.id;
 			isConnected = true;
 			trace(PlayScreen.game.currentPlayer);
@@ -84,8 +86,9 @@ package
 		//send a message saying that player X has joined, then start screen?
 		protected function handleUserAdded(theUser:UserObject) :void {
 			trace("FOUND USER");
-			trace("User has joined: " + theUser.name + ", total: " + mConnection.userCount + ", " + theUser.id);
+			trace("User has joined the game: " + theUser.name + ", total: " + mConnection.userCount + ", " + theUser.id);
 			opponentId = theUser.id;
+			opponentIsConnected = true;
 			
 			if (currentId < opponentId)
 				PlayScreen.game.currentPlayer = 1;
