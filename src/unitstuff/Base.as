@@ -93,7 +93,7 @@ package unitstuff {
 		public function tick2(dt:Number, resourcePoints:Vector.<ResourcePoint> = null):void {
 			this.tick(dt, null);
 			
-			updateResources(resourcePoints);
+			updateResources(resourcePoints, dt);
 			if (unitQueue.length > 0) {
 				unitBuildCooldown -= dt;
 			}
@@ -109,11 +109,11 @@ package unitstuff {
 			}
 		}
 		
-		private function updateResources(resourcePoints:Vector.<ResourcePoint>):void {
-			totalResources += resourceRate;
+		private function updateResources(resourcePoints:Vector.<ResourcePoint>, dt:Number):void {
+			totalResources += resourceRate*dt*60;
 			for (var i:int=0, l:int=resourcePoints.length; i<l; ++i) {
 				if (resourcePoints[i].owner == this.owner) {
-					totalResources += ResourcePoint.RESOURCE_RATE;
+					totalResources += ResourcePoint.RESOURCE_RATE*dt*60;
 				}
 			}
 		}
