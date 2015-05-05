@@ -72,7 +72,7 @@ package
 			foundPlayer = true;
 			*/
 			//mConnection.close();
-			screen.onMatchFound();
+			//screen.onMatchFound();
 			
 			
 			
