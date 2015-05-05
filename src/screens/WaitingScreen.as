@@ -48,7 +48,7 @@ package screens {
 			roomId = room;
 
 			dispatchEventWith(NavEvent.WAITING_SCREEN_CONNECT);
-			setTimeout(function():void { waitingRoom.mConnection.close() }, 0);
+			
 			
 		}
 		
