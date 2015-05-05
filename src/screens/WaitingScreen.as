@@ -46,7 +46,10 @@ package screens {
 		}
 		
 		// touch handlers
-		private function onBackBtnPress():void { dispatchEventWith(NavEvent.WAITING_SCREEN_BACK); }
+		private function onBackBtnPress():void { 
+			setTimeout(function():void { waitingRoom.mConnection.close() }, 0 );
+			dispatchEventWith(NavEvent.WAITING_SCREEN_BACK); 
+		}
 	}
 	
 }
