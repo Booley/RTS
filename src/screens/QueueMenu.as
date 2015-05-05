@@ -36,7 +36,7 @@ package screens {
 		private var snipriceText:TextField;
 		private var raipriceText:TextField;
 		
-		private var base:Base;
+		private var playerBase:Base;
 		private var queuePreview:Sprite;
 		
 		private var ang:Number;
@@ -44,7 +44,7 @@ package screens {
 		public function QueueMenu(base:Base) {
 			super();
 			
-			this.base = base;
+			this.playerBase = base;
 			
 			// initialize and add buttons
 			button1 = new Button(Assets.getAtlas().getTexture(Infantry.TEXTURE_NAME + base.owner));
@@ -142,13 +142,13 @@ package screens {
 			var touch:Touch = e.getTouch(button1);
 			if (touch) {
 				if (touch.phase == TouchPhase.BEGAN) {
-					if (base.totalResources < Infantry.COST) {
+					if (playerBase.totalResources < Infantry.COST) {
 						messageText.text = "Not Enough\nResources";
 					}
 					else {
 						messageText.text = "";
-						base.totalResources -= Infantry.COST;
-						base.queueUnit(Unit.INFANTRY);
+						playerBase.totalResources -= Infantry.COST;
+						playerBase.queueUnit(Unit.INFANTRY);
 					}
 				
 				}
@@ -160,13 +160,13 @@ package screens {
 			var touch:Touch = e.getTouch(button2);
 			if (touch) {
 				if (touch.phase == TouchPhase.BEGAN) {
-					if (base.totalResources < Sniper.COST) {
+					if (playerBase.totalResources < Sniper.COST) {
 						messageText.text = "Not Enough\nResources";
 					}
 					else {
 						messageText.text = "";
-						base.totalResources -= Sniper.COST;
-						base.queueUnit(Unit.SNIPER);
+						playerBase.totalResources -= Sniper.COST;
+						playerBase.queueUnit(Unit.SNIPER);
 					}
 					
 				}
@@ -178,20 +178,20 @@ package screens {
 			var touch:Touch = e.getTouch(button3);
 			if (touch) {
 				if (touch.phase == TouchPhase.BEGAN) {
-					if (base.totalResources < Raider.COST) {
+					if (playerBase.totalResources < Raider.COST) {
 						messageText.text = "Not Enough\nResources";
 					}
 					else {
 						messageText.text = "";
-						base.totalResources -= Raider.COST;
-						base.queueUnit(Unit.RAIDER);
+						playerBase.totalResources -= Raider.COST;
+						playerBase.queueUnit(Unit.RAIDER);
 					}
 				}
 			}
 		}
 		
 		private function checkChangeHandler(e:Event):void {
-			base.infiniteBuild = check.isSelected;
+			playerBase.infiniteBuild = check.isSelected;
 		}
 		
 		public function tick(dt:Number):void {

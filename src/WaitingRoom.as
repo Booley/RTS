@@ -14,7 +14,7 @@ package
 	public class WaitingRoom
 	{
 		private const SERVER		:String   = "rtmfp://p2p.rtmfp.net/";
-		private const DEVKEY		:String   = "e4ece8a816e8d16dabef9b1a-cb286187d4bb"; // TODO: add your Cirrus key here. You can get a key from here : http://labs.adobe.com/technologies/cirrus/
+		private const DEVKEY		:String   = "d5f3e28c7ec7157b10a77250-ebc94833328b"; // TODO: add your Cirrus key here. You can get a key from here : http://labs.adobe.com/technologies/cirrus/
 		private const SERV_KEY		:String = SERVER + DEVKEY;
 		
 		public var mConnection		:MultiUserSession;
@@ -23,7 +23,7 @@ package
 		
 		public var isConnected:Boolean;
 		public var screen:WaitingScreen;
-		
+		private var flag:Boolean;
 		//necessary for reco1
 		public function WaitingRoom(ws:WaitingScreen) {
 			//Logger.LEVEL = Logger.ALL;
@@ -34,7 +34,8 @@ package
 		//establish connection
 		protected function initialize():void {
 			foundPlayer = false;
-			mConnection = new MultiUserSession(SERV_KEY, "multiuser/test/waitingroom"); 		// create a new instance of MultiUserSession
+			flag = false;
+			mConnection = new MultiUserSession(SERV_KEY, "multiuser/test/waitingroom/bo"); 		// create a new instance of MultiUserSession
 			
 			mConnection.onConnect 		= handleConnect;						// set the method to be executed when connected
 			mConnection.onUserAdded 	= handleUserAdded;						// set the method to be executed once a user has connected
@@ -50,10 +51,8 @@ package
 		
 		//enter as the second player, then you know opponent is there
 		protected function handleConnect(theUser:UserObject) :void {
-			//trace("I'm waiting: " + theUser.name + ", total: " + mConnection.userCount); 
+			trace("I'm waiting: " + theUser.name + ", total: " + mConnection.userCount); 
 			isConnected = true;
-			//mConnection.close()
-			//screen.onMatchFound();
 			/*
 			if (mConnection.userCount == 2) {
 				foundPlayer = true;
@@ -66,16 +65,20 @@ package
 		
 		//called when 2nd player joins
 		protected function handleUserAdded(theUser:UserObject) :void {
-			trace("FOUND USER");
-			//trace("User has joined: " + theUser.name + ", total: " + mConnection.userCount + ", " + theUser.id);
+			trace("FOUND USER in waiting room");
+			trace("User has joined waiting room: " + theUser.name + ", total: " + mConnection.userCount + ", " + theUser.id);
+			if (flag) return;
+			flag = true;
 			/*
 			if(isConnected)
 				mConnection.close();
 			foundPlayer = true;
-			screen.onatchFound();
 			*/
-			
 			//mConnection.close();
+			screen.onMatchFound();
+			
+			
+			
 		}
 		
 		//stop the game if a user disconnects?

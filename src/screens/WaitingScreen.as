@@ -16,6 +16,8 @@ package screens {
 		private var backBtn:Button;
 		
 		public function WaitingScreen() {
+			waitingRoom = new WaitingRoom(this);
+			
 			super();
 			
 			// add background
@@ -36,12 +38,12 @@ package screens {
 			addChild(text);
 			
 			this.addEventListener(Event.ADDED_TO_STAGE, onAddToStage);
-			waitingRoom = new WaitingRoom(this);
-			//waitingRoom.mConnection.close();
+			
 		}
 		
 		public function onMatchFound():void {
 			trace("Now starting game...");
+			//waitingRoom.mConnection.close();
 			dispatchEventWith(NavEvent.WAITING_SCREEN_CONNECT);
 		}
 		

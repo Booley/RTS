@@ -6,6 +6,7 @@ package {
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
+	import flash.events.UncaughtErrorEvent;
 	import flash.ui.Multitouch;
 	import flash.ui.MultitouchInputMode;
 	
@@ -29,8 +30,15 @@ package {
 			
 			Starling.current.showStats = false;
 			Starling.current.nativeStage.frameRate = 60;
+			
+			loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, handleGlobalErrors);
 		}
 		
+		public function handleGlobalErrors( evt : UncaughtErrorEvent ):void
+		{
+			evt.preventDefault();
+			trace("caught some error homedawgizzle");
+		}
 		
 		private function deactivate(e:Event):void 
 		{
