@@ -221,7 +221,8 @@ package {
 			addWaitingScreenEventListeners();
 			addChild(waitingScreen);
 			
-			waitingScreen.onMatchFound();
+			//EDIT THIS TO BYPASS SCREEN
+			//waitingScreen.onMatchFound();
 		}
 		
 		private function onWaitingScreenConnect(e:Event):void {
