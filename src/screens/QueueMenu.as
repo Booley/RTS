@@ -94,7 +94,6 @@ package screens {
 			check.isSelected = true;
 			addChild(check);
 			
-			
 			// initializa the text the list of the price of each unit
 			
 			/***************************************/
