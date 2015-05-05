@@ -6,12 +6,12 @@ package unitstuff {
 
 		public static const UNIT_TYPE:int = Unit.INFANTRY;
 		public static const TEXTURE_NAME:String = Assets.InfantryTexture;
-		public static const MAX_SPEED:Number = 20; // 15;
+		public static const MAX_SPEED:Number = 200; // 15;
 		public static const MAX_ACCEL:Number = 10;
-		public static const MAX_HEALTH:Number = 200; 
+		public static const MAX_HEALTH:Number = 2000; 
 		public static const HEALTH_REGEN:Number = 2;
-		public static const DAMAGE:Number = 10;
-		public static const ROF:Number = 1;
+		public static const DAMAGE:Number = 100;
+		public static const ROF:Number = 10;
 		public static const ATTACK_RANGE:Number = 100;
 		public static const BUILD_TIME:Number = 2;
 		public static const COST:Number = 20;
