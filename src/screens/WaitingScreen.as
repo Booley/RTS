@@ -11,13 +11,14 @@ package screens {
 	import starling.display.Image;
 	
 	public class WaitingScreen extends Sprite {
+		public static var roomId:String;
 		
 		private var waitingRoom:WaitingRoom;
 		private var backBtn:Button;
 		
 		public function WaitingScreen() {
 			waitingRoom = new WaitingRoom(this);
-			
+			roomId = "nothing";
 			super();
 			
 			// add background
@@ -41,8 +42,9 @@ package screens {
 			
 		}
 		
-		public function onMatchFound():void {
+		public function onMatchFound(room:String):void {
 			trace("Now starting game...");
+			roomId = room;
 			//waitingRoom.mConnection.close();
 			dispatchEventWith(NavEvent.WAITING_SCREEN_CONNECT);
 		}

@@ -24,6 +24,7 @@ package
 		public var isConnected:Boolean;
 		public var screen:WaitingScreen;
 		private var flag:Boolean;
+		private var currentId:String;
 		//necessary for reco1
 		public function WaitingRoom(ws:WaitingScreen) {
 			//Logger.LEVEL = Logger.ALL;
@@ -53,6 +54,7 @@ package
 		protected function handleConnect(theUser:UserObject) :void {
 			trace("I'm waiting: " + theUser.name + ", total: " + mConnection.userCount); 
 			isConnected = true;
+			currentId = theUser.id;
 			/*
 			if (mConnection.userCount == 2) {
 				foundPlayer = true;
@@ -69,13 +71,17 @@ package
 			trace("User has joined waiting room: " + theUser.name + ", total: " + mConnection.userCount + ", " + theUser.id);
 			if (flag) return;
 			flag = true;
-			/*
-			if(isConnected)
-				mConnection.close();
-			foundPlayer = true;
-			*/
-			//mConnection.close();
-			screen.onMatchFound();
+			
+			//create a room id
+			var room:String = "";
+			var opponentId:String = theUser.id;
+			
+			if (currentId < opponentId)
+				room = currentId + opponentId;
+			else
+				room = opponentId + currentId;
+			
+			screen.onMatchFound(room);
 			
 			
 			
