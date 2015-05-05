@@ -38,7 +38,12 @@
       <path-element>C:\Users\John\Desktop\FlashDevelop-4.7.2\Library\AS3\classes</path-element>
     </source-path>
     <library-path append="true">
+<<<<<<< HEAD
       <path-element>C:\Users\John\Documents\RTS\lib\starling.swc</path-element>
+=======
+      <path-element>C:\Users\Evan\Documents\RTS\lib\starling.swc</path-element>
+      <path-element>C:\Users\Evan\Documents\RTS\lib\feathers.swc</path-element>
+>>>>>>> 4663d295bb930c666c909a1d8626e8af5640323c
     </library-path>
   </compiler>
   <file-specs>

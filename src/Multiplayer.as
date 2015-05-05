@@ -52,6 +52,7 @@ package
 		}
 		*/
 		public function Multiplayer() {
+			if (!PlayScreen.isMultiplayer) return;
 			//Logger.LEVEL = Logger.ALL;
 			initialize(); //T
 			signals = new SignalHandler();

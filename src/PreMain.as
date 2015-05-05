@@ -11,7 +11,7 @@ package {
 	
 	import starling.core.Starling;
 	
-	[SWF(backgroundColor="#000000")]
+	[SWF(backgroundColor="#ffffff")]
 	public class PreMain extends Sprite {
 		
 		private var starl:Starling;
@@ -27,7 +27,7 @@ package {
 			starl = new Starling(Main, stage, null, null, "auto", "auto");
 			starl.start();
 			
-			Starling.current.showStats = true;
+			Starling.current.showStats = false;
 			Starling.current.nativeStage.frameRate = 60;
 		}
 		

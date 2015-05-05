@@ -1,5 +1,7 @@
 package screens {
 	
+	import feathers.controls.Check;
+	
 	import starling.display.DisplayObjectContainer;
 	import starling.display.Image;
 	import starling.textures.Texture;
@@ -24,6 +26,7 @@ package screens {
 		private var button2:Button;
 		private var button3:Button;
 		private var messageText:TextField;
+		private var check:Check;
 		
 		private var buttonheight:int = 75;
 		private var buttonwidth:int = 75;
@@ -33,7 +36,7 @@ package screens {
 		private var snipriceText:TextField;
 		private var raipriceText:TextField;
 		
-		private var portal:Base;
+		private var base:Base;
 		private var queuePreview:Sprite;
 		
 		private var ang:Number;
@@ -41,7 +44,7 @@ package screens {
 		public function QueueMenu(base:Base) {
 			super();
 			
-			this.portal = base;
+			this.base = base;
 			
 			// initialize and add buttons
 			button1 = new Button(Assets.getAtlas().getTexture(Infantry.TEXTURE_NAME + base.owner));
@@ -82,7 +85,15 @@ package screens {
 			messageText.y = 350;
 			messageText.x = 120;
 			addChild(messageText);
-
+			
+			check = new Check();
+			check.label = "Loop Queue";
+			check.x = 100,
+			check.y = 300;
+			check.setSize(100, 100);
+			check.isSelected = true;
+			addChild(check);
+			
 			
 			// initializa the text the list of the price of each unit
 			
@@ -116,12 +127,14 @@ package screens {
 			button1.addEventListener(TouchEvent.TOUCH, onButton1Press);
 			button2.addEventListener(TouchEvent.TOUCH, onButton2Press);
 			button3.addEventListener(TouchEvent.TOUCH, onButton3Press);
+			check.addEventListener(Event.CHANGE, checkChangeHandler);
 		}
 		
 		private function removeListeners():void {
 			button1.removeEventListener(TouchEvent.TOUCH, onButton1Press);
 			button2.removeEventListener(TouchEvent.TOUCH, onButton2Press);
 			button3.removeEventListener(TouchEvent.TOUCH, onButton3Press);
+			check.removeEventListener(Event.CHANGE, checkChangeHandler);
 		}
 		
 		private function onButton1Press(e:TouchEvent):void {
@@ -129,13 +142,13 @@ package screens {
 			var touch:Touch = e.getTouch(button1);
 			if (touch) {
 				if (touch.phase == TouchPhase.BEGAN) {
-					if (portal.totalResources < Infantry.COST) {
+					if (base.totalResources < Infantry.COST) {
 						messageText.text = "Not Enough\nResources";
 					}
 					else {
 						messageText.text = "";
-						portal.totalResources -= Infantry.COST;
-						portal.queueUnit(Unit.INFANTRY);
+						base.totalResources -= Infantry.COST;
+						base.queueUnit(Unit.INFANTRY);
 					}
 				
 				}
@@ -147,13 +160,13 @@ package screens {
 			var touch:Touch = e.getTouch(button2);
 			if (touch) {
 				if (touch.phase == TouchPhase.BEGAN) {
-					if (portal.totalResources < Sniper.COST) {
+					if (base.totalResources < Sniper.COST) {
 						messageText.text = "Not Enough\nResources";
 					}
 					else {
 						messageText.text = "";
-						portal.totalResources -= Sniper.COST;
-						portal.queueUnit(Unit.SNIPER);
+						base.totalResources -= Sniper.COST;
+						base.queueUnit(Unit.SNIPER);
 					}
 					
 				}
@@ -165,16 +178,20 @@ package screens {
 			var touch:Touch = e.getTouch(button3);
 			if (touch) {
 				if (touch.phase == TouchPhase.BEGAN) {
-					if (portal.totalResources < Raider.COST) {
+					if (base.totalResources < Raider.COST) {
 						messageText.text = "Not Enough\nResources";
 					}
 					else {
 						messageText.text = "";
-						portal.totalResources -= Raider.COST;
-						portal.queueUnit(Unit.RAIDER);
+						base.totalResources -= Raider.COST;
+						base.queueUnit(Unit.RAIDER);
 					}
 				}
 			}
+		}
+		
+		private function checkChangeHandler(e:Event):void {
+			base.infiniteBuild = check.isSelected;
 		}
 		
 		public function tick(dt:Number):void {
