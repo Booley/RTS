@@ -1,5 +1,6 @@
 package {
 	
+	import feathers.controls.renderers.LayoutGroupListItemRenderer;
 	import feathers.controls.text.TextFieldTextRenderer;
 	import feathers.core.FeathersControl;
 	import feathers.text.StageTextField;
@@ -26,7 +27,11 @@ package {
 		private function initializeStyleProviders():void {
 			// button
 			this.getStyleProviderForClass(Button).defaultStyleFunction = this.setButtonStyles;
-			//FeathersControl.defaultTextRendererFactory = TextFieldTextRenderer;
+			FeathersControl.defaultTextRendererFactory = test;
+		}
+		
+		private function test():TextFieldTextRenderer {
+			return new TextFieldTextRenderer();
 		}
 		
 		private function setButtonStyles( button:Button ):void {
@@ -37,7 +42,7 @@ package {
 			button.padding = 20;
 			button.gap = 15;
 			
-			//button.defaultLabelProperties.textRenderedr = new TextFieldTextRenderer()"Verdana", 18, 0x333333);
+			button.defaultLabelProperties.textFormat = new TextFormat("Verdana", 18, 0x333333);
 		}
     }
 }
