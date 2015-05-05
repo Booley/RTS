@@ -34,7 +34,6 @@ package {
 			Starling.current.root.alpha = 0.999;
 			setTheme();
 			
-			
 			// initialize all screens
 			mainMenu = new MainMenu();
 			addChild(mainMenu); // start at the menu screen TEMPORARILY
