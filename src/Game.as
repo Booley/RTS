@@ -357,7 +357,8 @@ package {
 					}
 					if (closestUnit) {
 						for each (unit in selectedUnits) {
-							unit.target = closestUnit;
+							//unit.target = closestUnit;
+							// FORCE-TARGETING SHOULD BE SYNCED
 						}
 					}
 				
