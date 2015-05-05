@@ -266,8 +266,8 @@ package {
 			if (pause) return;
 
 			if (PlayScreen.isMultiplayer && !multiplayer.isConnected && !multiplayer.opponentIsConnected) return;
-			
 			tickCounter++;
+			
 			if (multiplayer.isConnected && tickCounter >= 10) {
 				tickCounter = 0;
 				//multiplayer.sendAllPositions(getUnitMovementString(currentPlayer));
