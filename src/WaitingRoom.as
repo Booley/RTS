@@ -10,6 +10,7 @@ package
 	import unitstuff.Unit;
 	import screens.PlayScreen;
 	import screens.WaitingScreen;
+	import flash.utils.setTimeout;
 	
 	public class WaitingRoom
 	{
@@ -63,7 +64,8 @@ package
 			trace("User has joined waiting room: " + theUser.name + ", total: " + mConnection.userCount + ", " + theUser.id);
 			if (!isWaiting) return;
 			isWaiting = false;
-			//mConnection.close();
+
+			setTimeout(function():void { mConnection.close() }, 0);
 			
 			//create a room id
 			var room:String = "";

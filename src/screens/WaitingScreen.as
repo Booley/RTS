@@ -42,15 +42,11 @@ package screens {
 		public function onMatchFound(room:String):void {
 			trace("Now starting game...");
 			roomId = room;
-
 			dispatchEventWith(NavEvent.WAITING_SCREEN_CONNECT);
-			setTimeout(function():void { waitingRoom.mConnection.close() }, 0);
 		}
 		
 		// touch handlers
 		private function onBackBtnPress():void { dispatchEventWith(NavEvent.WAITING_SCREEN_BACK); }
-		
-		
 	}
 	
 }
