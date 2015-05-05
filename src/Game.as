@@ -262,7 +262,8 @@ package {
 		}
 		
 		public function tick(dt:Number):void {
-			//dt *= 20;
+			dt *= 5;
+			
 			if (pause) return;
 
 			if (PlayScreen.isMultiplayer && !multiplayer.isConnected && !multiplayer.opponentIsConnected) return;
