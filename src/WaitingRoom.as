@@ -71,6 +71,7 @@ package
 			trace("User has joined waiting room: " + theUser.name + ", total: " + mConnection.userCount + ", " + theUser.id);
 			if (flag) return;
 			flag = true;
+			mConnection.close();
 			
 			//create a room id
 			var room:String = "";
