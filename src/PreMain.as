@@ -1,7 +1,7 @@
 package {
 
 	import flash.display.Sprite;
-	import flash.desktop.NativeApplication;
+	//import flash.desktop.NativeApplication;
 	import flash.events.Event;
 	import flash.display.Sprite;
 	import flash.display.StageAlign;

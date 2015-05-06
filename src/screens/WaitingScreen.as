@@ -41,8 +41,10 @@ package screens {
 		
 		public function onMatchFound(room:String):void {
 			trace("Now starting game...");
+			
 			roomId = room;
 			dispatchEventWith(NavEvent.WAITING_SCREEN_CONNECT);
+			PlayScreen.game.start();
 		}
 		
 		// touch handlers
