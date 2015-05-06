@@ -34,7 +34,7 @@ package
 		private const OP_MOVEMENT:String = "MO";
 		private const OP_ALL_POSITIONS:String = "APO";
 		
-		private var mConnection		:MultiUserSession;
+		public var mConnection		:MultiUserSession;
 		private var mMyID:int;
 		
 		public var signals:SignalHandler;
@@ -43,19 +43,9 @@ package
 		
 		private var currentId:String;
 		private var opponentId:String;
-		/*
-		//necessary for reco1
-		public function Multiplayer(id1:String, id2:String) {
-			//Logger.LEVEL = Logger.ALL;
-			initialize(); //T
-			signals = new SignalHandler();
-			this.id1 = id1;
-			this.id2 = id2;
-		}
-		*/
+
 		public function Multiplayer() {
 			if (!PlayScreen.isMultiplayer) return;
-			//Logger.LEVEL = Logger.ALL;
 			opponentIsConnected = false;
 			initialize(); //T
 			signals = new SignalHandler();
@@ -63,7 +53,7 @@ package
 		
 		//establish connection
 		protected function initialize():void {
-			mConnection = new MultiUserSession(SERV_KEY, "multiuser/test/bo" + WaitingScreen.roomId ); 		// create a new instance of MultiUserSession
+			mConnection = new MultiUserSession(SERV_KEY, "multiuser/test/bo2" + WaitingScreen.roomId ); 		// create a new instance of MultiUserSession
 			
 			mConnection.onConnect 		= handleConnect;						// set the method to be executed when connected
 			mConnection.onUserAdded 	= handleUserAdded;						// set the method to be executed once a user has connected
@@ -73,8 +63,6 @@ package
 			var mMyName:String  = "User_" + Math.round(Math.random()*100);
 			mConnection.connect(""+mMyName);
 
-			//need some kind of loading/waiting screen?
-			//(FlxG.state as PlayState).hud.showMessage("Connecting", DEVKEY.length == 0 ? "ATTENTION! Use a valid key in DEVKEY at Multiplayer.as (line 38)" : "Please wait while we join the fun!", Number.MAX_VALUE);
 		}
 		
 		//maybe display waiting screen?
@@ -82,7 +70,6 @@ package
 			trace("I'm connected to game: " + theUser.name + ", total: " + mConnection.userCount); 
 			currentId = theUser.id;
 			isConnected = true;
-			trace(PlayScreen.game.currentPlayer);
 		}
 		
 		//send a message saying that player X has joined, then start screen?
@@ -96,15 +83,15 @@ package
 				PlayScreen.game.currentPlayer = 1;
 			else
 				PlayScreen.game.currentPlayer = 2;
-				
-			if (mConnection.userCount == 2) {
-				PlayScreen.game.start();
-			}
 		}
 		
 		//stop the PlayScreen.game if a user disconnects?
 		protected function handleUserRemoved(theUser:UserObject) :void {
 			trace("User disconnected: " + theUser.name + ", total users: " + mConnection.userCount); 
+			//test if the opponent disconnected
+			if (theUser.id == opponentId) {
+				PlayScreen.game.dispatchEventWith(NavEvent.GAME_OVER_WIN);
+			}
 		}
 		
 		public function sendUnitShoot(mUnit:Unit, mTarget:Unit):void {
@@ -155,9 +142,6 @@ package
 			var aOpCode :String = theData.op;
 			
 			switch(aOpCode) {			
-				case OP_BASE_DESTROY:
-					
-					break;
 				case OP_UNIT_SHOOT:
 					trace("UNIT SHOOTS");
 					var unit:Unit = PlayScreen.game.dictionary[theData.unitId];
