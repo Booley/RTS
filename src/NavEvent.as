@@ -16,7 +16,8 @@ package {
 		
 		// events for the Multi-Player Menu
 		public static const MP_MENU_BACK:String = "mpMenuBack";
-		public static const MP_MENU_PLAY:String = "mpMenuPlay";
+		public static const MP_MENU_PLAY_UNRANKED:String = "mpMenuPlayUnranked";
+		public static const MP_MENU_PLAY_RANKED:String = "mpMenuPlayRanked"
 		
 		// events for the Leaderboard Menu
 		public static const LEADERBOARD_MENU_BACK:String = "leaderboardMenuBack";

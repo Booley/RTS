@@ -3,6 +3,8 @@ package {
 	
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
+	import flash.media.Sound;
+	import flash.net.URLRequest;
 	import flash.utils.Dictionary;
 	
 	import starling.text.TextField;
@@ -221,10 +223,16 @@ package {
 			addChild(gameOverMenu);
 		}
 		
+		//winner will update the database
 		public function onGameOverWin(event:Event):void {
 			pause = true;
 			gameOverMenu = new GameOverMenu(true);
 			addChild(gameOverMenu);
+			
+			
+			if (PlayScreen.isRanked)
+				multiplayer.updateElo();
+		
 		}
 		
 		public function start():void {
