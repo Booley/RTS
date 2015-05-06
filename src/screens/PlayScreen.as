@@ -1,18 +1,20 @@
 package screens {
 	//Interface for touch, also executes the tick for game.
 	
+	import feathers.controls.ButtonGroup;
+	import feathers.controls.Button;
+	import feathers.data.ListCollection;
+	
 	import flash.geom.Point;
 	import flash.utils.getTimer;
 	import flash.utils.setTimeout;
 	import flash.ui.Multitouch;
 	
-	import starling.display.Button;
 	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
 	import starling.events.Touch;
-	import starling.textures.Texture;
 	import starling.display.Quad;
 	
 	import unitstuff.*;
@@ -23,7 +25,6 @@ package screens {
 	
 		public static var game:Game;
 		
-		private var backBtn:Button;
 		private var startTap:Point;
 		private var selectRect:Quad;
 		private var lastTime:int;
@@ -40,19 +41,13 @@ package screens {
 			
 			isMultiplayer = ism;
 			
-			// initialize and add buttons
-			backBtn = new Button(Assets.getAtlas().getTexture(Assets.ButtonTexture), "X");
-			backBtn.y = 0;
-			backBtn.width = 20; 
-			backBtn.height = 20;
-			addChild(backBtn);
-			
-			// fake invisible rectangle so touch events don't fall through
-			// will be removed when a background is added
-			/*var bg:Quad = new Quad(1000, 2000);
-			bg.color = 0x000000;
-			//bg.alpha = 0;
-			addChildAt(bg, 0);*/
+			var group:ButtonGroup = new ButtonGroup();
+			group.width = 20;
+			group.dataProvider = new ListCollection([
+				{ label: "X", triggered: onBackBtnPress },
+			]);
+			group.height = 20;
+			addChild( group );
 			
 			selectRect = new Quad(1, 1, 0x00ffff);
 			selectRect.alpha = 0.2;
@@ -63,12 +58,13 @@ package screens {
 			addEventListener(Event.REMOVED_FROM_STAGE, onRemoveFromStage);
 		}
 		
+		private function onBackBtnPress():void { dispatchEventWith(NavEvent.PLAY_SCREEN_BACK); }
+		
 		public function newGame():void {
 			game = new Game();
 			if (!isMultiplayer) {
 				game.start();
 			}
-			
 			addChildAt(game, 0);
 				
 			//game.createSignalHandler();
@@ -77,14 +73,15 @@ package screens {
 		public function endGame():void {
 			game.end();
 			removeChild(game);
-			game.multiplayer.mConnection.close();
+			if (PlayScreen.isMultiplayer) {
+				game.multiplayer.mConnection.close();
+			}
 		}
 		
 		public function onAddToStage(event:Event):void {
 			removeEventListener(Event.ADDED_TO_STAGE, onAddToStage);
 			addEventListener(Event.REMOVED_FROM_STAGE, onRemoveFromStage);
 			
-			// TEMPORARY.
 			newGame();
 			
 			addListeners();
@@ -94,7 +91,6 @@ package screens {
 			removeEventListener(Event.REMOVED_FROM_STAGE, onRemoveFromStage);
 			addEventListener(Event.ADDED_TO_STAGE, onAddToStage);
 			
-			// TEMPORARY.
 			endGame();
 			
 			removeListeners();
@@ -102,13 +98,11 @@ package screens {
 		
 		private function addListeners():void {
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);	
-			backBtn.addEventListener(TouchEvent.TOUCH, onBackBtnPress);
 			addEventListener(TouchEvent.TOUCH, onTouch);			
 		}
 		
 		private function removeListeners():void {
 			removeEventListener(Event.ENTER_FRAME, onEnterFrame);
-			backBtn.removeEventListener(TouchEvent.TOUCH, onBackBtnPress);
 			removeEventListener(TouchEvent.TOUCH, onTouch);
 		}
 		
@@ -161,16 +155,6 @@ package screens {
 					}
 				}
 				
-			}
-		}
-		
-		// handle backBtn press
-		private function onBackBtnPress(e:TouchEvent):void {
-			var touch:Touch = e.getTouch(backBtn);
-			if (touch) {
-				if (touch.phase == TouchPhase.BEGAN) {
-					dispatchEventWith(NavEvent.PLAY_SCREEN_BACK);
-				}
 			}
 		}
 
