@@ -225,10 +225,10 @@ package {
 			gameOverMenu = new GameOverMenu(true);
 			addChild(gameOverMenu);
 			
-			/*
+			
 			if (PlayScreen.isRanked)
-				multiplayer.updateElo("d", "b");
-				*/
+				multiplayer.updateElo();
+		
 		}
 		
 		public function start():void {

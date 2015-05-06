@@ -25,6 +25,8 @@ package screens {
 		private var userText:TextField;
 		private var passwordText:TextField;
 		
+		public static var myUsername:String;
+		
 		public function LoginScreen() {
 			super();
 		
@@ -118,6 +120,12 @@ package screens {
 			*/
 			var urlLoader:URLLoader = URLLoader(event.target);
 			messageField.text = urlLoader.data.msg;
+			
+			if (messageField.text == "Login successful.")
+			{
+				trace("recording username...");
+				myUsername = userField.text; //be sure to assign something else when logged out
+			}
 			trace(urlLoader.data.msg);
 		 
 		}

@@ -14,6 +14,7 @@ package
 	import unitstuff.Unit;
 	import screens.PlayScreen;
 	import screens.WaitingScreen;
+	import screens.LoginScreen;
 	import flash.net.*;
 	
 	public class Multiplayer 
@@ -53,6 +54,7 @@ package
 		
 		public function Multiplayer() {
 			if (!PlayScreen.isMultiplayer) return;
+			if (PlayScreen.isRanked) currentUserName = LoginScreen.myUsername;
 			opponentIsConnected = false;
 			initialize(); //T
 			signals = new SignalHandler();
@@ -67,7 +69,8 @@ package
 			mConnection.onUserRemoved 	= handleUserRemoved;					// set the method to be executed once a user has disconnected
 			mConnection.onObjectRecieve = handleGetObject;						// set the method to be executed when we recieve data from a user
 			
-			var mMyName:String  = "User_" + Math.round(Math.random()*100);
+			var mMyName:String  = "User_" + Math.round(Math.random() * 100);
+			if (PlayScreen.isRanked) mMyName = currentUserName;
 			mConnection.connect(""+mMyName);
 
 		}
@@ -85,6 +88,7 @@ package
 			trace("User has joined the game: " + theUser.name + ", total: " + mConnection.userCount + ", " + theUser.id);
 			opponentId = theUser.id;
 			opponentIsConnected = true;
+			opponentUserName = theUser.name;
 			
 			if (currentId < opponentId)
 				PlayScreen.game.currentPlayer = 1;
@@ -196,9 +200,12 @@ package
 		//Script to update the scores in a ranked match
 		private static const UPDATE_URL:String = "http://samuelfc.mycpanel.princeton.edu/public_html/cos333/update_elo.php";
 		
-		public function updateElo(username:String, opponent:String):void {
+		public function updateElo():void {
 			trace("updating the elo scores");
 			
+			var username:String = currentUserName; //the player who calls this is the winner, so username contains winner
+			var opponent:String = opponentUserName;
+			trace("winner: " + username + ", loser: " + opponent);
 			var urlVariables:URLVariables = new URLVariables();
 			urlVariables.first = username;
 			urlVariables.second = opponent;
