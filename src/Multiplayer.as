@@ -4,6 +4,9 @@ package
 	import com.reyco1.multiuser.debug.Logger;
 	import com.reyco1.multiuser.MultiUserSession;
 	import flash.geom.Point;
+	import flash.net.URLLoader;
+	import flash.net.URLRequest;
+	import flash.net.URLVariables;
 	import mx.core.FlexApplicationBootstrap;
 	import unitstuff.Base;
 	import unitstuff.Flock;
@@ -11,6 +14,7 @@ package
 	import unitstuff.Unit;
 	import screens.PlayScreen;
 	import screens.WaitingScreen;
+	import flash.net.*;
 	
 	public class Multiplayer 
 	{
@@ -44,6 +48,9 @@ package
 		private var currentId:String;
 		private var opponentId:String;
 
+		private var currentUserName:String;
+		private var opponentUserName:String;
+		
 		public function Multiplayer() {
 			if (!PlayScreen.isMultiplayer) return;
 			opponentIsConnected = false;
@@ -183,6 +190,29 @@ package
 		private function syncUnitPosition(unitId:int, posX:int, posY:int):void {
 			var unit:Unit = PlayScreen.game.dictionary[unitId];
 			unit.pos = new Point(posX, posY);
+		}
+		
+		
+		//Script to update the scores in a ranked match
+		private static const UPDATE_URL:String = "http://samuelfc.mycpanel.princeton.edu/public_html/cos333/update_elo.php";
+		
+		public function updateElo(username:String, opponent:String):void {
+			trace("updating the elo scores");
+			
+			var urlVariables:URLVariables = new URLVariables();
+			urlVariables.first = username;
+			urlVariables.second = opponent;
+			urlVariables.win = "1";
+				
+				
+			var phpFileRequest:URLRequest = new URLRequest(UPDATE_URL);
+			phpFileRequest.method = URLRequestMethod.POST;
+			phpFileRequest.data = urlVariables;
+			
+			var phpLoader:URLLoader = new URLLoader();
+			phpLoader.dataFormat = URLLoaderDataFormat.VARIABLES;
+			//phpLoader.addEventListener(Event.COMPLETE, showResult);
+			phpLoader.load(phpFileRequest);
 		}
 	}
 }

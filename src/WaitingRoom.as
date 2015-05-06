@@ -37,8 +37,11 @@ package
 		protected function initialize():void {
 			foundPlayer = false;
 			isWaiting = true;
-			mConnection = new MultiUserSession(SERV_KEY, "multiuser/test/waitingroom/bo2"); 		// create a new instance of MultiUserSession
-			
+			if(PlayScreen.isRanked)
+				mConnection = new MultiUserSession(SERV_KEY, "multiuser/test/waitingroom/ranked/"); 		// create a new instance of MultiUserSession
+			else
+				mConnection = new MultiUserSession(SERV_KEY, "multiuser/test/waitingroom/unranked/"); 
+				
 			mConnection.onConnect 		= handleConnect;						// set the method to be executed when connected
 			mConnection.onUserAdded 	= handleUserAdded;						// set the method to be executed once a user has connected
 			mConnection.onUserRemoved 	= handleUserRemoved;					// set the method to be executed once a user has disconnected
