@@ -26,6 +26,18 @@ package {
 		[Embed(source="../assets/images/maps/map2/obstacles.png")]
 		public static const Map2Obstacles:Class;
 		
+		public static const Map3Background:String = "map3/background";
+		[Embed(source="../assets/images/maps/map3/obstacles.png")]
+		public static const Map3Obstacles:Class;
+		
+		public static const Map4Background:String = "map4/background";
+		[Embed(source="../assets/images/maps/map4/obstacles.png")]
+		public static const Map4Obstacles:Class;
+		
+		public static const Map5Background:String = "map5/background";
+		[Embed(source="../assets/images/maps/map5/obstacles.png")]
+		public static const Map5Obstacles:Class;
+		
 		private static var gameTextureAtlas:TextureAtlas;
 		private static var gameTextures:Dictionary = new Dictionary();
 		

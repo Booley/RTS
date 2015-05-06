@@ -16,7 +16,8 @@ package ai {
 		public static const MEDIUM:int = 1;
 		public static const HARD:int = 2;
 		
-		private static const FLOCK_MERGE_DISTANCE:Number = 120; // max distance for like units to be merged into 1 flock.
+		private static const FLOCK_MERGE_DISTANCE:Number = 80; // max distance for like units to be merged into 1 flock.
+		private static const FLOCK_BROKEN_DISTANCE:Number = 100; // broken flock detection
 		
 		// get the AI's unit movement order
 		public static function getUnitMovementCommand(difficulty:int, owner:int, flocks:Vector.<Flock>, mapData:Vector.<Vector.<Tile>>, resourcePoints:Vector.<ResourcePoint>, friendlyBase:Base, enemyBase:Base):void {
@@ -36,14 +37,28 @@ package ai {
 						//if (unit.goal == otherUnit.goal) {
 							if (unit.unitType == otherUnit.unitType) {
 								if (unit.flock.getAvgPos().subtract(otherUnit.pos).length < FLOCK_MERGE_DISTANCE) {
-									otherUnit.flock.removeUnit(otherUnit);
-									unit.flock.addUnit(otherUnit);
+									unit.flock.removeUnit(unit);
+									otherUnit.flock.addUnit(unit);
 								}
 							}
 						//}
 					}
 				}
 			}	
+			/*
+			// fix broken flocks
+			for each (unit in myUnits) {
+				if (unit.flock) {
+					if (unit.flock.getAvgPos().subtract(unit.pos).length > FLOCK_BROKEN_DISTANCE) {
+						trace("NOW");
+						unit.flock.removeUnit(unit);
+						unit.flock = new Flock();
+						PlayScreen.game.flocks.push(unit.flock);
+						unit.goal = null;
+						unit.goals = new Vector.<Point>();
+					}
+				}
+			}*/
 				
 			for each (unit in myUnits) {
 				if (difficulty > MEDIUM) {
@@ -63,7 +78,7 @@ package ai {
 				}
 				
 				// if the unit is already doing something, let it continue
-				if (unit.goals.length > 0) continue;
+				if (unit.goals.length > 0 || unit.target is ResourcePoint) continue;
 				if (difficulty > MEDIUM) {
 					if (unit.unitType == Unit.INFANTRY) {
 						// follow raiders
@@ -140,7 +155,6 @@ package ai {
 		
 		// get the AI's build command
 		public static function getUnitBuildCommand(difficulty:int, owner:int, flocks:Vector.<Flock>, mapData:Vector.<Vector.<Tile>>, resourcePoints:Vector.<ResourcePoint>, friendlyBase:Base, enemyBase:Base):int {
-			
 			if (difficulty == AI.EASY) {
 				if (Math.random() < 0.33) {
 					return Unit.INFANTRY;

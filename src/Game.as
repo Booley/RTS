@@ -15,8 +15,6 @@ package {
 	import starling.events.TouchPhase;
 	import starling.events.Touch;
 	import starling.textures.Texture;
-	import starling.filters.BlurFilter;
-	import starling.filters.ColorMatrixFilter;
 	
 	import be.dauntless.astar.core.Astar;
 	import be.dauntless.astar.core.PathRequest;
@@ -48,7 +46,6 @@ package {
 		// AI stuff
 		private var nextUnitTypeChosen:Boolean = false;
 		private var nextUnitType:int;
-		public var difficulty:int = AI.EASY;
 		
 		private var queueMenu:QueueMenu;
 		private var gameOverMenu:GameOverMenu;
@@ -118,13 +115,13 @@ package {
 		
 		public function testMap():void {
 			// get map background
-			background = new Image(Assets.getAtlas().getTexture(Assets.Map1Background));
+			background = new Image(Assets.getAtlas().getTexture(Assets.Map3Background));
 			background.width = Constants.SCREEN_WIDTH;
 			background.height =  Constants.SCREEN_HEIGHT;
 			addChildAt(background, 0);
 			
 			obstaclePoints = new Vector.<Point>();
-			mapData = MapGen.getMapObstacles(Assets.Map1Obstacles, this);
+			mapData = MapGen.getMapObstacles(Assets.Map3Obstacles, this);
 			mapWidth = mapData[0].length;
 			mapHeight = mapData.length;
 			mapWidthFactor = Constants.SCREEN_WIDTH / mapWidth;
@@ -244,12 +241,12 @@ package {
 			
 			if (AIBase.unitBuildCooldown < 0) {
 				if (!nextUnitTypeChosen) {
-					nextUnitType = AI.getUnitBuildCommand(difficulty, AIOwner, flocks, mapData, resourcePoints, AIBase, AIEnemyBase);
+					nextUnitType = AI.getUnitBuildCommand(PlayScreen.difficulty, AIOwner, flocks, mapData, resourcePoints, AIBase, AIEnemyBase);
 					nextUnitTypeChosen = true;
 				}
 				var penaltyFactor:int = 1;
-				if (difficulty == AI.EASY) penaltyFactor = 1.5;
-				if (difficulty == AI.MEDIUM) penaltyFactor = 1.4;
+				if (PlayScreen.difficulty == AI.EASY) penaltyFactor = 1.5;
+				if (PlayScreen.difficulty == AI.MEDIUM) penaltyFactor = 1.4;
 				if (AIBase.totalResources >= Unit.getClass(nextUnitType).COST*penaltyFactor) {
 					AIBase.totalResources -= Unit.getClass(nextUnitType).COST*penaltyFactor;
 					AIBase.queueUnit(nextUnitType);
@@ -258,11 +255,12 @@ package {
 			}
 			
 			// do unit movement
-			AI.getUnitMovementCommand(difficulty, AIOwner, flocks, mapData, resourcePoints, AIBase, AIEnemyBase);
+			AI.getUnitMovementCommand(PlayScreen.difficulty, AIOwner, flocks, mapData, resourcePoints, AIBase, AIEnemyBase);
 		}
 		
 		public function tick(dt:Number):void {
-			dt *= 5;
+			//dt *= 5;			
+			
 			if (pause) return;
 
 			if (PlayScreen.isMultiplayer && !multiplayer.isConnected && !multiplayer.opponentIsConnected) return;

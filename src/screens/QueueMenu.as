@@ -86,14 +86,6 @@ package screens {
 			messageText.x = 120;
 			addChild(messageText);
 			
-			check = new Check();
-			check.label = "Loop Queue";
-			check.x = 100,
-			check.y = 300;
-			check.setSize(100, 100);
-			check.isSelected = true;
-			addChild(check);
-			
 			// initializa the text the list of the price of each unit
 			
 			/***************************************/
@@ -126,14 +118,12 @@ package screens {
 			button1.addEventListener(TouchEvent.TOUCH, onButton1Press);
 			button2.addEventListener(TouchEvent.TOUCH, onButton2Press);
 			button3.addEventListener(TouchEvent.TOUCH, onButton3Press);
-			check.addEventListener(Event.CHANGE, checkChangeHandler);
 		}
 		
 		private function removeListeners():void {
 			button1.removeEventListener(TouchEvent.TOUCH, onButton1Press);
 			button2.removeEventListener(TouchEvent.TOUCH, onButton2Press);
 			button3.removeEventListener(TouchEvent.TOUCH, onButton3Press);
-			check.removeEventListener(Event.CHANGE, checkChangeHandler);
 		}
 		
 		private function onButton1Press(e:TouchEvent):void {

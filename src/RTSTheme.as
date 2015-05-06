@@ -35,7 +35,6 @@ package {
 		}
 		
 		private function setButtonStyles( button:Button ):void {
-			
 			button.defaultSkin = new Image(Assets.getAtlas().getTexture(Assets.ButtonTexture));
 			button.downSkin = new Image(Assets.getAtlas().getTexture(Assets.ButtonTexture));
 

@@ -18,12 +18,14 @@ package screens {
 	import starling.display.Quad;
 	
 	import unitstuff.*;
+	import ai.AI;
 	
 	public class PlayScreen extends Sprite {
 		
 		private static const TAP_LENGTH_CUTOFF:Number = 20; // length finger can travel before a tap becomes a box-select
 	
 		public static var game:Game;
+		public static var difficulty:int = AI.EASY;
 		
 		private var startTap:Point;
 		private var selectRect:Quad;
