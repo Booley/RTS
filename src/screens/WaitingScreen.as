@@ -44,7 +44,7 @@ package screens {
 			
 			roomId = room;
 			dispatchEventWith(NavEvent.WAITING_SCREEN_CONNECT);
-			PlayScreen.game.start();
+			//PlayScreen.game.start();
 		}
 		
 		// touch handlers

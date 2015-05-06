@@ -9,11 +9,28 @@ package screens {
 	import starling.events.TouchPhase;
 	import starling.events.Touch;
 	
-	public class MPMenu extends Sprite {
+	public class TutorialMenu extends Sprite {
+	
+		public function TutorialMeno():void {
+			// get map background
+			background = new Image(Assets.getAtlas().getTexture(Assets.Map1Background));
+			background.width = Constants.SCREEN_WIDTH;
+			background.height =  Constants.SCREEN_HEIGHT;
+			addChildAt(background, 0);
+			
+			// get map background
+			tutorialscreen = new Image(Assets.getAtlas().getTexture(Assets.TutorialScreen));
+			tutorialscreen.width = Constants.SCREEN_WIDTH;
+			tutorialscreen.height =  Constants.SCREEN_HEIGHT;
+			addChildAt(tutorialscreen, 0);
+	
+		}
+	}
 		
 		private var backBtn:Button;
 		private var playBtn:Button;
 		private var background:Image;
+		private var tutorialscreen:Image;
 
 		
 		public function MPMenu() {

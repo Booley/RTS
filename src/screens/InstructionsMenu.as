@@ -9,13 +9,6 @@ package screens {
 	
 	public class InstructionsMenu extends Sprite {
 		
-<<<<<<< HEAD
-		private var backBtn:Button;
-
-		private var background:Image;
-		
-=======
->>>>>>> fe71b00771fe5497749050197ef492722b776bab
 		public function InstructionsMenu() {
 			super();
 			
@@ -24,6 +17,7 @@ package screens {
 			background.height = Constants.SCREEN_HEIGHT;
 			addChild(background);
 			
+			// get map background			
 			var group:ButtonGroup = new ButtonGroup();
 			group.width = Constants.SCREEN_WIDTH;
 			group.dataProvider = new ListCollection([

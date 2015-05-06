@@ -77,6 +77,10 @@ package {
 		private var scoreText:TextField;
 		private var resourceText:TextField;
 		
+		private var playercolorText:TextField;
+		private var timeleftText:TextField;
+		private var time:Number;
+		
 		public function Game() {
 			super();
 			//waitingRoom = new WaitingRoom();
@@ -224,7 +228,24 @@ package {
 		}
 		
 		public function start():void {
-			pause = false;
+			if (currentPlayer == 1) {
+				playercolorText = new TextField(300, 100,"Blue Player Ready in", "Verdana", 20, 0x0000ff);
+			}
+			else {
+				playercolorText = new TextField(300, 100,"Red Player Ready in", "Verdana", 20, 0xcc0000);
+			}
+			
+			playercolorText.x = 0;		
+			playercolorText.y = 90;
+			playercolorText.touchable = false;
+			timeleftText = new TextField(100, 050,"3", "Verdana", 20, 0xffffff);
+			timeleftText.x = Constants.SCREEN_HEIGHT/4.5;
+			timeleftText.y = Constants.SCREEN_WIDTH/2;
+			timeleftText.touchable = false;
+			addChild(playercolorText);
+			addChild(timeleftText);
+			
+			time = 3;
 		}
 		
 		public function end():void {
@@ -262,7 +283,19 @@ package {
 		}
 		
 		public function tick(dt:Number):void {
-			dt *= 5;
+			dt *= 1;
+			
+			if (pause) {
+				time -= dt;
+				timeleftText.text = "" + int(time + 1);
+				if (time < 0) {
+					pause = false;
+					removeChild(timeleftText);
+					removeChild(playercolorText);
+				}
+			}
+			
+			
 			if (pause) return;
 
 			if (PlayScreen.isMultiplayer && !multiplayer.isConnected && !multiplayer.opponentIsConnected) return;
