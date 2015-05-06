@@ -180,7 +180,7 @@ package screens {
 		}
 		
 		private function checkChangeHandler(e:Event):void {
-			playerBase.infiniteBuild = check.isSelected;
+			//playerBase.infiniteBuild = check.isSelected;
 		}
 		
 		public function tick(dt:Number):void {

@@ -17,6 +17,7 @@ package screens {
 			background.height = Constants.SCREEN_HEIGHT;
 			addChild(background);
 			
+			// get map background			
 			var group:ButtonGroup = new ButtonGroup();
 			group.width = Constants.SCREEN_WIDTH;
 			group.dataProvider = new ListCollection([

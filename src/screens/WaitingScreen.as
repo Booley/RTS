@@ -33,7 +33,7 @@ package screens {
 			group.height = Constants.SCREEN_HEIGHT / 5 * group.dataProvider.length;
 			addChild( group );
 			
-			var text:TextField = new TextField(300, 300, "Waiting to connect...", "Verdana", 30, 0xffffff);
+			var text:TextField = new TextField(250, 250, "Waiting to connect...", "Verdana", 30, 0xffffff);
 			text.x = Constants.SCREEN_WIDTH / 2;
 			text.y = Constants.SCREEN_HEIGHT / 2;
 			addChild(text);
@@ -44,7 +44,7 @@ package screens {
 			
 			roomId = room;
 			dispatchEventWith(NavEvent.WAITING_SCREEN_CONNECT);
-			PlayScreen.game.start();
+			//PlayScreen.game.start();
 		}
 		
 		// touch handlers

@@ -25,6 +25,8 @@ package screens {
 		private var userText:TextField;
 		private var passwordText:TextField;
 		
+		public static var myUsername:String = "";
+		
 		public function LoginScreen() {
 			super();
 		
@@ -49,8 +51,8 @@ package screens {
 			userField.backgroundColor = 0x00FFFF;
 			passwordField.backgroundColor = 0x00FFFF;
 			
-			userText.textColor = 0x0000FF;
-			passwordText.textColor = 0x0000FF;
+			userText.textColor = 0x00FFFF;
+			passwordText.textColor = 0x00FFFF;
 			
 			userText.text = "Username";
 			passwordText.text = "Password";
@@ -118,6 +120,13 @@ package screens {
 			*/
 			var urlLoader:URLLoader = URLLoader(event.target);
 			messageField.text = urlLoader.data.msg;
+			
+			if (messageField.text == "Login successful.")
+			{
+				trace("recording username...");
+				PlayScreen.isRanked = true;
+				myUsername = userField.text; //be sure to assign something else when logged out!!!
+			}
 			trace(urlLoader.data.msg);
 		 
 		}

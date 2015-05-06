@@ -1,9 +1,13 @@
 package {
 	//Takes in commands from other classes and executes them. Also executes tick for all state-mutable objects
 	
+	import flash.filters.GlowFilter;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
+	import flash.media.Sound;
+	import flash.net.URLRequest;
 	import flash.utils.Dictionary;
+	import starling.filters.FragmentFilter;
 	
 	import starling.text.TextField;
 	import starling.core.Starling;
@@ -71,8 +75,11 @@ package {
 		private var waitingRoom:WaitingRoom;
 		private static var tickCounter:int = 0;
 		
-		private var scoreText:TextField;
 		private var resourceText:TextField;
+		
+		private var playercolorText:TextField;
+		private var startCountdownText:TextField;
+		private var startCountdown:Number;
 		
 		public function Game() {
 			super();
@@ -88,11 +95,7 @@ package {
 			this.addEventListener(NavEvent.GAME_OVER_LOSE, onGameOverLose);
 			this.addEventListener(NavEvent.GAME_OVER_WIN, onGameOverWin);
 		
-			testMap();
-			
-			scoreText = new TextField(100, 30, "Score: " + 0, "Verdana", 12, 0xffffff, true);
-			scoreText.y = 0;
-			scoreText.x = 200;
+			spawnMap(1);
 			
 			//customize resource display button
 			resourceText = new TextField(100, 30, "Gold: " + Base.DEFAULT_TOTAL_RESOURCES, "Verdana", 12, 0xffffff, true);
@@ -113,15 +116,15 @@ package {
 			//multiplayer.signals.game = this;
 		}
 		
-		public function testMap():void {
+		public function spawnMap(mapID:int):void {
 			// get map background
-			background = new Image(Assets.getAtlas().getTexture(Assets.Map3Background));
+			background = new Image(Assets.getAtlas().getTexture(Assets["Map" + mapID + "Background"]));
 			background.width = Constants.SCREEN_WIDTH;
 			background.height =  Constants.SCREEN_HEIGHT;
 			addChildAt(background, 0);
 			
 			obstaclePoints = new Vector.<Point>();
-			mapData = MapGen.getMapObstacles(Assets.Map3Obstacles, this);
+			mapData = MapGen.getMapObstacles(Assets["Map" + mapID + "Obstacles"], this);
 			mapWidth = mapData[0].length;
 			mapHeight = mapData.length;
 			mapWidthFactor = Constants.SCREEN_WIDTH / mapWidth;
@@ -214,14 +217,37 @@ package {
 			addChild(gameOverMenu);
 		}
 		
+		//winner will update the database
 		public function onGameOverWin(event:Event):void {
 			pause = true;
 			gameOverMenu = new GameOverMenu(true);
 			addChild(gameOverMenu);
+			
+			if (PlayScreen.isRanked) {
+				multiplayer.updateElo();
+			}
+		
 		}
 		
 		public function start():void {
-			pause = false;
+			if (currentPlayer == 1) {
+				playercolorText = new TextField(300, 100, "Blue Player Ready in", "Verdana", 20, 0x00ffff, true);
+			}
+			else {
+				playercolorText = new TextField(300, 100, "Red Player Ready in", "Verdana", 20, 0xff0000, true);
+			}
+			
+			playercolorText.x = 0;		
+			playercolorText.y = 90;
+			playercolorText.touchable = false;
+			startCountdownText = new TextField(100, 050,"3", "Verdana", 20, 0xffffff);
+			startCountdownText.x = Constants.SCREEN_HEIGHT/4.5;
+			startCountdownText.y = Constants.SCREEN_WIDTH/2;
+			startCountdownText.touchable = false;
+			addChild(playercolorText);
+			addChild(startCountdownText);
+			
+			startCountdown = 3;
 		}
 		
 		public function end():void {
@@ -259,7 +285,19 @@ package {
 		}
 		
 		public function tick(dt:Number):void {
-			//dt *= 5;			
+			dt *= 1;
+			
+			if (pause) {
+				if (startCountdownText) {
+					startCountdown -= dt;
+					startCountdownText.text = "" + int(startCountdown + 1);
+					if (startCountdown < 0) {
+						pause = false;
+						removeChild(startCountdownText);
+						removeChild(playercolorText);
+					}
+				}
+			}
 			
 			if (pause) return;
 
@@ -289,7 +327,6 @@ package {
 				base.tick2(dt, resourcePoints);
 				if (base.owner == this.currentPlayer) {
 					resourceText.text = "Gold: " + int(base.totalResources); 
-					scoreText.text = "Score: " + base.score;
 				}
 			}
 			for each (var bullet:Bullet in bullets) {
@@ -563,7 +600,6 @@ package {
 					dispatchEventWith(NavEvent.GAME_OVER_LOSE);
 				} else {
 					dispatchEventWith(NavEvent.GAME_OVER_WIN);
-					
 				}
 			}
 		}

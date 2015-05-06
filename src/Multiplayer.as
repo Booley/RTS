@@ -4,6 +4,9 @@ package
 	import com.reyco1.multiuser.debug.Logger;
 	import com.reyco1.multiuser.MultiUserSession;
 	import flash.geom.Point;
+	import flash.net.URLLoader;
+	import flash.net.URLRequest;
+	import flash.net.URLVariables;
 	import mx.core.FlexApplicationBootstrap;
 	import unitstuff.Base;
 	import unitstuff.Flock;
@@ -11,6 +14,8 @@ package
 	import unitstuff.Unit;
 	import screens.PlayScreen;
 	import screens.WaitingScreen;
+	import screens.LoginScreen;
+	import flash.net.*;
 	
 	public class Multiplayer 
 	{
@@ -44,8 +49,12 @@ package
 		private var currentId:String;
 		private var opponentId:String;
 
+		private var currentUserName:String;
+		private var opponentUserName:String;
+		
 		public function Multiplayer() {
 			if (!PlayScreen.isMultiplayer) return;
+			if (PlayScreen.isRanked) currentUserName = LoginScreen.myUsername;
 			opponentIsConnected = false;
 			initialize(); //T
 			signals = new SignalHandler();
@@ -60,7 +69,8 @@ package
 			mConnection.onUserRemoved 	= handleUserRemoved;					// set the method to be executed once a user has disconnected
 			mConnection.onObjectRecieve = handleGetObject;						// set the method to be executed when we recieve data from a user
 			
-			var mMyName:String  = "User_" + Math.round(Math.random()*100);
+			var mMyName:String  = "User_" + Math.round(Math.random() * 100);
+			if (PlayScreen.isRanked) mMyName = currentUserName;
 			mConnection.connect(""+mMyName);
 
 		}
@@ -78,11 +88,13 @@ package
 			trace("User has joined the game: " + theUser.name + ", total: " + mConnection.userCount + ", " + theUser.id);
 			opponentId = theUser.id;
 			opponentIsConnected = true;
+			opponentUserName = theUser.name;
 			
 			if (currentId < opponentId)
 				PlayScreen.game.currentPlayer = 1;
 			else
 				PlayScreen.game.currentPlayer = 2;
+			PlayScreen.game.start();
 		}
 		
 		//stop the PlayScreen.game if a user disconnects?
@@ -183,6 +195,32 @@ package
 		private function syncUnitPosition(unitId:int, posX:int, posY:int):void {
 			var unit:Unit = PlayScreen.game.dictionary[unitId];
 			unit.pos = new Point(posX, posY);
+		}
+		
+		
+		//Script to update the scores in a ranked match
+		private static const UPDATE_URL:String = "http://samuelfc.mycpanel.princeton.edu/public_html/cos333/update_elo.php";
+		
+		public function updateElo():void {
+			trace("updating the elo scores");
+			
+			var username:String = currentUserName; //the player who calls this is the winner, so username contains winner
+			var opponent:String = opponentUserName;
+			trace("winner: " + username + ", loser: " + opponent);
+			var urlVariables:URLVariables = new URLVariables();
+			urlVariables.first = username;
+			urlVariables.second = opponent;
+			urlVariables.win = "1";
+				
+				
+			var phpFileRequest:URLRequest = new URLRequest(UPDATE_URL);
+			phpFileRequest.method = URLRequestMethod.POST;
+			phpFileRequest.data = urlVariables;
+			
+			var phpLoader:URLLoader = new URLLoader();
+			phpLoader.dataFormat = URLLoaderDataFormat.VARIABLES;
+			//phpLoader.addEventListener(Event.COMPLETE, showResult);
+			phpLoader.load(phpFileRequest);
 		}
 	}
 }
