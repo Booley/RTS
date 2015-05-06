@@ -31,7 +31,7 @@ package screens {
 		
 		private var waitingRoom:WaitingRoom;
 		public static var isMultiplayer:Boolean;
-		public static var isRanked:Boolean = true; //CAREFUL WITH DEFAULT VALUE
+		public static var isRanked:Boolean = false; //CAREFUL WITH DEFAULT VALUE
 		
 		// handle events and user input and pass data to the game
 		// the "PlayScreen" abstraction will pass data to Game.  Game will 
