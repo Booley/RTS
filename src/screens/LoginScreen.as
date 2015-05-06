@@ -25,7 +25,7 @@ package screens {
 		private var userText:TextField;
 		private var passwordText:TextField;
 		
-		public static var myUsername:String;
+		public static var myUsername:String = "";
 		
 		public function LoginScreen() {
 			super();
@@ -124,7 +124,8 @@ package screens {
 			if (messageField.text == "Login successful.")
 			{
 				trace("recording username...");
-				myUsername = userField.text; //be sure to assign something else when logged out
+				PlayScreen.isRanked = true;
+				myUsername = userField.text; //be sure to assign something else when logged out!!!
 			}
 			trace(urlLoader.data.msg);
 		 

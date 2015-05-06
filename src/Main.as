@@ -92,12 +92,14 @@ package {
 		
 		private function addMPMenuEventListeners():void {
 			mpMenu.addEventListener(NavEvent.MP_MENU_BACK, onMPBackBtnPress);
-			mpMenu.addEventListener(NavEvent.MP_MENU_PLAY, onMPPlayBtnPress);
+			mpMenu.addEventListener(NavEvent.MP_MENU_PLAY_UNRANKED, onMPPlayUnrankedBtnPress);
+			mpMenu.addEventListener(NavEvent.MP_MENU_PLAY_RANKED, onMPPlayRankedBtnPress);
 		}
 		
 		private function removeMPMenuEventListeners():void {
 			mpMenu.removeEventListener(NavEvent.MP_MENU_BACK, onMPBackBtnPress);
-			mpMenu.removeEventListener(NavEvent.MP_MENU_PLAY, onMPPlayBtnPress);
+			mpMenu.removeEventListener(NavEvent.MP_MENU_PLAY_UNRANKED, onMPPlayUnrankedBtnPress);
+			mpMenu.removeEventListener(NavEvent.MP_MENU_PLAY_RANKED, onMPPlayRankedBtnPress);
 		}
 		
 		private function addLeaderboardMenuEventListeners():void {
@@ -214,9 +216,10 @@ package {
 			addChild(mainMenu);
 		}
 		
-		// handle SPMenu's play button press
-		private function onMPPlayBtnPress(e:Event):void {
+		// handle MPMenu's play button press
+		private function onMPPlayUnrankedBtnPress(e:Event):void {
 			removeChild(mpMenu);
+			PlayScreen.isRanked = false;
 			waitingScreen = new WaitingScreen();
 			addWaitingScreenEventListeners();
 			addChild(waitingScreen);
@@ -224,6 +227,19 @@ package {
 			//EDIT THIS TO BYPASS SCREEN
 			//waitingScreen.onMatchFound();
 		}
+		
+		// handle MPMenu's play button press
+		private function onMPPlayRankedBtnPress(e:Event):void {			
+			removeChild(mpMenu);
+			PlayScreen.isRanked = true;
+			waitingScreen = new WaitingScreen();
+			addWaitingScreenEventListeners();
+			addChild(waitingScreen);
+			
+			//EDIT THIS TO BYPASS SCREEN
+			//waitingScreen.onMatchFound();
+		}
+		
 		
 		private function onWaitingScreenConnect(e:Event):void {
 			removeChild(waitingScreen);
