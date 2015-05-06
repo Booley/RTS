@@ -12,6 +12,7 @@ package screens {
 	public class InstructionsMenu extends Sprite {
 		
 		private var backBtn:Button;
+
 		private var background:Image;
 		
 		public function InstructionsMenu() {
