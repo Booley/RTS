@@ -17,6 +17,8 @@ package {
 		public static const ResourcePointTexture:String = "neutral_point";
 		public static const HealthBackgroundTexture:String = "healthBackground";
 		public static const HealthBarTexture:String = "healthBar";
+		public static const Title:String = "title";
+		public static const Instructions:String = "info";
 				
 		public static const Map1Background:String = "map1/background";
 		[Embed(source="../assets/images/maps/map1/obstacles.png")]
@@ -43,12 +45,6 @@ package {
 		
 		[Embed(source="../assets/images/buttons/button2.png")]
 		public static const TestButton:Class;
-		
-		[Embed(source="../assets/images/backgrounds/title.png")]
-		public static const Title:Class;
-		
-		[Embed(source="../assets/images/backgrounds/info.png")]
-		public static const Instructions:Class;
 		
 		private static var gameTextureAtlas:TextureAtlas;
 		private static var gameTextures:Dictionary = new Dictionary();

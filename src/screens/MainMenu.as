@@ -20,10 +20,10 @@ package screens {
 			background.height = Constants.SCREEN_HEIGHT;
 			addChild(background);
 			
-			var image:Image = new Image(Assets.getTexture2(Assets.Title) );
+			var image:Image = new Image(Assets.getAtlas().getTexture(Assets.Title));
 			image.width = Constants.SCREEN_WIDTH;
 			//image.scaleX *= 0.5;
-			image.scaleY *= 0.6; // TEMPORARY
+			image.scaleY *= 0.7; // TEMPORARY
 			addChild(image);
 			
 			group = new ButtonGroup();
@@ -36,10 +36,8 @@ package screens {
 				{ label: "Login", triggered: onLoginBtnPress },
 			]);
 			group.height = Constants.SCREEN_HEIGHT / 8 * group.dataProvider.length;
-			group.y = image.height;
+			group.y = Constants.SCREEN_HEIGHT - group.height;
 			addChild( group );
-			
-			
 		}
 		
 		// touch handlers

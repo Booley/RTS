@@ -39,7 +39,6 @@ package screens {
 			passwordText = new TextField();
 			emailText = new TextField();
 			
-			
 			var textFormat:TextFormat = new TextFormat("Arial", 20, 0x000000);
 			textFormat.align = TextFormatAlign.LEFT;
 			
@@ -57,48 +56,50 @@ package screens {
 			
 			
 			messageField.text = "";
-			messageField.width = 300;
+			messageField.width = Constants.SCREEN_WIDTH;
 			
 			userField.background = true;
 			passwordField.background = true;
 			emailField.background = true;
 			
-			userField.backgroundColor = 0x00FFFF;
-			passwordField.backgroundColor = 0x00FFFF;
-			emailField.backgroundColor = 0x00FFFF;
+			userField.backgroundColor = 0x00ffff;
+			passwordField.backgroundColor = 0x00ffff;
+			emailField.backgroundColor = 0x00ffff;
 			
-			userField.width = 150;
-			passwordField.width = 150;
-			emailField.width = 150;
+			userField.width = 2*Constants.SCREEN_WIDTH/3;
+			passwordField.width = 2*Constants.SCREEN_WIDTH/3;
+			emailField.width = 2*Constants.SCREEN_WIDTH/3;
 			
+			userField.height = Constants.SCREEN_HEIGHT / 8;
+			userText.height = Constants.SCREEN_HEIGHT / 8;
+			passwordField.height = Constants.SCREEN_HEIGHT / 8;
+			passwordText.height = Constants.SCREEN_HEIGHT / 8;
+			emailField.height = Constants.SCREEN_HEIGHT / 8;
+			emailText.height = Constants.SCREEN_HEIGHT / 8;
+			
+			userField.x = Constants.SCREEN_WIDTH / 3;
+			passwordField.x = Constants.SCREEN_WIDTH / 3;
+			emailField.x = Constants.SCREEN_WIDTH / 3;
 			
 			userField.y = 0;
 			userText.y = 0;
-			passwordField.y = 100;
-			passwordText.y = 100;
-			emailField.y = 200;
-			emailText.y = 200;
-			messageField.y = 250;
+			passwordField.y = Constants.SCREEN_HEIGHT / 5;
+			passwordText.y = Constants.SCREEN_HEIGHT / 5;
+			emailField.y = 2*Constants.SCREEN_HEIGHT / 5;
+			emailText.y = 2*Constants.SCREEN_HEIGHT / 5;
+			messageField.y = 3 * Constants.SCREEN_HEIGHT / 5;
 			
 			userField.restrict = "A-Za-z0-9";
 			passwordField.restrict = "A-Za-z0-9";
-			
-			userField.height = 50;
-			passwordField.height = 50;
-			emailField.height = 50;
-			
-			userField.x = 150;
-			passwordField.x = 150;
-			emailField.x = 150;
 			
 			userText.text = "Username";
 			passwordText.text = "Password";
 			emailText.text = "Email";
 			
-			userText.textColor = 0x00FFFF;
-			passwordText.textColor = 0x00FFFF;
-			emailText.textColor = 0x00FFFF;
-			messageField.textColor = 0x00FFFF;
+			userText.textColor = 0xffffff;
+			passwordText.textColor = 0xffffff;
+			emailText.textColor = 0xffffff;
+			messageField.textColor = 0xffffff;
 			
 			userField.maxChars = 15;
 			passwordField.maxChars = 15;

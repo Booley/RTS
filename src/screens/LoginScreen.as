@@ -51,35 +51,35 @@ package screens {
 			userField.background = true;
 			passwordField.background = true;
 			
-			userField.backgroundColor = 0x00FFFF;
-			passwordField.backgroundColor = 0x00FFFF;
+			userField.backgroundColor = 0x00ffff;
+			passwordField.backgroundColor = 0x00ffff;
 			
-			userText.textColor = 0x00FFFF;
-			passwordText.textColor = 0x00FFFF;
+			userText.textColor = 0xffffff;
+			passwordText.textColor = 0xffffff;
 			
 			userText.text = "Username";
 			passwordText.text = "Password";
 			
-			userField.height = 50;
-			passwordField.height = 50;
+			userField.height = Constants.SCREEN_HEIGHT/8;
+			passwordField.height = Constants.SCREEN_HEIGHT/8;
 			
-			userField.x = 150;
-			passwordField.x = 150;
+			userField.x = Constants.SCREEN_WIDTH/3;
+			passwordField.x = Constants.SCREEN_WIDTH / 3;
 			
-			userField.width = 150;
-			passwordField.width = 150;
+			userField.y = 0;
+			userText.y = 0;
+			passwordField.y = Constants.SCREEN_HEIGHT / 5;
+			passwordText.y = Constants.SCREEN_HEIGHT / 5;
+			messageField.y = 2 * Constants.SCREEN_HEIGHT / 5;
+			
+			userField.width = 2*Constants.SCREEN_WIDTH/3;
+			passwordField.width = 2*Constants.SCREEN_WIDTH/3;
 			
 			userField.type = TextFieldType.INPUT;
 			passwordField.type = TextFieldType.INPUT;
 			
-			messageField.width = 300;
-			messageField.textColor = 0x00FFFF;
-			
-			userField.y = 0;
-			userText.y = 0;
-			passwordField.y = 100;
-			passwordText.y = 100;
-			messageField.y = 200;
+			messageField.width = Constants.SCREEN_WIDTH;
+			messageField.textColor = 0xffffff;
 			
 			userField.restrict = "A-Za-z0-9";
 			passwordField.restrict = "A-Za-z0-9";

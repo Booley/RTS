@@ -18,13 +18,13 @@ package screens {
 		
 			var group:ButtonGroup = new ButtonGroup();
 			group.width = Constants.SCREEN_WIDTH;
-			group.y = 2 * Constants.SCREEN_HEIGHT / 5;
 			group.dataProvider = new ListCollection([
 				{ label: "Register", triggered: onRegisterBtnPress },
 				{ label: "Login", triggered: onLoginBtnPress },
 				{ label: "Back", triggered: onBackBtnPress },
 			]);
 			group.height = Constants.SCREEN_HEIGHT / 8 * group.dataProvider.length;
+			group.y = Constants.SCREEN_HEIGHT - group.height;
 			addChild( group );
 		}
 		

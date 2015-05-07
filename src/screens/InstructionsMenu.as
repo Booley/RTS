@@ -24,11 +24,12 @@ package screens {
 				{ label: "Back", triggered: onBackBtnPress },
 			]);
 			group.height = Constants.SCREEN_HEIGHT / 8 * group.dataProvider.length;
+			group.y = Constants.SCREEN_HEIGHT - group.height;
 			addChild( group );
 			
-			var image:Image = new Image(Assets.getTexture2(Assets.Instructions) );
+			var image:Image = new Image(Assets.getAtlas().getTexture(Assets.Instructions));
 			//image.x = -30;
-			image.y = group.height/1.5;
+			image.y = 0;
 			var scale:Number = Constants.SCREEN_WIDTH / image.width;
 			image.width = Constants.SCREEN_WIDTH;
 			image.height *= scale;

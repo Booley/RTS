@@ -1,33 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with TexturePacker http://www.codeandweb.com/texturepacker-->
-<!-- $TexturePacker:SmartUpdate:bd1182f5c968a8b24f4f9e69c6823408:c09245350bb61ccf4d4f73a58d9a8b10:16f56762a94d573415e189992fe8c31d$ -->
+<!-- $TexturePacker:SmartUpdate:f5aecd429e7101b5e02642267bf078ce:516baf6fc26c2beaa2b2ce376e2756ff:16f56762a94d573415e189992fe8c31d$ -->
 <TextureAtlas imagePath="resources.png">
-    <SubTexture name="base1" x="685" y="2" width="446" height="233" frameX="0" frameY="-3" frameWidth="448" frameHeight="236"/>
-    <SubTexture name="base2" x="2" y="759" width="446" height="233" frameX="0" frameY="-3" frameWidth="448" frameHeight="236"/>
-    <SubTexture name="bullet" x="1210" y="948" width="132" height="54" frameX="0" frameY="-1" frameWidth="132" frameHeight="56"/>
-    <SubTexture name="button" x="2" y="2" width="681" height="253" frameX="-4" frameY="-2" frameWidth="686" frameHeight="256"/>
-    <SubTexture name="circle1" x="1210" y="704" width="120" height="120"/>
-    <SubTexture name="circle2" x="1210" y="826" width="120" height="120"/>
-    <SubTexture name="healthBackground" x="2" y="994" width="20" height="5"/>
-    <SubTexture name="healthBar" x="2" y="1003" width="20" height="3"/>
-    <SubTexture name="highlight" x="1210" y="404" width="172" height="176" frameX="-26" frameY="-24" frameWidth="224" frameHeight="224"/>
-    <SubTexture name="map1/background" x="2" y="257" width="300" height="500"/>
-    <SubTexture name="map1/obstacles" x="585" y="759" width="15" height="25"/>
-    <SubTexture name="map2/background" x="1133" y="2" width="260" height="400"/>
-    <SubTexture name="map2/obstacles" x="585" y="786" width="13" height="19"/>
-    <SubTexture name="map3/background" x="1345" y="582" width="15" height="25"/>
-    <SubTexture name="map3/obstacles" x="1345" y="582" width="15" height="25"/>
-    <SubTexture name="map4/background" x="908" y="359" width="15" height="25"/>
-    <SubTexture name="map4/obstacles" x="908" y="359" width="15" height="25"/>
-    <SubTexture name="map5/background" x="1030" y="237" width="15" height="25"/>
-    <SubTexture name="map5/obstacles" x="1030" y="237" width="15" height="25"/>
-    <SubTexture name="menu_background" x="304" y="257" width="300" height="500"/>
-    <SubTexture name="neutral_point1" x="606" y="635" width="300" height="300"/>
-    <SubTexture name="neutral_point2" x="908" y="404" width="300" height="300"/>
-    <SubTexture name="neutral_point3" x="908" y="706" width="300" height="300"/>
-    <SubTexture name="square1" x="450" y="881" width="120" height="120"/>
-    <SubTexture name="square2" x="908" y="237" width="120" height="120"/>
-    <SubTexture name="triangle1" x="450" y="759" width="133" height="120"/>
-    <SubTexture name="triangle2" x="1210" y="582" width="133" height="120"/>
-    <SubTexture name="tutorial" x="606" y="257" width="300" height="376" frameX="0" frameY="-21" frameWidth="320" frameHeight="420"/>
+    <SubTexture name="base1" x="1581" y="218" width="446" height="233" frameX="0" frameY="-3" frameWidth="448" frameHeight="236"/>
+    <SubTexture name="base2" x="1531" y="453" width="446" height="233" frameX="0" frameY="-3" frameWidth="448" frameHeight="236"/>
+    <SubTexture name="bullet" x="2" y="948" width="132" height="54" frameX="0" frameY="-1" frameWidth="132" frameHeight="56"/>
+    <SubTexture name="button" x="2" y="693" width="681" height="253" frameX="-4" frameY="-2" frameWidth="686" frameHeight="256"/>
+    <SubTexture name="button2" x="685" y="693" width="681" height="253" frameX="-4" frameY="-2" frameWidth="686" frameHeight="256"/>
+    <SubTexture name="circle1" x="1878" y="799" width="108" height="107" frameX="-6" frameY="-6" frameWidth="120" frameHeight="120"/>
+    <SubTexture name="circle2" x="1878" y="908" width="108" height="107" frameX="-6" frameY="-6" frameWidth="120" frameHeight="120"/>
+    <SubTexture name="healthBackground" x="2" y="1004" width="20" height="5"/>
+    <SubTexture name="healthBar" x="2" y="1011" width="20" height="3"/>
+    <SubTexture name="highlight" x="1407" y="218" width="172" height="176" frameX="-26" frameY="-24" frameWidth="224" frameHeight="224"/>
+    <SubTexture name="info" x="2" y="2" width="537" height="689" frameX="0" frameY="-43" frameWidth="558" frameHeight="733"/>
+    <SubTexture name="map1/background" x="541" y="2" width="300" height="500"/>
+    <SubTexture name="map1/obstacles" x="136" y="948" width="15" height="25"/>
+    <SubTexture name="map2/background" x="1145" y="2" width="260" height="400"/>
+    <SubTexture name="map2/obstacles" x="170" y="948" width="13" height="19"/>
+    <SubTexture name="map3/background" x="136" y="975" width="15" height="25"/>
+    <SubTexture name="map3/obstacles" x="136" y="975" width="15" height="25"/>
+    <SubTexture name="map4/background" x="153" y="948" width="15" height="25"/>
+    <SubTexture name="map4/obstacles" x="153" y="948" width="15" height="25"/>
+    <SubTexture name="map5/background" x="153" y="975" width="15" height="25"/>
+    <SubTexture name="map5/obstacles" x="153" y="975" width="15" height="25"/>
+    <SubTexture name="menu_background" x="843" y="2" width="300" height="500"/>
+    <SubTexture name="neutral_point1" x="1276" y="404" width="253" height="236" frameX="-15" frameY="-22" frameWidth="286" frameHeight="284"/>
+    <SubTexture name="neutral_point2" x="1368" y="753" width="253" height="236" frameX="-15" frameY="-22" frameWidth="286" frameHeight="284"/>
+    <SubTexture name="neutral_point3" x="1623" y="688" width="253" height="236" frameX="-15" frameY="-22" frameWidth="286" frameHeight="284"/>
+    <SubTexture name="picker_bg" x="541" y="504" width="733" height="187"/>
+    <SubTexture name="square1" x="1368" y="642" width="109" height="109" frameX="-6" frameY="-5" frameWidth="120" frameHeight="120"/>
+    <SubTexture name="square2" x="1878" y="688" width="109" height="109" frameX="-6" frameY="-5" frameWidth="120" frameHeight="120"/>
+    <SubTexture name="title" x="1531" y="2" width="460" height="214" frameX="-4" frameY="-19" frameWidth="475" frameHeight="251"/>
+    <SubTexture name="triangle1" x="1407" y="2" width="121" height="103" frameX="-12" frameY="-9" frameWidth="133" frameHeight="120"/>
+    <SubTexture name="triangle2" x="1407" y="107" width="121" height="103" frameX="-12" frameY="-9" frameWidth="133" frameHeight="120"/>
 </TextureAtlas>
