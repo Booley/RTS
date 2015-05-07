@@ -80,10 +80,11 @@ package {
 		private var playercolorText:TextField;
 		private var startCountdownText:TextField;
 		private var startCountdown:Number;
+		private var gameOver:Boolean;
 		
 		public function Game() {
 			super();
-			//waitingRoom = new WaitingRoom();
+			gameOver = false;
 			
 			flocks = new Vector.<Flock>();
 			bases = new Vector.<Base>();
@@ -109,6 +110,10 @@ package {
 			// END TESTING UNIT MOVEMENT }}}}}}}}}}}}}}}}}}
 			
 			multiplayer = new Multiplayer();
+		}
+		
+		public function hasStarted():Boolean {
+			return startCountdown <= 0;
 		}
 		
 		public function createSignalHandler():void {
@@ -213,6 +218,7 @@ package {
 		
 		public function onGameOverLose(event:Event):void {
 			pause = true;
+			gameOver = true;
 			gameOverMenu = new GameOverMenu(false);
 			addChild(gameOverMenu);
 		}
@@ -220,6 +226,7 @@ package {
 		//winner will update the database
 		public function onGameOverWin(event:Event):void {
 			pause = true;
+			gameOver = true;
 			gameOverMenu = new GameOverMenu(true);
 			addChild(gameOverMenu);
 			
@@ -287,7 +294,8 @@ package {
 		public function tick(dt:Number):void {
 			dt *= 1;
 			
-			if (pause) {
+			//change position of gameOver to determine if countdown should still go when player d/c at start
+			if (pause && startCountdown > 0 && !gameOver) {
 				if (startCountdownText) {
 					startCountdown -= dt;
 					startCountdownText.text = "" + int(startCountdown + 1);

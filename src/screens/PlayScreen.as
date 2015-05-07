@@ -61,7 +61,11 @@ package screens {
 			addEventListener(Event.REMOVED_FROM_STAGE, onRemoveFromStage);
 		}
 		
-		private function onBackBtnPress():void { dispatchEventWith(NavEvent.PLAY_SCREEN_BACK); }
+		private function onBackBtnPress():void { 
+			if (!game.hasStarted()) return;
+			dispatchEventWith(NavEvent.PLAY_SCREEN_BACK); 
+			
+		}
 		
 		public function newGame():void {
 			game = new Game();

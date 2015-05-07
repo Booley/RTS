@@ -3,7 +3,13 @@ package screens {
 	import ai.AI;
 	import feathers.controls.ButtonGroup;
 	import feathers.controls.Button;
+	import feathers.controls.List;
 	import feathers.controls.PickerList;
+	import feathers.controls.popups.DropDownPopUpContentManager;
+	import feathers.controls.popups.IPopUpContentManager;
+	import feathers.controls.popups.VerticalCenteredPopUpContentManager;
+	import feathers.controls.renderers.DefaultListItemRenderer;
+	import feathers.controls.renderers.IListItemRenderer;
 	import feathers.data.ListCollection;
 	
 	import starling.text.TextField;
@@ -39,6 +45,7 @@ package screens {
 			addChild(messageText);
 			
 			var diff:ButtonGroup = new ButtonGroup();
+			diff.direction = ButtonGroup.DIRECTION_HORIZONTAL;
 			diff.y = messageText.y + messageText.height;
 			diff.width = Constants.SCREEN_WIDTH;
 			diff.dataProvider = new ListCollection([
@@ -46,8 +53,49 @@ package screens {
 				{ label: "Normal", triggered: onNormalBtnPress },
 				{ label: "Hard", triggered: onHardBtnPress },
 			]);
-			diff.height = Constants.SCREEN_HEIGHT / 6 * diff.dataProvider.length;
+			diff.height = Constants.SCREEN_HEIGHT / 18 * diff.dataProvider.length;
 			addChild(diff);
+			
+			//create options to choose from
+			var list:PickerList = new PickerList();
+			var groceryList:ListCollection = new ListCollection(
+				[
+					{ text: "Milk", thumbnail: new Image(Assets.getTexture2(Assets.TestButton)) },
+					{ text: "Eggs", thumbnail: new Image(Assets.getTexture2(Assets.TestButton)) },
+					{ text: "Bread", thumbnail: new Image(Assets.getTexture2(Assets.TestButton)) },
+					{ text: "Chicken", thumbnail: new Image(Assets.getTexture2(Assets.TestButton)) },
+				]);
+			list.dataProvider = groceryList;
+			list.listProperties.itemRendererFactory = function():IListItemRenderer
+			 {
+				 var renderer:DefaultListItemRenderer = new DefaultListItemRenderer();
+				 renderer.labelField = "text";
+				 renderer.iconSourceField = "thumbnail";
+				 return renderer;
+			 };
+			 
+			//apply visuals
+			list.listProperties.@itemRendererProperties.labelField = "text";
+			list.labelField = "text";
+			list.prompt = "Select a stage";
+			list.listFactory = function():List
+			 {
+				 var popUpList:List = new List();
+				 popUpList.backgroundSkin = new Image(Assets.getTexture2(Assets.TestBG) );
+				
+				 return popUpList;
+			 };
+			
+			
+			//apply behavior for tapping
+			list.selectedIndex = -1;
+			list.popUpContentManager = new VerticalCenteredPopUpContentManager();
+			
+			//handle positioning
+			list.width = Constants.SCREEN_WIDTH;
+			list.y = diff.y + diff.height;
+			list.height = Constants.SCREEN_HEIGHT / 18 * list.dataProvider.length;
+			this.addChild(list);
 		}
 		
 		// touch handlers
