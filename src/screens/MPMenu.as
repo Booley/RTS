@@ -29,11 +29,13 @@ package screens {
 				{ label: "Back", triggered: onBackBtnPress },
 			]);
 			group.height = Constants.SCREEN_HEIGHT / 8 * group.dataProvider.length;
+			group.y = Constants.SCREEN_HEIGHT - group.height;
 			addChild( group );
 			
-			messageText = new TextField(300, 200, "", "Verdana", 15, 0xffffff);
-			messageText.y = 300;
-			messageText.x = 0;
+			messageText = new TextField(Constants.SCREEN_WIDTH, 200, "", "Verdana", 18, 0xffffff);
+			messageText.y = Constants.SCREEN_WIDTH / 8;
+			messageText.x = Constants.SCREEN_WIDTH / 2;
+			messageText.alignPivot("center", "center");
 			addChild(messageText);
 		}
 		

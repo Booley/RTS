@@ -100,12 +100,11 @@ package {
 		
 			spawnMap(mapSelect);
 			mapSelect = 1;
+			
 			//customize resource display button
 			resourceText = new TextField(100, 30, "Gold: " + Base.DEFAULT_TOTAL_RESOURCES, "Verdana", 12, 0xffffff, true);
 			resourceText.y = 0;
 			resourceText.x = 200;
-			
-			//addChild(scoreText);
 			
 			addChild(resourceText);
 			
@@ -116,11 +115,6 @@ package {
 		
 		public function hasStarted():Boolean {
 			return startCountdown <= 0;
-		}
-		
-		public function createSignalHandler():void {
-			//multiplayer.game = this;
-			//multiplayer.signals.game = this;
 		}
 		
 		public function spawnMap(mapID:int):void {
