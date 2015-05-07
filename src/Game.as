@@ -1,11 +1,13 @@
 package {
 	//Takes in commands from other classes and executes them. Also executes tick for all state-mutable objects
 	
+	import flash.filters.GlowFilter;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.media.Sound;
 	import flash.net.URLRequest;
 	import flash.utils.Dictionary;
+	import starling.filters.FragmentFilter;
 	
 	import starling.text.TextField;
 	import starling.core.Starling;
@@ -17,8 +19,6 @@ package {
 	import starling.events.TouchPhase;
 	import starling.events.Touch;
 	import starling.textures.Texture;
-	import starling.filters.BlurFilter;
-	import starling.filters.ColorMatrixFilter;
 	
 	import be.dauntless.astar.core.Astar;
 	import be.dauntless.astar.core.PathRequest;
@@ -50,7 +50,6 @@ package {
 		// AI stuff
 		private var nextUnitTypeChosen:Boolean = false;
 		private var nextUnitType:int;
-		public var difficulty:int = AI.EASY;
 		
 		private var queueMenu:QueueMenu;
 		private var gameOverMenu:GameOverMenu;
@@ -76,12 +75,11 @@ package {
 		private var waitingRoom:WaitingRoom;
 		private static var tickCounter:int = 0;
 		
-		private var scoreText:TextField;
 		private var resourceText:TextField;
 		
 		private var playercolorText:TextField;
-		private var timeleftText:TextField;
-		private var time:Number;
+		private var startCountdownText:TextField;
+		private var startCountdown:Number;
 		
 		public function Game() {
 			super();
@@ -97,11 +95,7 @@ package {
 			this.addEventListener(NavEvent.GAME_OVER_LOSE, onGameOverLose);
 			this.addEventListener(NavEvent.GAME_OVER_WIN, onGameOverWin);
 		
-			testMap();
-			
-			scoreText = new TextField(100, 30, "Score: " + 0, "Verdana", 12, 0xffffff, true);
-			scoreText.y = 0;
-			scoreText.x = 200;
+			spawnMap(1);
 			
 			//customize resource display button
 			resourceText = new TextField(100, 30, "Gold: " + Base.DEFAULT_TOTAL_RESOURCES, "Verdana", 12, 0xffffff, true);
@@ -122,15 +116,15 @@ package {
 			//multiplayer.signals.game = this;
 		}
 		
-		public function testMap():void {
+		public function spawnMap(mapID:int):void {
 			// get map background
-			background = new Image(Assets.getAtlas().getTexture(Assets.Map1Background));
+			background = new Image(Assets.getAtlas().getTexture(Assets["Map" + mapID + "Background"]));
 			background.width = Constants.SCREEN_WIDTH;
 			background.height =  Constants.SCREEN_HEIGHT;
 			addChildAt(background, 0);
 			
 			obstaclePoints = new Vector.<Point>();
-			mapData = MapGen.getMapObstacles(Assets.Map1Obstacles, this);
+			mapData = MapGen.getMapObstacles(Assets["Map" + mapID + "Obstacles"], this);
 			mapWidth = mapData[0].length;
 			mapHeight = mapData.length;
 			mapWidthFactor = Constants.SCREEN_WIDTH / mapWidth;
@@ -229,31 +223,31 @@ package {
 			gameOverMenu = new GameOverMenu(true);
 			addChild(gameOverMenu);
 			
-			
-			if (PlayScreen.isRanked)
+			if (PlayScreen.isRanked) {
 				multiplayer.updateElo();
+			}
 		
 		}
 		
 		public function start():void {
 			if (currentPlayer == 1) {
-				playercolorText = new TextField(300, 100,"Blue Player Ready in", "Verdana", 20, 0x0000ff);
+				playercolorText = new TextField(300, 100, "Blue Player Ready in", "Verdana", 20, 0x00ffff, true);
 			}
 			else {
-				playercolorText = new TextField(300, 100,"Red Player Ready in", "Verdana", 20, 0xcc0000);
+				playercolorText = new TextField(300, 100, "Red Player Ready in", "Verdana", 20, 0xff0000, true);
 			}
 			
 			playercolorText.x = 0;		
 			playercolorText.y = 90;
 			playercolorText.touchable = false;
-			timeleftText = new TextField(100, 050,"3", "Verdana", 20, 0xffffff);
-			timeleftText.x = Constants.SCREEN_HEIGHT/4.5;
-			timeleftText.y = Constants.SCREEN_WIDTH/2;
-			timeleftText.touchable = false;
+			startCountdownText = new TextField(100, 050,"3", "Verdana", 20, 0xffffff);
+			startCountdownText.x = Constants.SCREEN_HEIGHT/4.5;
+			startCountdownText.y = Constants.SCREEN_WIDTH/2;
+			startCountdownText.touchable = false;
 			addChild(playercolorText);
-			addChild(timeleftText);
+			addChild(startCountdownText);
 			
-			time = 3;
+			startCountdown = 3;
 		}
 		
 		public function end():void {
@@ -273,12 +267,12 @@ package {
 			
 			if (AIBase.unitBuildCooldown < 0) {
 				if (!nextUnitTypeChosen) {
-					nextUnitType = AI.getUnitBuildCommand(difficulty, AIOwner, flocks, mapData, resourcePoints, AIBase, AIEnemyBase);
+					nextUnitType = AI.getUnitBuildCommand(PlayScreen.difficulty, AIOwner, flocks, mapData, resourcePoints, AIBase, AIEnemyBase);
 					nextUnitTypeChosen = true;
 				}
 				var penaltyFactor:int = 1;
-				if (difficulty == AI.EASY) penaltyFactor = 1.5;
-				if (difficulty == AI.MEDIUM) penaltyFactor = 1.4;
+				if (PlayScreen.difficulty == AI.EASY) penaltyFactor = 1.5;
+				if (PlayScreen.difficulty == AI.MEDIUM) penaltyFactor = 1.4;
 				if (AIBase.totalResources >= Unit.getClass(nextUnitType).COST*penaltyFactor) {
 					AIBase.totalResources -= Unit.getClass(nextUnitType).COST*penaltyFactor;
 					AIBase.queueUnit(nextUnitType);
@@ -287,22 +281,23 @@ package {
 			}
 			
 			// do unit movement
-			AI.getUnitMovementCommand(difficulty, AIOwner, flocks, mapData, resourcePoints, AIBase, AIEnemyBase);
+			AI.getUnitMovementCommand(PlayScreen.difficulty, AIOwner, flocks, mapData, resourcePoints, AIBase, AIEnemyBase);
 		}
 		
 		public function tick(dt:Number):void {
 			dt *= 1;
 			
 			if (pause) {
-				time -= dt;
-				timeleftText.text = "" + int(time + 1);
-				if (time < 0) {
-					pause = false;
-					removeChild(timeleftText);
-					removeChild(playercolorText);
+				if (startCountdownText) {
+					startCountdown -= dt;
+					startCountdownText.text = "" + int(startCountdown + 1);
+					if (startCountdown < 0) {
+						pause = false;
+						removeChild(startCountdownText);
+						removeChild(playercolorText);
+					}
 				}
 			}
-			
 			
 			if (pause) return;
 
@@ -332,7 +327,6 @@ package {
 				base.tick2(dt, resourcePoints);
 				if (base.owner == this.currentPlayer) {
 					resourceText.text = "Gold: " + int(base.totalResources); 
-					scoreText.text = "Score: " + base.score;
 				}
 			}
 			for each (var bullet:Bullet in bullets) {
@@ -606,7 +600,6 @@ package {
 					dispatchEventWith(NavEvent.GAME_OVER_LOSE);
 				} else {
 					dispatchEventWith(NavEvent.GAME_OVER_WIN);
-					
 				}
 			}
 		}
