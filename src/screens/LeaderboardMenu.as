@@ -34,7 +34,7 @@ package screens {
 			group.dataProvider = new ListCollection([
 				{ label: "Back", triggered: onBackBtnPress },
 			]);
-			group.height = Constants.SCREEN_HEIGHT / 5 * group.dataProvider.length;
+			group.height = Constants.SCREEN_HEIGHT / 8 * group.dataProvider.length;
 			addChild( group );
 			
 			rank = new TextField(200, 400, "Loading ...", "Verdana", 12, 0xffffff, true);

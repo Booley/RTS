@@ -24,7 +24,7 @@ package screens {
 				{ label: "Login", triggered: onLoginBtnPress },
 				{ label: "Back", triggered: onBackBtnPress },
 			]);
-			group.height = Constants.SCREEN_HEIGHT / 5 * group.dataProvider.length;
+			group.height = Constants.SCREEN_HEIGHT / 8 * group.dataProvider.length;
 			addChild( group );
 		}
 		

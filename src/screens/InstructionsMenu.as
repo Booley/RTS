@@ -23,8 +23,18 @@ package screens {
 			group.dataProvider = new ListCollection([
 				{ label: "Back", triggered: onBackBtnPress },
 			]);
-			group.height = Constants.SCREEN_HEIGHT / 5 * group.dataProvider.length;
+			group.height = Constants.SCREEN_HEIGHT / 8 * group.dataProvider.length;
 			addChild( group );
+			
+			var image:Image = new Image(Assets.getTexture2(Assets.Instructions) );
+			//image.x = -30;
+			image.y = group.height/1.5;
+			var scale:Number = Constants.SCREEN_WIDTH / image.width;
+			image.width = Constants.SCREEN_WIDTH;
+			image.height *= scale;
+			//image.scaleX *= 0.5;
+			//image.scaleY *= 0.6; // TEMPORARY
+			addChild(image);
 		}
 		
 		// touch handlers

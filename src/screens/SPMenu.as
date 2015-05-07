@@ -43,7 +43,7 @@ package screens {
 				{ label: "Play", triggered: onPlayBtnPress },
 				{ label: "Back", triggered: onBackBtnPress },
 			]);
-			group.height = Constants.SCREEN_HEIGHT / 5 * group.dataProvider.length;
+			group.height = Constants.SCREEN_HEIGHT / 8 * group.dataProvider.length;
 			addChild( group );
 			
 			//will update UI
@@ -80,7 +80,7 @@ package screens {
 				 var renderer:DefaultListItemRenderer = new DefaultListItemRenderer();
 				 renderer.labelField = "text";
 				 renderer.iconSourceField = "thumbnail";
-				 renderer.defaultLabelProperties.textFormat = new TextFormat("Verdana", 30, 0x333333);
+				 renderer.defaultLabelProperties.textFormat = new TextFormat("Verdana", 30, 0xffffff);
 				 return renderer;
 			 };
 			 
@@ -104,7 +104,7 @@ package screens {
 			//handle positioning
 			list.width = Constants.SCREEN_WIDTH;
 			list.y = diff.y + diff.height;
-			list.height = Constants.SCREEN_HEIGHT / 18 * list.dataProvider.length;
+			list.height = Constants.SCREEN_HEIGHT / 8;// * list.dataProvider.length;
 			this.addChild(list);
 		}
 		
