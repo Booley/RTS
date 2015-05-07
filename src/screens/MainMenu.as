@@ -18,6 +18,12 @@ package screens {
 			background.height = Constants.SCREEN_HEIGHT;
 			addChild(background);
 			
+			var image:Image = new Image(Assets.getTexture2(Assets.Title) );
+			image.width = Constants.SCREEN_WIDTH;
+			//image.scaleX *= 0.5;
+			image.scaleY *= 0.6; // TEMPORARY
+			addChild(image);
+			
 			var group:ButtonGroup = new ButtonGroup();
 			group.width = Constants.SCREEN_WIDTH;
 			group.dataProvider = new ListCollection([
@@ -27,8 +33,11 @@ package screens {
 				{ label: "Leaderboards", triggered: onLeaderboardBtnPress },
 				{ label: "Login", triggered: onLoginBtnPress },
 			]);
-			group.height = Constants.SCREEN_HEIGHT / 5 * group.dataProvider.length;
+			group.height = Constants.SCREEN_HEIGHT / 8 * group.dataProvider.length;
+			group.y = image.height;
 			addChild( group );
+			
+			
 		}
 		
 		// touch handlers
