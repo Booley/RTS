@@ -132,7 +132,7 @@ package screens {
 			if (touch) {
 				if (touch.phase == TouchPhase.BEGAN) {
 					if (playerBase.totalResources < Infantry.COST) {
-						messageText.text = "Not Enough\nResources";
+						messageText.text = "Not Enough\nGold";
 					}
 					else {
 						messageText.text = "";
@@ -150,7 +150,7 @@ package screens {
 			if (touch) {
 				if (touch.phase == TouchPhase.BEGAN) {
 					if (playerBase.totalResources < Sniper.COST) {
-						messageText.text = "Not Enough\nResources";
+						messageText.text = "Not Enough\nGold";
 					}
 					else {
 						messageText.text = "";
@@ -168,7 +168,7 @@ package screens {
 			if (touch) {
 				if (touch.phase == TouchPhase.BEGAN) {
 					if (playerBase.totalResources < Raider.COST) {
-						messageText.text = "Not Enough\nResources";
+						messageText.text = "Not Enough\nGold";
 					}
 					else {
 						messageText.text = "";
