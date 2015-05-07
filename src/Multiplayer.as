@@ -94,6 +94,7 @@ package
 				PlayScreen.game.currentPlayer = 1;
 			else
 				PlayScreen.game.currentPlayer = 2;
+			PlayScreen.game.start();
 		}
 		
 		//stop the PlayScreen.game if a user disconnects?

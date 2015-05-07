@@ -17,7 +17,7 @@ package {
 		public static const ResourcePointTexture:String = "neutral_point";
 		public static const HealthBackgroundTexture:String = "healthBackground";
 		public static const HealthBarTexture:String = "healthBar";
-		
+				
 		public static const Map1Background:String = "map1/background";
 		[Embed(source="../assets/images/maps/map1/obstacles.png")]
 		public static const Map1Obstacles:Class;
