@@ -130,11 +130,13 @@ package {
 		}
 		
 		private function addLoginScreenEventListeners():void {
+			loginButtonScreen.addEventListener(NavEvent.LOGIN_SCREEN_REGISTER, onLoginScreenRegisterBtnPress);
 			loginButtonScreen.addEventListener(NavEvent.LOGIN_SCREEN_BACK, onLoginScreenBackBtnPress);
 			loginButtonScreen.addEventListener(NavEvent.LOGIN_SCREEN_SUBMIT, onLoginScreenSubmitBtnPress);
 		}
 		
 		private function removeLoginScreenEventListeners():void {
+			loginButtonScreen.removeEventListener(NavEvent.LOGIN_SCREEN_REGISTER, onLoginScreenRegisterBtnPress);
 			loginButtonScreen.removeEventListener(NavEvent.LOGIN_SCREEN_BACK, onLoginScreenBackBtnPress);
 			loginButtonScreen.removeEventListener(NavEvent.LOGIN_SCREEN_SUBMIT, onLoginScreenSubmitBtnPress);
 		}
@@ -193,7 +195,8 @@ package {
 		
 		//handle signupScreen button press
 		private function onSignupBtnPress(e:Event):void {
-			removeChild(mainMenu);
+			Starling.current.nativeOverlay.removeChild(loginScreen);
+			removeChild(loginButtonScreen);
 			addChild(signupButtonScreen);
 			Starling.current.nativeOverlay.addChild(signupScreen);
 		}
@@ -280,8 +283,20 @@ package {
 			addChild(mainMenu);
 		}
 		
+		//handle LoginScreen's register button press
+		private function onLoginScreenRegisterBtnPress(e:Event):void {
+			Starling.current.nativeOverlay.removeChild(loginScreen);
+			removeChild(loginButtonScreen);
+			addChild(signupButtonScreen);
+			Starling.current.nativeOverlay.addChild(signupScreen);
+		}
+		
+		
 		// handle LoginScreen's back button press
 		private function onLoginScreenBackBtnPress(e:Event):void {
+			loginScreen.userField.text = "";
+			loginScreen.passwordField.text = "";
+			loginScreen.messageField.text = "";
 			removeChild(loginButtonScreen);
 			Starling.current.nativeOverlay.removeChild(loginScreen);
 			addChild(mainMenu);
@@ -296,9 +311,14 @@ package {
 		
 		// handle SignupScreen's back button press
 		private function onSignupScreenBackBtnPress(e:Event):void {
+			signupScreen.messageField.text = "";
+			signupScreen.userField.text = "";
+			signupScreen.passwordField.text = "";
+			signupScreen.emailField.text = "";
 			removeChild(signupButtonScreen);
 			Starling.current.nativeOverlay.removeChild(signupScreen);
-			addChild(mainMenu);
+			addChild(loginButtonScreen);
+			Starling.current.nativeOverlay.addChild(loginScreen);
 		}
 		
 		//handle SignupScreen's submit button press

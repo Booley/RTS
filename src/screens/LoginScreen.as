@@ -21,9 +21,9 @@ package screens {
 		
 		public var userField:TextField;
 		public var passwordField:TextField;
-		private var messageField:TextField;
-		private var userText:TextField;
-		private var passwordText:TextField;
+		public var messageField:TextField;
+		public var userText:TextField;
+		public var passwordText:TextField;
 		private var leaderboard:LeaderboardMenu;
 		
 		public static var myUsername:String = "";
@@ -65,10 +65,14 @@ package screens {
 			userField.x = 150;
 			passwordField.x = 150;
 			
+			userField.width = 150;
+			passwordField.width = 150;
+			
 			userField.type = TextFieldType.INPUT;
 			passwordField.type = TextFieldType.INPUT;
 			
 			messageField.width = 300;
+			messageField.textColor = 0x00FFFF;
 			
 			userField.y = 0;
 			userText.y = 0;

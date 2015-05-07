@@ -28,7 +28,7 @@ package screens {
 				{ label: "Play Ranked Match", triggered: onPlayRankedBtnPress },
 				{ label: "Back", triggered: onBackBtnPress },
 			]);
-			group.height = Constants.SCREEN_HEIGHT / 5 * group.dataProvider.length;
+			group.height = Constants.SCREEN_HEIGHT / 8 * group.dataProvider.length;
 			addChild( group );
 			
 			messageText = new TextField(300, 200, "", "Verdana", 15, 0xffffff);

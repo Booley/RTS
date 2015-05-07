@@ -31,6 +31,7 @@ package {
 		// events for the login Screen
 		public static const LOGIN_SCREEN_BACK:String = "loginScreenBack";
 		public static const LOGIN_SCREEN_SUBMIT:String = "loginScreenSubmit";
+		public static const LOGIN_SCREEN_REGISTER:String = "loginScreenRegister";
 		
 		// events for the waiting screen
 		public static const WAITING_SCREEN_BACK:String = "waitingScreenBack";

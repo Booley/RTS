@@ -1,6 +1,7 @@
 package screens {
 	
 	import ai.AI;
+	import flash.text.TextFormat;
 	import feathers.controls.ButtonGroup;
 	import feathers.controls.Button;
 	import feathers.controls.List;
@@ -19,7 +20,14 @@ package screens {
 	
 	public class SPMenu extends Sprite {
 		
+		private static var map1:String = "Wild West";
+		private static var map2:String = "Canada";
+		private static var map3:String = "Ocean";
+		private static var map4:String = "California";
+		private static var map5:String = "Final Frontier";
+		
 		private var messageText:TextField;
+		private var list:PickerList;
 		
 		public function SPMenu() {
 			super();
@@ -35,7 +43,7 @@ package screens {
 				{ label: "Play", triggered: onPlayBtnPress },
 				{ label: "Back", triggered: onBackBtnPress },
 			]);
-			group.height = Constants.SCREEN_HEIGHT / 5 * group.dataProvider.length;
+			group.height = Constants.SCREEN_HEIGHT / 8 * group.dataProvider.length;
 			addChild( group );
 			
 			//will update UI
@@ -57,13 +65,14 @@ package screens {
 			addChild(diff);
 			
 			//create options to choose from
-			var list:PickerList = new PickerList();
+			list = new PickerList();
 			var groceryList:ListCollection = new ListCollection(
 				[
-					{ text: "Milk", thumbnail: new Image(Assets.getTexture2(Assets.TestButton)) },
-					{ text: "Eggs", thumbnail: new Image(Assets.getTexture2(Assets.TestButton)) },
-					{ text: "Bread", thumbnail: new Image(Assets.getTexture2(Assets.TestButton)) },
-					{ text: "Chicken", thumbnail: new Image(Assets.getTexture2(Assets.TestButton)) },
+					{ text: map1, thumbnail: new Image(Assets.getTexture2(Assets.TestButton)) },
+					{ text: map2, thumbnail: new Image(Assets.getTexture2(Assets.TestButton)) },
+					{ text: map3, thumbnail: new Image(Assets.getTexture2(Assets.TestButton)) },
+					{ text: map4, thumbnail: new Image(Assets.getTexture2(Assets.TestButton)) },
+					{ text: map5, thumbnail: new Image(Assets.getTexture2(Assets.TestButton)) },
 				]);
 			list.dataProvider = groceryList;
 			list.listProperties.itemRendererFactory = function():IListItemRenderer
@@ -71,13 +80,14 @@ package screens {
 				 var renderer:DefaultListItemRenderer = new DefaultListItemRenderer();
 				 renderer.labelField = "text";
 				 renderer.iconSourceField = "thumbnail";
+				 renderer.defaultLabelProperties.textFormat = new TextFormat("Verdana", 30, 0xffffff);
 				 return renderer;
 			 };
 			 
 			//apply visuals
 			list.listProperties.@itemRendererProperties.labelField = "text";
 			list.labelField = "text";
-			list.prompt = "Select a stage";
+			list.prompt = map1;
 			list.listFactory = function():List
 			 {
 				 var popUpList:List = new List();
@@ -88,18 +98,22 @@ package screens {
 			
 			
 			//apply behavior for tapping
-			list.selectedIndex = -1;
+			list.selectedIndex = 0;
 			list.popUpContentManager = new VerticalCenteredPopUpContentManager();
 			
 			//handle positioning
 			list.width = Constants.SCREEN_WIDTH;
 			list.y = diff.y + diff.height;
-			list.height = Constants.SCREEN_HEIGHT / 18 * list.dataProvider.length;
+			list.height = Constants.SCREEN_HEIGHT / 8;// * list.dataProvider.length;
 			this.addChild(list);
 		}
 		
 		// touch handlers
-		private function onPlayBtnPress():void { dispatchEventWith(NavEvent.SP_MENU_PLAY); }
+		private function onPlayBtnPress():void { 
+			Game.mapSelect = list.selectedIndex + 1;
+			trace(Game.mapSelect);
+			dispatchEventWith(NavEvent.SP_MENU_PLAY); 
+		}
 		private function onBackBtnPress():void { dispatchEventWith(NavEvent.SP_MENU_BACK); }
 		private function onEasyBtnPress():void { PlayScreen.difficulty = AI.EASY; messageText.text = "Difficulty: Easy"; }
 		private function onNormalBtnPress():void { PlayScreen.difficulty = AI.MEDIUM; messageText.text = "Difficulty: Normal"; }

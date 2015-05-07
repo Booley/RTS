@@ -34,8 +34,8 @@ package screens {
 			addChild( group );
 			
 			var text:TextField = new TextField(250, 250, "Waiting to connect...", "Verdana", 30, 0xffffff);
-			text.x = Constants.SCREEN_WIDTH / 2;
-			text.y = Constants.SCREEN_HEIGHT / 2;
+			text.x = 0;
+			text.y = Constants.SCREEN_HEIGHT / 4;
 			addChild(text);
 		}
 		

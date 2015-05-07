@@ -23,7 +23,7 @@ package {
         private function initialize():void {
 			this.initializeStyleProviders();
         }
-		
+
 		private function initializeStyleProviders():void {
 			// button
 			this.getStyleProviderForClass(Button).defaultStyleFunction = this.setButtonStyles;
