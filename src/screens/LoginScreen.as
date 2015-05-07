@@ -24,12 +24,14 @@ package screens {
 		private var messageField:TextField;
 		private var userText:TextField;
 		private var passwordText:TextField;
+		private var leaderboard:LeaderboardMenu;
 		
 		public static var myUsername:String = "";
 		
-		public function LoginScreen() {
+		public function LoginScreen(leaderboard:LeaderboardMenu) {
 			super();
-		
+			this.leaderboard = leaderboard;
+			
 			messageField = new TextField();
 			userField = new TextField();
 			passwordField = new TextField();
@@ -126,6 +128,7 @@ package screens {
 				trace("recording username...");
 				PlayScreen.isRanked = true;
 				myUsername = userField.text; //be sure to assign something else when logged out!!!
+				leaderboard.username = myUsername;
 			}
 			trace(urlLoader.data.msg);
 		 

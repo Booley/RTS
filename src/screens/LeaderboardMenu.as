@@ -20,7 +20,7 @@ package screens {
 		public function LeaderboardMenu() {
 			super();
 			
-			username = "rts3";
+			username = "";
 			
 			var background:Image = new Image(Assets.getAtlas().getTexture(Assets.MenuBackground));
 			background.width = Constants.SCREEN_WIDTH;

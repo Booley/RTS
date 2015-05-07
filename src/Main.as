@@ -44,7 +44,7 @@ package {
 			leaderboardMenu = new LeaderboardMenu();
 			instructionsMenu = new InstructionsMenu();
 			
-			loginScreen = new LoginScreen();
+			loginScreen = new LoginScreen(leaderboardMenu);
 			loginButtonScreen = new LoginButtonScreen();
 			signupScreen = new SignupScreen();
 			signupButtonScreen = new SignupButtonScreen();
