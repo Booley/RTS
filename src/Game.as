@@ -82,7 +82,7 @@ package {
 		private var startCountdown:Number;
 		private var gameOver:Boolean;
 		
-		public function Game() {
+		public function Game(mapSelect:int) {
 			super();
 			gameOver = false;
 			
@@ -96,7 +96,7 @@ package {
 			this.addEventListener(NavEvent.GAME_OVER_LOSE, onGameOverLose);
 			this.addEventListener(NavEvent.GAME_OVER_WIN, onGameOverWin);
 		
-			spawnMap(3);
+			spawnMap(mapSelect);
 			
 			//customize resource display button
 			resourceText = new TextField(100, 30, "Gold: " + Base.DEFAULT_TOTAL_RESOURCES, "Verdana", 12, 0xffffff, true);
