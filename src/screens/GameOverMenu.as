@@ -32,17 +32,14 @@ package screens {
 			
 			// Gameover screen
 			var winScreen:Image = new Image(Assets.getAtlas().getTexture(Assets.ButtonTexture));
-			//var winScreen:Image = new Image(Assets.getTexture2(Assets.ButtonTexture) );
 			winScreen.width = Constants.SCREEN_WIDTH;
 			winScreen.height = Constants.SCREEN_HEIGHT;
-			//winScreen.x = Constants.SCREEN_WIDTH / 2;
 			winScreen.y = 2* Constants.SCREEN_HEIGHT / 5;
 			//image.scaleX *= 0.5;
 			winScreen.scaleY *= 0.3; // TEMPORARY
 			addChild(winScreen);
 			
-			//resourceText = new TextField(100, 30, "Gold: " + Base.DEFAULT_TOTAL_RESOURCES, "Verdana", 12, 0xffffff, true);
-
+			// text for winning and losing.
 			if (won) {
 				text = new TextField(200, 100, "You win! You are awesome.", "Verdana", 20, 0x0000ff);
 				text.filter = new BlurFilter(0.1, 0.1, 1);
