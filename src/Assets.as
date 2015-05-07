@@ -47,6 +47,9 @@ package {
 		[Embed(source="../assets/images/backgrounds/title.png")]
 		public static const Title:Class;
 		
+		[Embed(source="../assets/images/backgrounds/info.png")]
+		public static const Instructions:Class;
+		
 		private static var gameTextureAtlas:TextureAtlas;
 		private static var gameTextures:Dictionary = new Dictionary();
 		

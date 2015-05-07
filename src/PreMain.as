@@ -30,6 +30,7 @@ package {
 			
 			Starling.current.showStats = false;
 			Starling.current.nativeStage.frameRate = 60;
+			Starling.current.antiAliasing = 1;
 			
 			loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, handleGlobalErrors);
 		}
