@@ -30,7 +30,7 @@ package screens {
 			addChild( group );
 			
 			if (won) {
-				text = new TextField(100, 100, "You win. ");
+				text = new TextField(300, 100, "You win. You are awesome.");
 				text.color = 0x00ffff;
 				text.filter = new BlurFilter(0.1, 0.1, 1);
 			} else {

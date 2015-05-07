@@ -22,10 +22,10 @@ package screens {
 		public var userField:TextField;
 		public var passwordField:TextField;
 		public var emailField:TextField;
-		private var messageField:TextField;
-		private var userText:TextField;
-		private var passwordText:TextField;
-		private var emailText:TextField;
+		public var messageField:TextField;
+		public var userText:TextField;
+		public var passwordText:TextField;
+		public var emailText:TextField;
 		
 		
 		public function SignupScreen() {
@@ -67,6 +67,11 @@ package screens {
 			passwordField.backgroundColor = 0x00FFFF;
 			emailField.backgroundColor = 0x00FFFF;
 			
+			userField.width = 150;
+			passwordField.width = 150;
+			emailField.width = 150;
+			
+			
 			userField.y = 0;
 			userText.y = 0;
 			passwordField.y = 100;
@@ -90,9 +95,10 @@ package screens {
 			passwordText.text = "Password";
 			emailText.text = "Email";
 			
-			userText.textColor = 0x0000FF;
-			passwordText.textColor = 0x0000FF;
-			emailText.textColor = 0x0000FF;
+			userText.textColor = 0x00FFFF;
+			passwordText.textColor = 0x00FFFF;
+			emailText.textColor = 0x00FFFF;
+			messageField.textColor = 0x00FFFF;
 			
 			userField.maxChars = 15;
 			passwordField.maxChars = 15;

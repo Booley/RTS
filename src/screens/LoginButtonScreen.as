@@ -15,12 +15,13 @@ package screens {
 			background.width = Constants.SCREEN_WIDTH;
 			background.height = Constants.SCREEN_HEIGHT;
 			addChild(background);
-			
+		
 			var group:ButtonGroup = new ButtonGroup();
 			group.width = Constants.SCREEN_WIDTH;
-			group.y = 3 * Constants.SCREEN_HEIGHT / 5;
+			group.y = 2 * Constants.SCREEN_HEIGHT / 5;
 			group.dataProvider = new ListCollection([
 				{ label: "Register", triggered: onRegisterBtnPress },
+				{ label: "Login", triggered: onLoginBtnPress },
 				{ label: "Back", triggered: onBackBtnPress },
 			]);
 			group.height = Constants.SCREEN_HEIGHT / 5 * group.dataProvider.length;
@@ -28,8 +29,9 @@ package screens {
 		}
 		
 		// touch handlers
-		private function onRegisterBtnPress():void { dispatchEventWith(NavEvent.LOGIN_SCREEN_SUBMIT); }
-		private function onBackBtnPress():void { dispatchEventWith(NavEvent.LOGIN_SCREEN_BACK); }
+		private function onRegisterBtnPress():void { dispatchEventWith(NavEvent.LOGIN_SCREEN_REGISTER); }
+		private function onLoginBtnPress():void { dispatchEventWith(NavEvent.LOGIN_SCREEN_SUBMIT); }
+		private function onBackBtnPress():void {dispatchEventWith(NavEvent.LOGIN_SCREEN_BACK); }
 		
 		
 		

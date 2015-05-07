@@ -95,7 +95,7 @@ package {
 			this.addEventListener(NavEvent.GAME_OVER_LOSE, onGameOverLose);
 			this.addEventListener(NavEvent.GAME_OVER_WIN, onGameOverWin);
 		
-			spawnMap(1);
+			spawnMap(3);
 			
 			//customize resource display button
 			resourceText = new TextField(100, 30, "Gold: " + Base.DEFAULT_TOTAL_RESOURCES, "Verdana", 12, 0xffffff, true);
