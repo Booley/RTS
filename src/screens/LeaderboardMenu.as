@@ -13,14 +13,14 @@ package screens {
 		public var rank:TextField;
 		public var user:TextField;
 		public var elo:TextField;
-		public var username:String;
+		public static var username:String;
 		public var line:TextField;
 		private var leaders:Leaders;
 		
 		public function LeaderboardMenu() {
 			super();
 			
-			username = "rts3";
+			username = "";
 			
 			var background:Image = new Image(Assets.getAtlas().getTexture(Assets.MenuBackground));
 			background.width = Constants.SCREEN_WIDTH;
@@ -34,7 +34,7 @@ package screens {
 			group.dataProvider = new ListCollection([
 				{ label: "Back", triggered: onBackBtnPress },
 			]);
-			group.height = Constants.SCREEN_HEIGHT / 5 * group.dataProvider.length;
+			group.height = Constants.SCREEN_HEIGHT / 8 * group.dataProvider.length;
 			addChild( group );
 			
 			rank = new TextField(200, 400, "Loading ...", "Verdana", 12, 0xffffff, true);

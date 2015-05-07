@@ -80,10 +80,13 @@ package {
 		private var playercolorText:TextField;
 		private var startCountdownText:TextField;
 		private var startCountdown:Number;
+		private var gameOver:Boolean;
+		
+		public static var mapSelect:int = 1;
 		
 		public function Game() {
 			super();
-			//waitingRoom = new WaitingRoom();
+			gameOver = false;
 			
 			flocks = new Vector.<Flock>();
 			bases = new Vector.<Base>();
@@ -95,8 +98,8 @@ package {
 			this.addEventListener(NavEvent.GAME_OVER_LOSE, onGameOverLose);
 			this.addEventListener(NavEvent.GAME_OVER_WIN, onGameOverWin);
 		
-			spawnMap(1);
-			
+			spawnMap(mapSelect);
+			mapSelect = 1;
 			//customize resource display button
 			resourceText = new TextField(100, 30, "Gold: " + Base.DEFAULT_TOTAL_RESOURCES, "Verdana", 12, 0xffffff, true);
 			resourceText.y = 0;
@@ -109,6 +112,10 @@ package {
 			// END TESTING UNIT MOVEMENT }}}}}}}}}}}}}}}}}}
 			
 			multiplayer = new Multiplayer();
+		}
+		
+		public function hasStarted():Boolean {
+			return startCountdown <= 0;
 		}
 		
 		public function createSignalHandler():void {
@@ -213,6 +220,7 @@ package {
 		
 		public function onGameOverLose(event:Event):void {
 			pause = true;
+			gameOver = true;
 			gameOverMenu = new GameOverMenu(false);
 			addChild(gameOverMenu);
 		}
@@ -220,6 +228,7 @@ package {
 		//winner will update the database
 		public function onGameOverWin(event:Event):void {
 			pause = true;
+			gameOver = true;
 			gameOverMenu = new GameOverMenu(true);
 			addChild(gameOverMenu);
 			
@@ -287,7 +296,8 @@ package {
 		public function tick(dt:Number):void {
 			dt *= 1;
 			
-			if (pause) {
+			//change position of gameOver to determine if countdown should still go when player d/c at start
+			if (pause && startCountdown > 0 && !gameOver) {
 				if (startCountdownText) {
 					startCountdown -= dt;
 					startCountdownText.text = "" + int(startCountdown + 1);

@@ -38,6 +38,18 @@ package {
 		[Embed(source="../assets/images/maps/map5/obstacles.png")]
 		public static const Map5Obstacles:Class;
 		
+		[Embed(source="../assets/images/backgrounds/picker_bg.png")]
+		public static const TestBG:Class;
+		
+		[Embed(source="../assets/images/buttons/button2.png")]
+		public static const TestButton:Class;
+		
+		[Embed(source="../assets/images/backgrounds/title.png")]
+		public static const Title:Class;
+		
+		[Embed(source="../assets/images/backgrounds/info.png")]
+		public static const Instructions:Class;
+		
 		private static var gameTextureAtlas:TextureAtlas;
 		private static var gameTextures:Dictionary = new Dictionary();
 		
@@ -62,6 +74,14 @@ package {
 		private static function getTexture(name:String):Texture {
 			if (gameTextures[name] == undefined) {
 				gameTextures[name] = Texture.fromEmbeddedAsset(Assets[name]);
+			}
+			return gameTextures[name];
+		}
+		
+		// avoid creating a texture from a bitmap more than once for optimization.
+		public static function getTexture2(name:Class):Texture {
+			if (gameTextures[name] == undefined) {
+				gameTextures[name] = Texture.fromBitmap(new name());
 			}
 			return gameTextures[name];
 		}

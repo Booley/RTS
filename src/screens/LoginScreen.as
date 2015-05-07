@@ -21,15 +21,18 @@ package screens {
 		
 		public var userField:TextField;
 		public var passwordField:TextField;
-		private var messageField:TextField;
-		private var userText:TextField;
-		private var passwordText:TextField;
+		public var messageField:TextField;
+		public var userText:TextField;
+		public var passwordText:TextField;
 		
 		public static var myUsername:String = "";
+		private var mainMenu:MainMenu;
 		
-		public function LoginScreen() {
+		public function LoginScreen(mainMenu:screens.MainMenu) {
 			super();
-		
+			
+			this.mainMenu = mainMenu;
+			
 			messageField = new TextField();
 			userField = new TextField();
 			passwordField = new TextField();
@@ -63,10 +66,14 @@ package screens {
 			userField.x = 150;
 			passwordField.x = 150;
 			
+			userField.width = 150;
+			passwordField.width = 150;
+			
 			userField.type = TextFieldType.INPUT;
 			passwordField.type = TextFieldType.INPUT;
 			
 			messageField.width = 300;
+			messageField.textColor = 0x00FFFF;
 			
 			userField.y = 0;
 			userText.y = 0;
@@ -126,6 +133,8 @@ package screens {
 				trace("recording username...");
 				PlayScreen.isRanked = true;
 				myUsername = userField.text; //be sure to assign something else when logged out!!!
+				LeaderboardMenu.username = myUsername;
+				mainMenu.loggedIn();
 			}
 			trace(urlLoader.data.msg);
 		 
