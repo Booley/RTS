@@ -10,6 +10,8 @@ package screens {
 	
 	public class MainMenu extends Sprite {
 		
+		public static var group:ButtonGroup;
+		
 		public function MainMenu() {
 			super();
 			
@@ -24,7 +26,7 @@ package screens {
 			image.scaleY *= 0.6; // TEMPORARY
 			addChild(image);
 			
-			var group:ButtonGroup = new ButtonGroup();
+			group = new ButtonGroup();
 			group.width = Constants.SCREEN_WIDTH;
 			group.dataProvider = new ListCollection([
 				{ label: "Single-Player", triggered: onSPBtnPress },
@@ -46,6 +48,17 @@ package screens {
 		private function onLeaderboardBtnPress():void { dispatchEventWith(NavEvent.MAIN_MENU_LEADERBOARD); }
 		private function onInstructionsBtnPress():void { dispatchEventWith(NavEvent.MAIN_MENU_OPTS); }
 		private function onLoginBtnPress():void { dispatchEventWith(NavEvent.MAIN_MENU_LOGIN); }
+		private function onLogoutBtnPress():void { 
+			group.dataProvider.removeItemAt(4);
+			group.dataProvider.addItem( { label:"Login", triggered: onLoginBtnPress } );
+			LeaderboardMenu.username = "";
+			PlayScreen.isRanked = false;
+			LoginScreen.myUsername = "";
+		}
+		public function loggedIn():void {
+			group.dataProvider.removeItemAt(4);
+			group.dataProvider.addItem( { label:"Logout", triggered: onLogoutBtnPress } );
+		}
 		private function onSignupBtnPress():void { dispatchEventWith(NavEvent.MAIN_MENU_SIGNUP); }
 	}
 }

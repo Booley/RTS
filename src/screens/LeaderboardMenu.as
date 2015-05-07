@@ -13,7 +13,7 @@ package screens {
 		public var rank:TextField;
 		public var user:TextField;
 		public var elo:TextField;
-		public var username:String;
+		public static var username:String;
 		public var line:TextField;
 		private var leaders:Leaders;
 		

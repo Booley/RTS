@@ -17,7 +17,7 @@ package screens
 		
 		public function update():void {
 			var urlVariables:URLVariables = new URLVariables();
-			urlVariables.username = leaderScreen.username;
+			urlVariables.username = LeaderboardMenu.username;
 				
 			var phpFileRequest:URLRequest = new URLRequest(LEADER_URL);
 			phpFileRequest.method = URLRequestMethod.POST;
