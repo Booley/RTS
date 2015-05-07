@@ -294,7 +294,7 @@ package {
 		}
 		
 		public function tick(dt:Number):void {
-			dt *= 10;
+			dt *= 1;
 			
 			//change position of gameOver to determine if countdown should still go when player d/c at start
 			if (pause && startCountdown > 0 && !gameOver) {
