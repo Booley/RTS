@@ -98,7 +98,7 @@ package screens {
 			
 			
 			//apply behavior for tapping
-			list.selectedIndex = -1;
+			list.selectedIndex = 0;
 			list.popUpContentManager = new VerticalCenteredPopUpContentManager();
 			
 			//handle positioning
@@ -110,7 +110,8 @@ package screens {
 		
 		// touch handlers
 		private function onPlayBtnPress():void { 
-			PlayScreen.mapSelect = list.selectedIndex;
+			Game.mapSelect = list.selectedIndex + 1;
+			trace(Game.mapSelect);
 			dispatchEventWith(NavEvent.SP_MENU_PLAY); 
 		}
 		private function onBackBtnPress():void { dispatchEventWith(NavEvent.SP_MENU_BACK); }

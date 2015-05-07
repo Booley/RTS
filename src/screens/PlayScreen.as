@@ -26,7 +26,6 @@ package screens {
 	
 		public static var game:Game;
 		public static var difficulty:int = AI.EASY;
-		public static var mapSelect:int = 1;
 		
 		private var startTap:Point;
 		private var selectRect:Quad;
@@ -69,7 +68,7 @@ package screens {
 		}
 		
 		public function newGame():void {
-			game = new Game(mapSelect);
+			game = new Game();
 			if (!isMultiplayer) {
 				game.start();
 			}
