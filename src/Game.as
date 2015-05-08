@@ -71,7 +71,7 @@ package {
 		private var playercolorText:TextField;
 		private var startCountdownText:TextField;
 		private var startCountdown:Number;
-		private var gameOver:Boolean;
+		public var gameOver:Boolean;
 		
 		public static var mapSelect:int = 1;
 		

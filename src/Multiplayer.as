@@ -101,7 +101,7 @@ package
 		protected function handleUserRemoved(theUser:UserObject) :void {
 			trace("User disconnected: " + theUser.name + ", total users: " + mConnection.userCount); 
 			//test if the opponent disconnected
-			if (theUser.id == opponentId) {
+			if (theUser.id == opponentId && PlayScreen.game.gameOver == false) {
 				PlayScreen.game.dispatchEventWith(NavEvent.GAME_OVER_WIN);
 			}
 		}
