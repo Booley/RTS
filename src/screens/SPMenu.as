@@ -29,6 +29,8 @@ package screens {
 		private var messageText:TextField;
 		private var list:PickerList;
 		
+		private var mapPreview:Sprite;
+		
 		public function SPMenu() {
 			super();
 			
@@ -107,6 +109,14 @@ package screens {
 			list.y = diff.y + diff.height;
 			list.height = Constants.SCREEN_HEIGHT / 8;// * list.dataProvider.length;
 			this.addChild(list);
+			
+			mapPreview = getPreview(list.selectedIndex + 1);
+			addChild(mapPreview);
+			
+			list.addEventListener('change', function():void {
+				mapPreview = getPreview(list.selectedIndex + 1);
+			});
+			
 		}
 		
 		// touch handlers
@@ -116,6 +126,20 @@ package screens {
 			trace(Game.mapSelect);
 			dispatchEventWith(NavEvent.SP_MENU_PLAY); 
 		}
+		
+		private function getPreview(mapNum:int):Sprite {
+			var holder:Sprite = new Sprite();
+			var map:Image = new Image(Assets.getAtlas().getTexture(Assets["Map" + mapNum + "Background"]));
+			map.y = Constants.SCREEN_HEIGHT * .4;
+			map.height = Constants.SCREEN_HEIGHT * .3;
+			map.width = Constants.SCREEN_WIDTH * .6;
+			map.x = Constants.SCREEN_WIDTH * .2;
+			addChild(map);
+
+			return holder;
+			
+		}
+		
 		private function onBackBtnPress():void {
 			Sounds.play(Sounds.BACK);
 			dispatchEventWith(NavEvent.SP_MENU_BACK); }
