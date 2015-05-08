@@ -169,6 +169,7 @@ package {
 		
 		// handle mpMenu button press
 		private function onMPBtnPress(e:Event):void {
+			mpMenu.updateDisplay();
 			removeChild(mainMenu);
 			addChild(mpMenu);
 		}

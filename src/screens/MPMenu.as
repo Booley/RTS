@@ -11,6 +11,8 @@ package screens {
 	public class MPMenu extends Sprite {
 		
 		private var messageText:TextField;
+		private var accountInfo:TextField;
+		private var group:ButtonGroup;
 		
 		public function MPMenu() {
 			super();
@@ -21,7 +23,7 @@ package screens {
 			background.height = Constants.SCREEN_HEIGHT;
 			addChild(background);
 			
-			var group:ButtonGroup = new ButtonGroup();
+			group = new ButtonGroup();
 			group.width = Constants.SCREEN_WIDTH;
 			group.dataProvider = new ListCollection([
 				{ label: "Play Unranked Match", triggered: onPlayUnrankedBtnPress },
@@ -35,6 +37,21 @@ package screens {
 			messageText.y = 300;
 			messageText.x = 0;
 			addChild(messageText);
+			
+			accountInfo = new TextField(300, 50, "", "Verdana", 15, 0xffffff);
+			accountInfo.y = group.height;
+			addChild(accountInfo);
+		}
+		
+		public function updateDisplay():void {
+			
+			if (LoginScreen.myUsername == "") {
+				accountInfo.text = "You are not logged in yet. You may only play unranked matches.";
+			}
+			else {
+				accountInfo.text = "You are logged in as " + LoginScreen.myUsername;
+			}
+
 		}
 		
 		// touch handlers
