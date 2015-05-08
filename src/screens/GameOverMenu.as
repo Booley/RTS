@@ -38,7 +38,7 @@ package screens {
 			//image.scaleX *= 0.5;
 			winScreen.scaleY *= 0.3; // TEMPORARY
 			addChild(winScreen);
-			
+			 
 			// text for winning and losing.
 			if (won) {
 				text = new TextField(200, 100, "You win! You are awesome.", "Verdana", 20, 0x0000ff);
