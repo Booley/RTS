@@ -11,8 +11,6 @@
 		
 		private static const NUM_SONGS:int = 1;
 		
-		
-		
 		private static const boop:Boop = new Boop();
 		private static const song1:Song1 = new Song1();
 		

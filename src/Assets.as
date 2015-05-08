@@ -43,9 +43,6 @@ package {
 		[Embed(source="../assets/images/backgrounds/picker_bg.png")]
 		public static const TestBG:Class;
 		
-		[Embed(source="../assets/images/buttons/button2.png")]
-		public static const TestButton:Class;
-		
 		private static var gameTextureAtlas:TextureAtlas;
 		private static var gameTextures:Dictionary = new Dictionary();
 		

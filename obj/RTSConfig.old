@@ -30,18 +30,6 @@
     </define>
     <verbose-stacktraces>true</verbose-stacktraces>
     <source-path append="true">
-<<<<<<< HEAD
-      <path-element>C:\Users\John\Documents\RTS\src</path-element>
-      <path-element>C:\Users\John\Desktop\FlashDevelop-4.7.2\Library\AS3\classes</path-element>
-    </source-path>
-    <library-path append="true">
-      <path-element>C:\Users\John\Documents\RTS\lib\starling.swc</path-element>
-      <path-element>C:\Users\John\Documents\RTS\lib\feathers.swc</path-element>
-    </library-path>
-  </compiler>
-  <file-specs>
-    <path-element>C:\Users\John\Documents\RTS\src\PreMain.as</path-element>
-=======
       <path-element>C:\Users\Evan\Documents\RTS\src</path-element>
       <path-element>C:\Program Files (x86)\FlashDevelop\Library\AS3\classes</path-element>
     </source-path>
@@ -52,7 +40,6 @@
   </compiler>
   <file-specs>
     <path-element>C:\Users\Evan\Documents\RTS\src\PreMain.as</path-element>
->>>>>>> 535f15a71a8175edcdf26e8575596ecf2a699b6d
   </file-specs>
   <default-background-color>#FFFFFF</default-background-color>
   <default-frame-rate>60</default-frame-rate>

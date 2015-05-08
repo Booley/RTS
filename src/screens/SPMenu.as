@@ -70,11 +70,11 @@ package screens {
 			list = new PickerList();
 			var mapList:ListCollection = new ListCollection(
 				[
-					{ text: map1, thumbnail: new Image(Assets.getTexture2(Assets.TestButton)) },
-					{ text: map2, thumbnail: new Image(Assets.getTexture2(Assets.TestButton)) },
-					{ text: map3, thumbnail: new Image(Assets.getTexture2(Assets.TestButton)) },
-					{ text: map4, thumbnail: new Image(Assets.getTexture2(Assets.TestButton)) },
-					{ text: map5, thumbnail: new Image(Assets.getTexture2(Assets.TestButton)) },
+					{ text: map1 },
+					{ text: map2 },
+					{ text: map3 },
+					{ text: map4 },
+					{ text: map5 },
 				]);
 			list.dataProvider = mapList;
 			list.listProperties.itemRendererFactory = function():IListItemRenderer
