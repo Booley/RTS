@@ -269,6 +269,7 @@ package {
 		// handle PlayScreen's back button press
 		private function onPlayScreenBackBtnPress(e:Event):void {
 			removeChild(playScreen);
+			removePlayScreenEventListeners();
 			addChild(mainMenu);
 		}
 		
@@ -281,6 +282,7 @@ package {
 		// handle OptsMenu's back button press
 		private function onGameQuit(e:Event):void {
 			removeChild(playScreen);
+			removePlayScreenEventListeners();
 			addChild(mainMenu);
 		}
 		

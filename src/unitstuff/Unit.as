@@ -78,7 +78,7 @@ package unitstuff {
 		public var healthBar:Quad;
 
 		//id
-		private static var counter:int;
+		public static var counter:int;
 		public var id:int;
 
 		// given unit type constant, return the corresponding class
