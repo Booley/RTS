@@ -78,6 +78,14 @@ package
 				room = currentId + opponentId;
 			else
 				room = opponentId + currentId;
+			/*
+			var mapNum:int = 0;
+			for (var i:int = 0; i < room.length; i++) {
+				mapNum += int (room.charAt(i));
+			}
+			Game.mapSelect = mapNum % 5 + 1;
+			*/
+			Game.mapSelect = 1;
 			
 			screen.onMatchFound(room);
 			

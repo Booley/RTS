@@ -38,15 +38,15 @@ package screens {
 			//image.scaleX *= 0.5;
 			winScreen.scaleY *= 0.3; // TEMPORARY
 			addChild(winScreen);
-			
+			 
 			// text for winning and losing.
 			if (won) {
-				text = new TextField(200, 100, "You win! You are awesome.", "Verdana", 20, 0x0000ff);
+				text = new TextField(200, 100, "You win!", "Verdana", 20, 0x0000ff);
 				text.filter = new BlurFilter(0.1, 0.1, 1);
 				
 
 			} else {
-				text = new TextField(200, 100, "GameOver ", "Verdana", 22, 0x0000ff);
+				text = new TextField(200, 100, "Game over.", "Verdana", 22, 0x0000ff);
 				text.filter = new BlurFilter(0.1, 0.1, 1);
 
 			}

@@ -388,6 +388,7 @@ package {
 					}
 				
 					getGoals(newFlock, startTap);
+					
 					multiplayer.sendMovement(idsToString(newFlock.units), startTap);
 				} else {
 					trace("Empty flock error");
