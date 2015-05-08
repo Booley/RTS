@@ -130,10 +130,10 @@ package screens {
 		private function getPreview(mapNum:int):Sprite {
 			var holder:Sprite = new Sprite();
 			var map:Image = new Image(Assets.getAtlas().getTexture(Assets["Map" + mapNum + "Background"]));
-			map.y = Constants.SCREEN_HEIGHT * .4;
-			map.height = Constants.SCREEN_HEIGHT * .3;
-			map.width = Constants.SCREEN_WIDTH * .6;
-			map.x = Constants.SCREEN_WIDTH * .2;
+			map.y = Constants.SCREEN_HEIGHT * .35;
+			map.height = Constants.SCREEN_HEIGHT * .38;
+			map.width = map.height / Constants.SCREEN_HEIGHT * Constants.SCREEN_WIDTH;
+			map.x = (1 - map.width / Constants.SCREEN_WIDTH) / 2 * Constants.SCREEN_WIDTH;
 			addChild(map);
 
 			return holder;
