@@ -110,12 +110,15 @@ package screens {
 		}
 		
 		// touch handlers
-		private function onPlayBtnPress():void { 
+		private function onPlayBtnPress():void {
+			Sounds.play(Sounds.BOOP);
 			Game.mapSelect = list.selectedIndex + 1;
 			trace(Game.mapSelect);
 			dispatchEventWith(NavEvent.SP_MENU_PLAY); 
 		}
-		private function onBackBtnPress():void { dispatchEventWith(NavEvent.SP_MENU_BACK); }
+		private function onBackBtnPress():void {
+			Sounds.play(Sounds.BACK);
+			dispatchEventWith(NavEvent.SP_MENU_BACK); }
 		private function onEasyBtnPress():void { PlayScreen.difficulty = AI.EASY; messageText.text = "Difficulty: Easy"; }
 		private function onNormalBtnPress():void { PlayScreen.difficulty = AI.MEDIUM; messageText.text = "Difficulty: Normal"; }
 		private function onHardBtnPress():void { PlayScreen.difficulty = AI.HARD; messageText.text = "Difficulty: Hard"; }

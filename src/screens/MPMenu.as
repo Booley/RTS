@@ -40,16 +40,20 @@ package screens {
 		}
 		
 		// touch handlers
-		private function onPlayUnrankedBtnPress():void { dispatchEventWith(NavEvent.MP_MENU_PLAY_UNRANKED); }
+		private function onPlayUnrankedBtnPress():void {
+			Sounds.play(Sounds.BOOP);
+			dispatchEventWith(NavEvent.MP_MENU_PLAY_UNRANKED); }
 		private function onPlayRankedBtnPress():void { 
 			if (LoginScreen.myUsername == "") {
 				messageText.text = "You must login before\n playing a ranked match";
 				return;
 			}
+			Sounds.play(Sounds.BOOP);
 			dispatchEventWith(NavEvent.MP_MENU_PLAY_RANKED); 
 			
 		}
-		private function onBackBtnPress():void { 
+		private function onBackBtnPress():void {
+			Sounds.play(Sounds.BACK);
 			messageText.text = "";
 			
 			dispatchEventWith(NavEvent.MP_MENU_BACK);
