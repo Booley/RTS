@@ -46,10 +46,10 @@ package screens {
 			
 			var group:ButtonGroup = new ButtonGroup();
 			group.width = 20;
+			group.height = 20;
 			group.dataProvider = new ListCollection([
 				{ label: "X", triggered: onBackBtnPress },
 			]);
-			group.height = 20;
 			addChild( group );
 			
 			selectRect = new Quad(1, 1, 0x00ffff);

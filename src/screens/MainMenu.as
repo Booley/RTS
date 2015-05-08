@@ -10,6 +10,8 @@ package screens {
 	
 	public class MainMenu extends Sprite {
 		
+		public static var group:ButtonGroup;
+		
 		public function MainMenu() {
 			super();
 			
@@ -18,13 +20,13 @@ package screens {
 			background.height = Constants.SCREEN_HEIGHT;
 			addChild(background);
 			
-			var image:Image = new Image(Assets.getTexture2(Assets.Title) );
+			var image:Image = new Image(Assets.getAtlas().getTexture(Assets.Title));
 			image.width = Constants.SCREEN_WIDTH;
 			//image.scaleX *= 0.5;
-			image.scaleY *= 0.6; // TEMPORARY
+			image.scaleY *= 0.7; // TEMPORARY
 			addChild(image);
 			
-			var group:ButtonGroup = new ButtonGroup();
+			group = new ButtonGroup();
 			group.width = Constants.SCREEN_WIDTH;
 			group.dataProvider = new ListCollection([
 				{ label: "Single-Player", triggered: onSPBtnPress },
@@ -34,18 +36,39 @@ package screens {
 				{ label: "Login", triggered: onLoginBtnPress },
 			]);
 			group.height = Constants.SCREEN_HEIGHT / 8 * group.dataProvider.length;
-			group.y = image.height;
+			group.y = Constants.SCREEN_HEIGHT - group.height;
 			addChild( group );
-			
-			
 		}
 		
 		// touch handlers
-		private function onSPBtnPress():void { dispatchEventWith(NavEvent.MAIN_MENU_SP); }
-		private function onMPBtnPress():void { dispatchEventWith(NavEvent.MAIN_MENU_MP); }
-		private function onLeaderboardBtnPress():void { dispatchEventWith(NavEvent.MAIN_MENU_LEADERBOARD); }
-		private function onInstructionsBtnPress():void { dispatchEventWith(NavEvent.MAIN_MENU_OPTS); }
-		private function onLoginBtnPress():void { dispatchEventWith(NavEvent.MAIN_MENU_LOGIN); }
+		private function onSPBtnPress():void { 	
+			//Sounds.play(Sounds.Boop);
+			Sounds.play(Sounds.BOOP);
+			dispatchEventWith(NavEvent.MAIN_MENU_SP); }
+		private function onMPBtnPress():void { 
+			Sounds.play(Sounds.BOOP);
+			dispatchEventWith(NavEvent.MAIN_MENU_MP); }
+		private function onLeaderboardBtnPress():void {
+			Sounds.play(Sounds.BOOP);
+			dispatchEventWith(NavEvent.MAIN_MENU_LEADERBOARD); }
+		private function onInstructionsBtnPress():void {
+			Sounds.play(Sounds.BOOP);
+			dispatchEventWith(NavEvent.MAIN_MENU_OPTS); }
+		private function onLoginBtnPress():void { 
+			Sounds.play(Sounds.BOOP);
+			dispatchEventWith(NavEvent.MAIN_MENU_LOGIN); }
+		private function onLogoutBtnPress():void { 
+			Sounds.play(Sounds.BOOP);
+			group.dataProvider.removeItemAt(4);
+			group.dataProvider.addItem( { label:"Login", triggered: onLoginBtnPress } );
+			LeaderboardMenu.username = "";
+			PlayScreen.isRanked = false;
+			LoginScreen.myUsername = "";
+		}
+		public function loggedIn():void {
+			group.dataProvider.removeItemAt(4);
+			group.dataProvider.addItem( { label:"Logout", triggered: onLogoutBtnPress } );
+		}
 		private function onSignupBtnPress():void { dispatchEventWith(NavEvent.MAIN_MENU_SIGNUP); }
 	}
 }

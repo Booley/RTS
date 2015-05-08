@@ -31,11 +31,13 @@ package screens {
 				{ label: "Back", triggered: onBackBtnPress },
 			]);
 			group.height = Constants.SCREEN_HEIGHT / 8 * group.dataProvider.length;
+			group.y = Constants.SCREEN_HEIGHT - group.height;
 			addChild( group );
 			
-			messageText = new TextField(300, 200, "", "Verdana", 15, 0xffffff);
-			messageText.y = 300;
-			messageText.x = 0;
+			messageText = new TextField(Constants.SCREEN_WIDTH, 200, "", "Verdana", 18, 0xffffff);
+			messageText.y = Constants.SCREEN_WIDTH / 8;
+			messageText.x = Constants.SCREEN_WIDTH / 2;
+			messageText.alignPivot("center", "center");
 			addChild(messageText);
 			
 			accountInfo = new TextField(300, 50, "", "Verdana", 15, 0xffffff);
@@ -55,8 +57,11 @@ package screens {
 		}
 		
 		// touch handlers
-		private function onPlayUnrankedBtnPress():void { dispatchEventWith(NavEvent.MP_MENU_PLAY_UNRANKED); }
+		private function onPlayUnrankedBtnPress():void {
+			Sounds.play(Sounds.BOOP);
+			dispatchEventWith(NavEvent.MP_MENU_PLAY_UNRANKED); }
 		private function onPlayRankedBtnPress():void { 
+			Sounds.play(Sounds.BOOP);
 			if (LoginScreen.myUsername == "") {
 				messageText.text = "You must login before\n playing a ranked match";
 				return;
@@ -64,7 +69,8 @@ package screens {
 			dispatchEventWith(NavEvent.MP_MENU_PLAY_RANKED); 
 			
 		}
-		private function onBackBtnPress():void { 
+		private function onBackBtnPress():void {
+			Sounds.play(Sounds.BACK);
 			messageText.text = "";
 			
 			dispatchEventWith(NavEvent.MP_MENU_BACK);

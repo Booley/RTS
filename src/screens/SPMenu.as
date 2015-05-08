@@ -44,12 +44,14 @@ package screens {
 				{ label: "Back", triggered: onBackBtnPress },
 			]);
 			group.height = Constants.SCREEN_HEIGHT / 8 * group.dataProvider.length;
-			addChild( group );
+			group.y = Constants.SCREEN_HEIGHT - group.height;
+			addChild(group);
 			
 			//will update UI
-			messageText = new TextField(150, 30, "Difficulty: Easy", "Verdana", 15, 0xffffff);
-			messageText.y = group.height;
-			messageText.alignPivot("left", "center");
+			messageText = new TextField(Constants.SCREEN_WIDTH, 25, "Difficulty: Easy", "Verdana", 18, 0xffffff);
+			messageText.y = 20;
+			messageText.x = Constants.SCREEN_WIDTH / 2;
+			messageText.alignPivot("center", "center");
 			addChild(messageText);
 			
 			var diff:ButtonGroup = new ButtonGroup();
@@ -61,20 +63,20 @@ package screens {
 				{ label: "Normal", triggered: onNormalBtnPress },
 				{ label: "Hard", triggered: onHardBtnPress },
 			]);
-			diff.height = Constants.SCREEN_HEIGHT / 18 * diff.dataProvider.length;
+			diff.height = Constants.SCREEN_HEIGHT / 8;
 			addChild(diff);
 			
 			//create options to choose from
 			list = new PickerList();
-			var groceryList:ListCollection = new ListCollection(
+			var mapList:ListCollection = new ListCollection(
 				[
-					{ text: map1, thumbnail: new Image(Assets.getTexture2(Assets.TestButton)) },
-					{ text: map2, thumbnail: new Image(Assets.getTexture2(Assets.TestButton)) },
-					{ text: map3, thumbnail: new Image(Assets.getTexture2(Assets.TestButton)) },
-					{ text: map4, thumbnail: new Image(Assets.getTexture2(Assets.TestButton)) },
-					{ text: map5, thumbnail: new Image(Assets.getTexture2(Assets.TestButton)) },
+					{ text: map1 },
+					{ text: map2 },
+					{ text: map3 },
+					{ text: map4 },
+					{ text: map5 },
 				]);
-			list.dataProvider = groceryList;
+			list.dataProvider = mapList;
 			list.listProperties.itemRendererFactory = function():IListItemRenderer
 			 {
 				 var renderer:DefaultListItemRenderer = new DefaultListItemRenderer();
@@ -95,8 +97,7 @@ package screens {
 				
 				 return popUpList;
 			 };
-			
-			
+			 
 			//apply behavior for tapping
 			list.selectedIndex = 0;
 			list.popUpContentManager = new VerticalCenteredPopUpContentManager();
@@ -109,15 +110,24 @@ package screens {
 		}
 		
 		// touch handlers
-		private function onPlayBtnPress():void { 
+		private function onPlayBtnPress():void {
+			Sounds.play(Sounds.BOOP);
 			Game.mapSelect = list.selectedIndex + 1;
 			trace(Game.mapSelect);
 			dispatchEventWith(NavEvent.SP_MENU_PLAY); 
 		}
-		private function onBackBtnPress():void { dispatchEventWith(NavEvent.SP_MENU_BACK); }
-		private function onEasyBtnPress():void { PlayScreen.difficulty = AI.EASY; messageText.text = "Difficulty: Easy"; }
-		private function onNormalBtnPress():void { PlayScreen.difficulty = AI.MEDIUM; messageText.text = "Difficulty: Normal"; }
-		private function onHardBtnPress():void { PlayScreen.difficulty = AI.HARD; messageText.text = "Difficulty: Hard"; }
+		private function onBackBtnPress():void {
+			Sounds.play(Sounds.BACK);
+			dispatchEventWith(NavEvent.SP_MENU_BACK); }
+		private function onEasyBtnPress():void {
+			Sounds.play(Sounds.BOOP);
+			PlayScreen.difficulty = AI.EASY; messageText.text = "Difficulty: Easy"; }
+		private function onNormalBtnPress():void {
+			Sounds.play(Sounds.BOOP);
+			PlayScreen.difficulty = AI.MEDIUM; messageText.text = "Difficulty: Normal"; }
+		private function onHardBtnPress():void {
+			Sounds.play(Sounds.BOOP);
+			PlayScreen.difficulty = AI.HARD; messageText.text = "Difficulty: Hard"; }
         
 	}
 }

@@ -1,24 +1,15 @@
 package {
 	//Takes in commands from other classes and executes them. Also executes tick for all state-mutable objects
 	
-	import flash.filters.GlowFilter;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.media.Sound;
-	import flash.net.URLRequest;
 	import flash.utils.Dictionary;
-	import starling.filters.FragmentFilter;
 	
 	import starling.text.TextField;
-	import starling.core.Starling;
 	import starling.display.Image;
-	import starling.display.Button;
 	import starling.display.Sprite;
 	import starling.events.Event;
-	import starling.events.TouchEvent;
-	import starling.events.TouchPhase;
-	import starling.events.Touch;
-	import starling.textures.Texture;
 	
 	import be.dauntless.astar.core.Astar;
 	import be.dauntless.astar.core.PathRequest;
@@ -100,12 +91,12 @@ package {
 		
 			spawnMap(mapSelect);
 			mapSelect = 1;
-			//customize resource display button
-			resourceText = new TextField(100, 30, "Gold: " + Base.DEFAULT_TOTAL_RESOURCES, "Verdana", 12, 0xffffff, true);
-			resourceText.y = 0;
-			resourceText.x = 200;
 			
-			//addChild(scoreText);
+			//customize resource display 
+			resourceText = new TextField(Constants.SCREEN_WIDTH/4, 30, "Gold: " + Base.DEFAULT_TOTAL_RESOURCES, "Verdana", 12, 0xffffff, true);
+			resourceText.y = resourceText.height/2;
+			resourceText.x = 3 * Constants.SCREEN_WIDTH / 4;
+			resourceText.alignPivot("center", "center");
 			
 			addChild(resourceText);
 			
@@ -116,11 +107,6 @@ package {
 		
 		public function hasStarted():Boolean {
 			return startCountdown <= 0;
-		}
-		
-		public function createSignalHandler():void {
-			//multiplayer.game = this;
-			//multiplayer.signals.game = this;
 		}
 		
 		public function spawnMap(mapID:int):void {

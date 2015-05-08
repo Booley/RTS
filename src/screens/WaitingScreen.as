@@ -30,10 +30,11 @@ package screens {
 			group.dataProvider = new ListCollection([
 				{ label: "Back", triggered: onBackBtnPress },
 			]);
-			group.height = Constants.SCREEN_HEIGHT / 5 * group.dataProvider.length;
+			group.height = Constants.SCREEN_HEIGHT / 8 * group.dataProvider.length;
+			group.y = Constants.SCREEN_HEIGHT - group.height;
 			addChild( group );
 			
-			var text:TextField = new TextField(250, 250, "Waiting to connect...", "Verdana", 30, 0xffffff);
+			var text:TextField = new TextField(Constants.SCREEN_WIDTH, 25, "Searching for game...", "Verdana", 18, 0xffffff);
 			text.x = 0;
 			text.y = Constants.SCREEN_HEIGHT / 4;
 			addChild(text);
@@ -49,6 +50,7 @@ package screens {
 		
 		// touch handlers
 		private function onBackBtnPress():void { 
+			Sounds.play(Sounds.BOOP);
 			setTimeout(function():void { waitingRoom.mConnection.close() }, 0 );
 			dispatchEventWith(NavEvent.WAITING_SCREEN_BACK); 
 		}
