@@ -29,9 +29,16 @@ package screens {
 		}
 		
 		// touch handlers
-		private function onRegisterBtnPress():void { dispatchEventWith(NavEvent.LOGIN_SCREEN_REGISTER); }
-		private function onLoginBtnPress():void { dispatchEventWith(NavEvent.LOGIN_SCREEN_SUBMIT); }
-		private function onBackBtnPress():void {dispatchEventWith(NavEvent.LOGIN_SCREEN_BACK); }
+		private function onRegisterBtnPress():void { 
+			Sounds.play(Sounds.BOOP);
+			dispatchEventWith(NavEvent.LOGIN_SCREEN_REGISTER); }
+		private function onLoginBtnPress():void { 
+			Sounds.play(Sounds.BOOP);
+			dispatchEventWith(NavEvent.LOGIN_SCREEN_SUBMIT); }
+		private function onBackBtnPress():void {
+			Sounds.play(Sounds.BACK);
+			dispatchEventWith(NavEvent.LOGIN_SCREEN_BACK); 
+			}
 		
 		
 		

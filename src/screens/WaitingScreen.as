@@ -50,6 +50,7 @@ package screens {
 		
 		// touch handlers
 		private function onBackBtnPress():void { 
+			Sounds.play(Sounds.BOOP);
 			setTimeout(function():void { waitingRoom.mConnection.close() }, 0 );
 			dispatchEventWith(NavEvent.WAITING_SCREEN_BACK); 
 		}

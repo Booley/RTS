@@ -41,12 +41,24 @@ package screens {
 		}
 		
 		// touch handlers
-		private function onSPBtnPress():void { dispatchEventWith(NavEvent.MAIN_MENU_SP); }
-		private function onMPBtnPress():void { dispatchEventWith(NavEvent.MAIN_MENU_MP); }
-		private function onLeaderboardBtnPress():void { dispatchEventWith(NavEvent.MAIN_MENU_LEADERBOARD); }
-		private function onInstructionsBtnPress():void { dispatchEventWith(NavEvent.MAIN_MENU_OPTS); }
-		private function onLoginBtnPress():void { dispatchEventWith(NavEvent.MAIN_MENU_LOGIN); }
+		private function onSPBtnPress():void { 	
+			//Sounds.play(Sounds.Boop);
+			Sounds.play(Sounds.BOOP);
+			dispatchEventWith(NavEvent.MAIN_MENU_SP); }
+		private function onMPBtnPress():void { 
+			Sounds.play(Sounds.BOOP);
+			dispatchEventWith(NavEvent.MAIN_MENU_MP); }
+		private function onLeaderboardBtnPress():void {
+			Sounds.play(Sounds.BOOP);
+			dispatchEventWith(NavEvent.MAIN_MENU_LEADERBOARD); }
+		private function onInstructionsBtnPress():void {
+			Sounds.play(Sounds.BOOP);
+			dispatchEventWith(NavEvent.MAIN_MENU_OPTS); }
+		private function onLoginBtnPress():void { 
+			Sounds.play(Sounds.BOOP);
+			dispatchEventWith(NavEvent.MAIN_MENU_LOGIN); }
 		private function onLogoutBtnPress():void { 
+			Sounds.play(Sounds.BOOP);
 			group.dataProvider.removeItemAt(4);
 			group.dataProvider.addItem( { label:"Login", triggered: onLoginBtnPress } );
 			LeaderboardMenu.username = "";

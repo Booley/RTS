@@ -69,6 +69,8 @@ package screens {
 		}
 		
 		// touch handlers
-		private function onBackBtnPress():void { dispatchEventWith(NavEvent.LEADERBOARD_MENU_BACK); }
+		private function onBackBtnPress():void { 
+			Sounds.play(Sounds.BACK);
+			dispatchEventWith(NavEvent.LEADERBOARD_MENU_BACK); }
 	}
 }

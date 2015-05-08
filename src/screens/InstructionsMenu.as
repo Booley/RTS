@@ -39,6 +39,8 @@ package screens {
 		}
 		
 		// touch handlers
-		private function onBackBtnPress():void { dispatchEventWith(NavEvent.INSTRUCTIONS_MENU_BACK); }
+		private function onBackBtnPress():void { 
+			Sounds.play(Sounds.BACK);
+			dispatchEventWith(NavEvent.INSTRUCTIONS_MENU_BACK); }
 	}
 }

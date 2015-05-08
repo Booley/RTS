@@ -25,8 +25,12 @@ package screens {
 			addChild( group );
 		}
 		
-		private function onBackBtnPress():void { dispatchEventWith(NavEvent.SIGNUP_SCREEN_BACK); }
-		private function onSubmitBtnPress():void { dispatchEventWith(NavEvent.SIGNUP_SCREEN_SUBMIT); }
+		private function onBackBtnPress():void {
+			Sounds.play(Sounds.BACK);
+			dispatchEventWith(NavEvent.SIGNUP_SCREEN_BACK); }
+		private function onSubmitBtnPress():void { 
+			Sounds.play(Sounds.BOOP);
+			dispatchEventWith(NavEvent.SIGNUP_SCREEN_SUBMIT); }
 	}
 
 }
