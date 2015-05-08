@@ -119,9 +119,15 @@ package screens {
 		private function onBackBtnPress():void {
 			Sounds.play(Sounds.BACK);
 			dispatchEventWith(NavEvent.SP_MENU_BACK); }
-		private function onEasyBtnPress():void { PlayScreen.difficulty = AI.EASY; messageText.text = "Difficulty: Easy"; }
-		private function onNormalBtnPress():void { PlayScreen.difficulty = AI.MEDIUM; messageText.text = "Difficulty: Normal"; }
-		private function onHardBtnPress():void { PlayScreen.difficulty = AI.HARD; messageText.text = "Difficulty: Hard"; }
+		private function onEasyBtnPress():void {
+			Sounds.play(Sounds.BOOP);
+			PlayScreen.difficulty = AI.EASY; messageText.text = "Difficulty: Easy"; }
+		private function onNormalBtnPress():void {
+			Sounds.play(Sounds.BOOP);
+			PlayScreen.difficulty = AI.MEDIUM; messageText.text = "Difficulty: Normal"; }
+		private function onHardBtnPress():void {
+			Sounds.play(Sounds.BOOP);
+			PlayScreen.difficulty = AI.HARD; messageText.text = "Difficulty: Hard"; }
         
 	}
 }

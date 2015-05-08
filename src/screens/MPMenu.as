@@ -44,11 +44,11 @@ package screens {
 			Sounds.play(Sounds.BOOP);
 			dispatchEventWith(NavEvent.MP_MENU_PLAY_UNRANKED); }
 		private function onPlayRankedBtnPress():void { 
+			Sounds.play(Sounds.BOOP);
 			if (LoginScreen.myUsername == "") {
 				messageText.text = "You must login before\n playing a ranked match";
 				return;
 			}
-			Sounds.play(Sounds.BOOP);
 			dispatchEventWith(NavEvent.MP_MENU_PLAY_RANKED); 
 			
 		}
