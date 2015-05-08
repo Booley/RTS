@@ -8,6 +8,7 @@ package screens {
 	import starling.text.TextField;
 	import starling.textures.Texture;
 	import starling.display.Sprite;
+	import starling.display.Image;
 	
 	import unitstuff.Base;
 	import unitstuff.Unit;
@@ -29,16 +30,30 @@ package screens {
 			group.height = Constants.SCREEN_HEIGHT / 5 * group.dataProvider.length;
 			addChild( group );
 			
+			// Gameover screen
+			var winScreen:Image = new Image(Assets.getAtlas().getTexture(Assets.ButtonTexture));
+			winScreen.width = Constants.SCREEN_WIDTH;
+			winScreen.height = Constants.SCREEN_HEIGHT;
+			winScreen.y = 2* Constants.SCREEN_HEIGHT / 5;
+			//image.scaleX *= 0.5;
+			winScreen.scaleY *= 0.3; // TEMPORARY
+			addChild(winScreen);
+			
+			// text for winning and losing.
 			if (won) {
-				text = new TextField(300, 100, "You win. You are awesome.");
-				text.color = 0x00ffff;
+				text = new TextField(200, 100, "You win! You are awesome.", "Verdana", 20, 0x0000ff);
 				text.filter = new BlurFilter(0.1, 0.1, 1);
+				
+
 			} else {
-				text = new TextField(100, 100, "You suck. ");
-				text.color = 0x00ffff;
+				text = new TextField(200, 100, "GameOver ", "Verdana", 22, 0x0000ff);
 				text.filter = new BlurFilter(0.1, 0.1, 1);
+
 			}
-			text.y = 100;
+			text.x =  Constants.SCREEN_WIDTH / 2 ;
+			text.alignPivot("center","center");
+
+			text.y = 2.2 *Constants.SCREEN_HEIGHT / 4;
 			addChild(text);
 		}
 		
