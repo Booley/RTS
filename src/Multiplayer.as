@@ -162,8 +162,8 @@ package
 						break;
 					}
 					
-					syncUnitPosition(theData.unitId, theData.posX, theData.posY);
-					syncUnitPosition(theData.targetId, theData.targetX, theData.targetY);
+					//syncUnitPosition(theData.unitId, theData.posX, theData.posY);
+					//syncUnitPosition(theData.targetId, theData.targetX, theData.targetY);
 					
 					unit.target = target;
 					unit.shoot();
