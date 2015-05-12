@@ -1,0 +1,13 @@
+
+CyberSurge.html:
+-Everyone puts in netID and email
+-Ignacio: Write elevator speech (basically what you said in your first 3-4 slides in presentation)
+	-"a single paragraph that states clearly and succinctly what your system does. And it must tell us how to access a working version of your project so we can experiment"
+
+internals.pdf:
+-Evan: Can you take care of explaining FlashDevelop, Starling, Feathers, and AIR?
+	-I put in a paragraph explaining multiplayer infrastructure
+
+
+report.pdf:
+-Everyone writes a few paragraphs across all sections about their roles
