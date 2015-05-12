@@ -20,10 +20,10 @@ package screens {
 	
 	public class SPMenu extends Sprite {
 		
-		private static var map1:String = "Wild West";
-		private static var map2:String = "Canada";
-		private static var map3:String = "Ocean";
-		private static var map4:String = "California";
+		private static var map1:String = "Citadel";
+		private static var map2:String = "Tundra";
+		private static var map3:String = "Obelisk";
+		private static var map4:String = "Destiny";
 		private static var map5:String = "Final Frontier";
 		
 		private var messageText:TextField;

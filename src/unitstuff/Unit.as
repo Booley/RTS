@@ -78,7 +78,7 @@ package unitstuff {
 		public var healthBar:Quad;
 
 		//id
-		private static var counter:int;
+		public static var counter:int;
 		public var id:int;
 
 		// given unit type constant, return the corresponding class
@@ -102,7 +102,8 @@ package unitstuff {
 		public function Unit(startPos:Point, owner:int = 1, rotation:Number = 0) {
 			this.firstPlayerLastHit = false;
 			this.secondPlayerLastHit = false;
-			this.id = counter++;			
+			this.id = counter + owner;		
+			counter += 4;
 			this.pos = startPos.clone();
 			this.x = pos.x;
 			this.y = pos.y;

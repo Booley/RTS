@@ -64,7 +64,6 @@ package {
 		
 		public var currentPlayer:int = 1;
 		private var waitingRoom:WaitingRoom;
-		private static var tickCounter:int = 0;
 		
 		private var resourceText:TextField;
 		
@@ -78,6 +77,7 @@ package {
 		public function Game() {
 			super();
 			gameOver = false;
+			Unit.counter = 0;
 			
 			flocks = new Vector.<Flock>();
 			bases = new Vector.<Base>();
@@ -650,7 +650,9 @@ package {
 				var id:int = parseInt(idString);
 				if (id >= 0) {
 					var unit:Unit = dictionary[id];
-					unitVector.push(unit);
+					if (unit) { 
+						unitVector.push(unit);
+					}
 				}
 			}
 			return unitVector;
@@ -686,7 +688,7 @@ package {
 					var DECAY_RATE:Number = 0.5;
 					diff.normalize(diff.length * DECAY_RATE);
 					unit.pos = unit.pos.add(diff);
-				}
+				} 
 			}
 		}
 	}

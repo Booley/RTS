@@ -20,7 +20,11 @@ package unitstuff {
 			} else {
 				this.units = units;
 				for each (var unit:Unit in units) {
-					unit.flock = this;
+					if (unit) {
+						unit.flock = this;
+					} else {
+						units.splice(units.indexOf(unit), 1);
+					}
 				}
 			}
 			this.avgPos = new Point();

@@ -25,7 +25,7 @@ package
 			var units:Vector.<Unit> = PlayScreen.game.idStringToUnitVector(ids);
 			for each (var unit:Unit in units) {
 				if (!unit) {
-					return;
+					continue;
 					//throw new Error("Can't move null unit");
 				}
 				var oldFlock:Flock = unit.flock;
@@ -36,6 +36,7 @@ package
 					}
 				}
 			}
+			trace(goal);
 			var newFlock:Flock = new Flock(units);
 			PlayScreen.game.getGoals(newFlock, goal);
 			PlayScreen.game.flocks.push(newFlock);
